@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyncTrip", "SyncTrip\SyncTrip.csproj", "{0D78224D-D5EE-4A25-99E2-0B5FEAE2D993}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyncTrip.Api", "SyncTrip.Api\SyncTrip.Api.csproj", "{AF627B4E-B9B6-4E78-AA11-7C314F4C8F55}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0D78224D-D5EE-4A25-99E2-0B5FEAE2D993}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D78224D-D5EE-4A25-99E2-0B5FEAE2D993}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D78224D-D5EE-4A25-99E2-0B5FEAE2D993}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D78224D-D5EE-4A25-99E2-0B5FEAE2D993}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF627B4E-B9B6-4E78-AA11-7C314F4C8F55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF627B4E-B9B6-4E78-AA11-7C314F4C8F55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF627B4E-B9B6-4E78-AA11-7C314F4C8F55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF627B4E-B9B6-4E78-AA11-7C314F4C8F55}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
