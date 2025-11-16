@@ -9,7 +9,7 @@ namespace SyncTrip.Api.API.Controllers;
 /// Controller d'authentification (magic link passwordless)
 /// </summary>
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/auth")]
 public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;
@@ -81,6 +81,30 @@ public class AuthController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Erreur lors de la vérification du magic link");
+            return BadRequest(ApiResponse<AuthResponse>.FailureResult(ex.Message));
+        }
+    }
+
+    /// <summary>
+    /// Rafraîchissement du token JWT à l'aide d'un refresh token
+    /// </summary>
+    [HttpPost("refresh")]
+    [ProducesResponseType(typeof(ApiResponse<AuthResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<AuthResponse>), StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var authResponse = await _authService.RefreshTokenAsync(request.RefreshToken, cancellationToken);
+            return Ok(ApiResponse<AuthResponse>.SuccessResult(authResponse, "Token rafraîchi avec succès"));
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Unauthorized(ApiResponse<AuthResponse>.FailureResult(ex.Message));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erreur lors du rafraîchissement du token");
             return BadRequest(ApiResponse<AuthResponse>.FailureResult(ex.Message));
         }
     }

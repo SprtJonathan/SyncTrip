@@ -4,6 +4,7 @@ using SyncTrip.Api.Application.DTOs.Convoys;
 using SyncTrip.Api.Application.DTOs.Locations;
 using SyncTrip.Api.Application.DTOs.Messages;
 using SyncTrip.Api.Application.DTOs.Trips;
+using SyncTrip.Api.Application.DTOs.Users;
 using SyncTrip.Api.Application.DTOs.Waypoints;
 using SyncTrip.Api.Core.Entities;
 
@@ -19,6 +20,9 @@ public class MappingProfile : Profile
         // ===== USER MAPPINGS =====
         CreateMap<User, UserDto>();
         CreateMap<RegisterRequest, User>();
+        CreateMap<UpdateProfileRequest, User>()
+            .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+        CreateMap<UpdateAvatarRequest, User>();
 
         // ===== CONVOY MAPPINGS =====
         CreateMap<Convoy, ConvoyDto>()

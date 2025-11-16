@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyncTrip", "SyncTrip\SyncTr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyncTrip.Api", "SyncTrip.Api\SyncTrip.Api.csproj", "{AF627B4E-B9B6-4E78-AA11-7C314F4C8F55}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyncTrip.Tests", "SyncTrip.Tests\SyncTrip.Tests.csproj", "{AAE429A2-4BE5-4F28-B656-21F3D61E9A0D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{AF627B4E-B9B6-4E78-AA11-7C314F4C8F55}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF627B4E-B9B6-4E78-AA11-7C314F4C8F55}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF627B4E-B9B6-4E78-AA11-7C314F4C8F55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAE429A2-4BE5-4F28-B656-21F3D61E9A0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAE429A2-4BE5-4F28-B656-21F3D61E9A0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAE429A2-4BE5-4F28-B656-21F3D61E9A0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAE429A2-4BE5-4F28-B656-21F3D61E9A0D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

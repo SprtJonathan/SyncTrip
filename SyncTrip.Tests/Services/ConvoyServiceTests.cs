@@ -18,7 +18,7 @@ namespace SyncTrip.Tests.Services;
 public class ConvoyServiceTests
 {
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
-    private readonly IMapper _mapper;
+    private readonly Mock<IMapper> _mapperMock;
     private readonly Mock<IConvoyCodeGenerator> _codeGeneratorMock;
     private readonly Mock<ILogger<ConvoyService>> _loggerMock;
     private readonly ConvoyService _sut;
@@ -26,15 +26,46 @@ public class ConvoyServiceTests
     public ConvoyServiceTests()
     {
         _unitOfWorkMock = new Mock<IUnitOfWork>();
+        _mapperMock = new Mock<IMapper>();
         _codeGeneratorMock = new Mock<IConvoyCodeGenerator>();
         _loggerMock = new Mock<ILogger<ConvoyService>>();
 
-        var config = new MapperConfiguration(cfg => cfg.AddProfile<MappingProfile>());
-        _mapper = config.CreateMapper();
+        // Setup AutoMapper mocks
+        _mapperMock.Setup(m => m.Map<Convoy>(It.IsAny<CreateConvoyRequest>()))
+            .Returns((CreateConvoyRequest request) => new Convoy
+            {
+                Name = request.Name
+            });
+
+        _mapperMock.Setup(m => m.Map<ConvoyDto>(It.IsAny<Convoy>()))
+            .Returns((Convoy convoy) => new ConvoyDto
+            {
+                Id = convoy.Id,
+                Code = convoy.Code,
+                Name = convoy.Name,
+                Status = convoy.Status,
+                Participants = new List<ConvoyParticipantDto>()
+            });
+
+        _mapperMock.Setup(m => m.Map<IEnumerable<ConvoyDto>>(It.IsAny<IEnumerable<Convoy>>()))
+            .Returns((IEnumerable<Convoy> convoys) => convoys.Select(c => new ConvoyDto
+            {
+                Id = c.Id,
+                Code = c.Code,
+                Name = c.Name,
+                Status = c.Status
+            }));
+
+        _mapperMock.Setup(m => m.Map(It.IsAny<UpdateConvoyRequest>(), It.IsAny<Convoy>()))
+            .Returns((UpdateConvoyRequest request, Convoy convoy) =>
+            {
+                convoy.Name = request.Name;
+                return convoy;
+            });
 
         _sut = new ConvoyService(
             _unitOfWorkMock.Object,
-            _mapper,
+            _mapperMock.Object,
             _codeGeneratorMock.Object,
             _loggerMock.Object);
     }

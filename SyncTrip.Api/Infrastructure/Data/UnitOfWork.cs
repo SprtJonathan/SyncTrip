@@ -20,6 +20,7 @@ public class UnitOfWork : IUnitOfWork
     private IConvoyParticipantRepository? _convoyParticipants;
     private IWaypointRepository? _waypoints;
     private IMagicLinkTokenRepository? _magicLinkTokens;
+    private IRefreshTokenRepository? _refreshTokens;
     private ILocationHistoryRepository? _locationHistories;
     private IMessageRepository? _messages;
 
@@ -35,6 +36,7 @@ public class UnitOfWork : IUnitOfWork
     public IConvoyParticipantRepository ConvoyParticipants => _convoyParticipants ??= new ConvoyParticipantRepository(_context);
     public IWaypointRepository Waypoints => _waypoints ??= new WaypointRepository(_context);
     public IMagicLinkTokenRepository MagicLinkTokens => _magicLinkTokens ??= new MagicLinkTokenRepository(_context);
+    public IRefreshTokenRepository RefreshTokens => _refreshTokens ??= new RefreshTokenRepository(_context);
     public ILocationHistoryRepository LocationHistories => _locationHistories ??= new LocationHistoryRepository(_context);
     public IMessageRepository Messages => _messages ??= new MessageRepository(_context);
 

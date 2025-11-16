@@ -21,6 +21,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<ConvoyParticipant> ConvoyParticipants => Set<ConvoyParticipant>();
     public DbSet<Waypoint> Waypoints => Set<Waypoint>();
     public DbSet<MagicLinkToken> MagicLinkTokens => Set<MagicLinkToken>();
+    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
     public DbSet<LocationHistory> LocationHistories => Set<LocationHistory>();
     public DbSet<Message> Messages => Set<Message>();
 
@@ -195,6 +196,32 @@ public class ApplicationDbContext : DbContext
             entity.HasOne(mlt => mlt.User)
                 .WithMany(u => u.MagicLinkTokens)
                 .HasForeignKey(mlt => mlt.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        // ===== REFRESH TOKEN CONFIGURATION =====
+        modelBuilder.Entity<RefreshToken>(entity =>
+        {
+            entity.ToTable("RefreshTokens");
+
+            entity.HasIndex(e => e.Token)
+                .IsUnique()
+                .HasDatabaseName("IX_RefreshTokens_Token");
+
+            entity.HasIndex(e => e.UserId)
+                .HasDatabaseName("IX_RefreshTokens_UserId");
+
+            entity.HasIndex(e => new { e.ExpiresAt, e.IsRevoked, e.IsUsed })
+                .HasDatabaseName("IX_RefreshTokens_ExpiresAt_IsRevoked_IsUsed");
+
+            entity.Property(e => e.Token)
+                .IsRequired()
+                .HasMaxLength(200);
+
+            // Relation avec User
+            entity.HasOne(rt => rt.User)
+                .WithMany()
+                .HasForeignKey(rt => rt.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
 

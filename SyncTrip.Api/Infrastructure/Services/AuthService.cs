@@ -18,17 +18,20 @@ public class AuthService : IAuthService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly IConfiguration _configuration;
+    private readonly IEmailService _emailService;
     private readonly ILogger<AuthService> _logger;
 
     public AuthService(
         IUnitOfWork unitOfWork,
         IMapper mapper,
         IConfiguration configuration,
+        IEmailService emailService,
         ILogger<AuthService> logger)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _configuration = configuration;
+        _emailService = emailService;
         _logger = logger;
     }
 
@@ -74,12 +77,10 @@ public class AuthService : IAuthService
         await _unitOfWork.MagicLinkTokens.AddAsync(magicLinkToken, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        // TODO: Envoyer l'email avec le magic link
-        // Pour l'instant on log juste le token (à remplacer par un vrai service d'email)
-        _logger.LogInformation("Magic link généré pour {Email}: {Token}", email, token);
+        // Envoyer l'email avec le magic link
+        await _emailService.SendMagicLinkAsync(email, token, cancellationToken);
 
-        // Dans un vrai système, on enverrait un email ici avec le lien
-        // await _emailService.SendMagicLinkAsync(email, token);
+        _logger.LogInformation("Magic link envoyé à {Email}", email);
     }
 
     public async Task<AuthResponse> VerifyMagicLinkAsync(string token, CancellationToken cancellationToken = default)
@@ -105,14 +106,26 @@ public class AuthService : IAuthService
 
         // Générer les tokens JWT
         var accessToken = GenerateJwtToken(user.Id, user.Email);
-        var refreshToken = GenerateRefreshToken();
+        var refreshTokenValue = GenerateRefreshToken();
+
+        // Stocker le refresh token en base
+        var refreshTokenExpirationDays = int.Parse(_configuration.GetSection("Jwt")["RefreshTokenExpirationDays"] ?? "30");
+        var refreshToken = new RefreshToken
+        {
+            UserId = user.Id,
+            Token = refreshTokenValue,
+            ExpiresAt = DateTime.UtcNow.AddDays(refreshTokenExpirationDays)
+        };
+
+        await _unitOfWork.RefreshTokens.AddAsync(refreshToken, cancellationToken);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         _logger.LogInformation("Utilisateur authentifié: {Email}", user.Email);
 
         return new AuthResponse
         {
             AccessToken = accessToken,
-            RefreshToken = refreshToken,
+            RefreshToken = refreshTokenValue,
             ExpiresAt = DateTime.UtcNow.AddHours(1),
             User = _mapper.Map<UserDto>(user)
         };
@@ -120,9 +133,43 @@ public class AuthService : IAuthService
 
     public async Task<AuthResponse> RefreshTokenAsync(string refreshToken, CancellationToken cancellationToken = default)
     {
-        // TODO: Implémenter la validation du refresh token
-        // Pour l'instant, retourner une exception
-        throw new NotImplementedException("Refresh token non implémenté");
+        // Récupérer et valider le refresh token
+        var storedToken = await _unitOfWork.RefreshTokens.GetValidTokenAsync(refreshToken, cancellationToken);
+        if (storedToken == null)
+        {
+            throw new UnauthorizedAccessException("Refresh token invalide ou expiré");
+        }
+
+        // Marquer le token comme utilisé
+        storedToken.IsUsed = true;
+        storedToken.UsedAt = DateTime.UtcNow;
+        _unitOfWork.RefreshTokens.Update(storedToken);
+
+        // Générer de nouveaux tokens
+        var accessToken = GenerateJwtToken(storedToken.UserId, storedToken.User.Email);
+        var newRefreshTokenValue = GenerateRefreshToken();
+
+        // Créer un nouveau refresh token
+        var refreshTokenExpirationDays = int.Parse(_configuration.GetSection("Jwt")["RefreshTokenExpirationDays"] ?? "30");
+        var newRefreshToken = new RefreshToken
+        {
+            UserId = storedToken.UserId,
+            Token = newRefreshTokenValue,
+            ExpiresAt = DateTime.UtcNow.AddDays(refreshTokenExpirationDays)
+        };
+
+        await _unitOfWork.RefreshTokens.AddAsync(newRefreshToken, cancellationToken);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+        _logger.LogInformation("Refresh token utilisé pour {Email}", storedToken.User.Email);
+
+        return new AuthResponse
+        {
+            AccessToken = accessToken,
+            RefreshToken = newRefreshTokenValue,
+            ExpiresAt = DateTime.UtcNow.AddHours(1),
+            User = _mapper.Map<UserDto>(storedToken.User)
+        };
     }
 
     public string GenerateJwtToken(Guid userId, string email)

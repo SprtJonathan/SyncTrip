@@ -37,6 +37,11 @@ public interface IUnitOfWork : IDisposable
     IMagicLinkTokenRepository MagicLinkTokens { get; }
 
     /// <summary>
+    /// Repository pour les refresh tokens
+    /// </summary>
+    IRefreshTokenRepository RefreshTokens { get; }
+
+    /// <summary>
     /// Repository pour l'historique de localisation
     /// </summary>
     ILocationHistoryRepository LocationHistories { get; }

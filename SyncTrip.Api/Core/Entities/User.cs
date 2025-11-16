@@ -30,6 +30,18 @@ public class User : BaseEntity
     public string? PhoneNumber { get; set; }
 
     /// <summary>
+    /// URL de l'avatar/photo de profil (optionnel)
+    /// </summary>
+    [MaxLength(500)]
+    public string? AvatarUrl { get; set; }
+
+    /// <summary>
+    /// Bio/description courte du profil (optionnel)
+    /// </summary>
+    [MaxLength(500)]
+    public string? Bio { get; set; }
+
+    /// <summary>
     /// 2FA activé ?
     /// </summary>
     public bool TwoFactorEnabled { get; set; } = false;

@@ -21,8 +21,20 @@ Log.Logger = new LoggerConfiguration()
 builder.Host.UseSerilog();
 
 // ===== DATABASE CONFIGURATION =====
+var useSqlite = builder.Configuration.GetValue<bool>("UseSqlite");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+{
+    if (useSqlite)
+    {
+        options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
+        Log.Information("Utilisation de SQLite pour le développement/tests");
+    }
+    else
+    {
+        options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+        Log.Information("Utilisation de PostgreSQL");
+    }
+});
 
 // ===== REDIS CONFIGURATION =====
 var redisConnectionString = builder.Configuration.GetConnectionString("Redis");
@@ -97,14 +109,20 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowMobileApp", policy =>
     {
-        policy.AllowAnyOrigin()
-              .AllowAnyMethod()
-              .AllowAnyHeader();
-
-        // Pour SignalR avec credentials
         if (builder.Environment.IsDevelopment())
         {
+            // En développement : autoriser tout avec credentials (pour SignalR)
             policy.SetIsOriginAllowed(_ => true)
+                  .AllowAnyMethod()
+                  .AllowAnyHeader()
+                  .AllowCredentials();
+        }
+        else
+        {
+            // En production : spécifier les origines exactes
+            policy.WithOrigins("https://yourdomain.com", "https://app.yourdomain.com")
+                  .AllowAnyMethod()
+                  .AllowAnyHeader()
                   .AllowCredentials();
         }
     });
@@ -119,7 +137,9 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // Services
 builder.Services.AddScoped<IConvoyCodeGenerator, ConvoyCodeGenerator>();
+builder.Services.AddScoped<IEmailService, ConsoleEmailService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IConvoyService, ConvoyService>();
 builder.Services.AddScoped<ITripService, TripService>();
 builder.Services.AddScoped<IMessageService, MessageService>();
@@ -160,6 +180,25 @@ app.MapControllers();
 // SignalR Hubs
 app.MapHub<LocationHub>("/hubs/location");
 app.MapHub<ChatHub>("/hubs/chat");
+
+// ===== DATABASE INITIALIZATION =====
+// Créer la base de données automatiquement en mode développement (SQLite)
+if (app.Environment.IsDevelopment() && useSqlite)
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        try
+        {
+            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            dbContext.Database.EnsureCreated();
+            Log.Information("Base de données SQLite créée/vérifiée avec succès");
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Erreur lors de la création de la base de données SQLite");
+        }
+    }
+}
 
 // ===== RUN APPLICATION =====
 try

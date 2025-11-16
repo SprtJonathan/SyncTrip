@@ -12,7 +12,7 @@ namespace SyncTrip.Api.API.Controllers;
 /// Controller de gestion des trips
 /// </summary>
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/trips")]
 [Authorize]
 public class TripsController : ControllerBase
 {

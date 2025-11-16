@@ -11,7 +11,7 @@ namespace SyncTrip.Api.API.Controllers;
 /// Controller de gestion des messages
 /// </summary>
 [ApiController]
-[Route("api/convoys/{convoyId}/[controller]")]
+[Route("api/convoys/{convoyId}/messages")]
 [Authorize]
 public class MessagesController : ControllerBase
 {

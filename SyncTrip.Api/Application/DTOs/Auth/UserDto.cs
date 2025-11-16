@@ -9,6 +9,8 @@ public class UserDto
     public string Email { get; set; } = string.Empty;
     public string DisplayName { get; set; } = string.Empty;
     public string? PhoneNumber { get; set; }
+    public string? AvatarUrl { get; set; }
+    public string? Bio { get; set; }
     public bool TwoFactorEnabled { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime? LastLoginAt { get; set; }

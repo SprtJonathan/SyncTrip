@@ -19,20 +19,61 @@ namespace SyncTrip.Tests.Services;
 public class TripServiceTests
 {
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
-    private readonly IMapper _mapper;
+    private readonly Mock<IMapper> _mapperMock;
     private readonly Mock<ILogger<TripService>> _loggerMock;
     private readonly TripService _sut; // System Under Test
 
     public TripServiceTests()
     {
         _unitOfWorkMock = new Mock<IUnitOfWork>();
+        _mapperMock = new Mock<IMapper>();
         _loggerMock = new Mock<ILogger<TripService>>();
 
-        // Configuration AutoMapper avec le vrai profil
-        var config = new MapperConfiguration(cfg => cfg.AddProfile<MappingProfile>());
-        _mapper = config.CreateMapper();
+        // Setup AutoMapper mock pour retourner des DTOs basiques
+        _mapperMock.Setup(m => m.Map<TripDto>(It.IsAny<Trip>()))
+            .Returns((Trip trip) => new TripDto
+            {
+                Id = trip.Id,
+                ConvoyId = trip.ConvoyId,
+                Destination = trip.Destination,
+                DestinationLatitude = trip.DestinationLatitude,
+                DestinationLongitude = trip.DestinationLongitude,
+                Status = trip.Status
+            });
 
-        _sut = new TripService(_unitOfWorkMock.Object, _mapper, _loggerMock.Object);
+        _mapperMock.Setup(m => m.Map<Trip>(It.IsAny<CreateTripRequest>()))
+            .Returns((CreateTripRequest request) => new Trip
+            {
+                ConvoyId = request.ConvoyId,
+                Destination = request.Destination,
+                DestinationLatitude = request.DestinationLatitude,
+                DestinationLongitude = request.DestinationLongitude,
+                RoutePreference = request.RoutePreference,
+                PlannedDepartureTime = request.PlannedDepartureTime
+            });
+
+        _mapperMock.Setup(m => m.Map<WaypointDto>(It.IsAny<Waypoint>()))
+            .Returns((Waypoint waypoint) => new WaypointDto
+            {
+                Id = waypoint.Id,
+                TripId = waypoint.TripId,
+                Name = waypoint.Name,
+                Latitude = waypoint.Latitude,
+                Longitude = waypoint.Longitude,
+                Order = waypoint.Order,
+                IsReached = waypoint.IsReached,
+                ReachedAt = waypoint.ReachedAt
+            });
+
+        _mapperMock.Setup(m => m.Map<Waypoint>(It.IsAny<CreateWaypointRequest>()))
+            .Returns((CreateWaypointRequest request) => new Waypoint
+            {
+                Name = request.Name,
+                Latitude = request.Latitude,
+                Longitude = request.Longitude
+            });
+
+        _sut = new TripService(_unitOfWorkMock.Object, _mapperMock.Object, _loggerMock.Object);
     }
 
     #region CreateTripAsync Tests
