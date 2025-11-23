@@ -1,0 +1,12 @@
+C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Shared\bin\Debug\net10.0\SyncTrip.Shared.deps.json
+C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Shared\bin\Debug\net10.0\SyncTrip.Shared.dll
+C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Shared\bin\Debug\net10.0\SyncTrip.Shared.pdb
+C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Shared\obj\Debug\net10.0\SyncTrip.Shared.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Shared\obj\Debug\net10.0\SyncTrip.Shared.AssemblyInfoInputs.cache
+C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Shared\obj\Debug\net10.0\SyncTrip.Shared.AssemblyInfo.cs
+C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Shared\obj\Debug\net10.0\SyncTrip.Shared.csproj.CoreCompileInputs.cache
+C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Shared\obj\Debug\net10.0\SyncTrip.Shared.sourcelink.json
+C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Shared\obj\Debug\net10.0\SyncTrip.Shared.dll
+C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Shared\obj\Debug\net10.0\refint\SyncTrip.Shared.dll
+C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Shared\obj\Debug\net10.0\SyncTrip.Shared.pdb
+C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Shared\obj\Debug\net10.0\ref\SyncTrip.Shared.dll
