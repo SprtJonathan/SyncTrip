@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SyncTrip.Application")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+762b01df9e77542ea9e41e53c2fddf234f95f16d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0a0b59110abe486f45dcb041ceb6d0e65861fc1f")]
 [assembly: System.Reflection.AssemblyProductAttribute("SyncTrip.Application")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SyncTrip.Application")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
