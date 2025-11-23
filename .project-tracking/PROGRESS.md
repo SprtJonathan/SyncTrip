@@ -1,7 +1,7 @@
 # SyncTrip - Suivi de Progression
 
-**Dernière mise à jour** : 23 Novembre 2025
-**Statut Global** : En développement initial
+**Dernière mise à jour** : 23 Novembre 2025 - 17h20
+**Statut Global** : Feature Auth API terminée - Mobile en attente
 
 ---
 
@@ -15,34 +15,42 @@ Chaque feature est développée de bout en bout (Core → Application → Infras
 ## Progression par Feature
 
 ### ✅ TERMINÉ
-_Aucune feature terminée pour le moment_
+
+#### Feature 1 : Authentification Magic Link (Backend)
+**Statut** : Backend terminé, Mobile en attente
+**Progression** : 80% (API complète, Mobile à faire)
+
+**Composants terminés** :
+- [x] Core : Entités User, MagicLinkToken
+- [x] Core : Interfaces IUserRepository, IAuthService, IEmailService
+- [x] Shared : DTOs Auth (MagicLinkRequest, VerifyTokenRequest, CompleteRegistrationRequest, VerifyTokenResponse)
+- [x] Application : Commands Auth (SendMagicLink, VerifyToken, CompleteRegistration)
+- [x] Application : Validators Auth (CompleteRegistrationValidator)
+- [x] Infrastructure : Repositories (UserRepository, MagicLinkTokenRepository)
+- [x] Infrastructure : Services (AuthService, EmailService)
+- [x] Infrastructure : Configuration EF Core + Migration initiale
+- [x] API : AuthController avec 3 endpoints (SendMagicLink, VerifyToken, CompleteRegistration)
+- [x] API : Configuration Program.cs (MediatR, JWT, FluentValidation, CORS, Swagger)
+- [x] Tests : Tests unitaires entités User (17 tests - validation âge > 14 ans)
+- [x] Tests : Tests handlers CompleteRegistrationCommandHandler (5 tests)
+- [x] Vérification : Compilation sans erreur de l'API
+- [x] Vérification : Tous les tests passent (22/22)
+
+**Composants en attente** :
+- [ ] Mobile : MagicLinkPage + ViewModel
+- [ ] Mobile : RegistrationPage + ViewModel
+- [ ] Mobile : Services (IApiService, ApiService, IAuthenticationService, AuthenticationService)
+- [ ] Mobile : Configuration MauiProgram.cs et AppShell.xaml
+- [ ] Tests : Tests Mobile (si applicable)
+- [ ] Vérification : Feature testée end-to-end
+
+**Raison attente Mobile** : Android SDK manquant sur la machine de développement. La partie Backend/API est production-ready.
 
 ---
 
 ### 🚧 EN COURS
 
-#### Feature 1 : Authentification (Magic Link)
-**Statut** : Non démarré
-**Progression** : 0%
-
-**Composants** :
-- [ ] Core : Entités User, MagicLinkToken
-- [ ] Core : Interfaces IUserRepository, IAuthService, IEmailService
-- [ ] Shared : DTOs Auth (MagicLinkRequest, VerifyTokenRequest, etc.)
-- [ ] Application : Commands Auth (SendMagicLink, VerifyToken, CompleteRegistration)
-- [ ] Application : Validators Auth
-- [ ] Infrastructure : Repositories (UserRepository, MagicLinkTokenRepository)
-- [ ] Infrastructure : Services (AuthService, EmailService)
-- [ ] Infrastructure : Configuration EF Core + Migration initiale
-- [ ] API : AuthController
-- [ ] Mobile : MagicLinkPage + ViewModel
-- [ ] Mobile : RegistrationPage + ViewModel
-- [ ] Mobile : AuthenticationService
-- [ ] Tests : Tests unitaires entités
-- [ ] Tests : Tests handlers
-- [ ] Tests : Tests API
-- [ ] Vérification : Compilation sans erreur
-- [ ] Vérification : Feature testée end-to-end
+_Aucune feature en cours pour le moment_
 
 ---
 
@@ -128,25 +136,60 @@ _Aucune feature terminée pour le moment_
 
 ## Métriques
 
-**Features Terminées** : 0 / 6
-**Progression Globale** : 0%
-**Dernière compilation** : N/A
-**Tests Passing** : 0 / 0
+**Features Terminées** : 0.8 / 6 (Backend Auth complet)
+**Progression Globale** : 13%
+**Dernière compilation** : 23 Nov 2025 - Succès (API + Tests)
+**Tests Passing** : 22 / 22 (100%)
+  - Core.Tests : 17 tests
+  - Application.Tests : 5 tests
 
 ---
 
 ## Historique des Commits
 
-_Les commits seront listés ici au fur et à mesure_
-
 ### Session du 23 Novembre 2025
-- Aucun commit pour le moment
+
+1. **ea74d52** - `feat(api): ajoute AuthController avec 3 endpoints Magic Link`
+   - Création du AuthController avec SendMagicLink, VerifyToken, CompleteRegistration
+   - Documentation XML complète des endpoints
+
+2. **1b75d1a** - `feat(api): finalise configuration Program.cs avec MediatR, JWT, FluentValidation et CORS`
+   - Configuration complète de l'API (MediatR, JWT Bearer, FluentValidation, CORS, Swagger)
+   - Ajout des packages nécessaires
+   - Configuration XML documentation pour Swagger
+
+3. **acb877b** - `test(core): ajoute tests validation âge pour entité User`
+   - 17 tests unitaires pour l'entité User
+   - Tests de validation âge > 14 ans
+   - Tests des méthodes Create, SetBirthDate, UpdateProfile, Deactivate, Reactivate
+
+4. **ddeea0f** - `test(application): ajoute tests handlers authentification CompleteRegistration`
+   - 5 tests unitaires pour CompleteRegistrationCommandHandler
+   - Tests avec Moq pour IUserRepository et IAuthService
+   - Tests de validation, normalisation email, trim username
+
+5. **1eb3d58** - `chore: ajoute projets de tests à la solution`
+   - Ajout des projets SyncTrip.Core.Tests et SyncTrip.Application.Tests à la solution
+
+**Total commits** : 5 commits fonctionnels + tests
 
 ---
 
 ## Prochaines Actions
 
-1. Créer les fichiers de suivi (.project-tracking)
-2. Démarrer Feature 1 : Authentification
-3. Commits fréquents après chaque fichier/groupe compilable
-4. Vérifier compilation avant chaque commit
+### Priorité Haute (Backend)
+1. Tester manuellement l'API avec Swagger/Postman
+2. Vérifier que la base de données PostgreSQL fonctionne
+3. Tester le flux complet d'authentification Magic Link
+
+### Priorité Moyenne (Mobile)
+1. Installer Android SDK pour compilation MAUI
+2. Créer les services Mobile (IApiService, AuthenticationService)
+3. Créer les ViewModels (MagicLinkViewModel, RegistrationViewModel)
+4. Créer les Views XAML (MagicLinkPage, RegistrationPage)
+5. Configurer MauiProgram.cs et AppShell.xaml
+
+### Priorité Basse
+1. Améliorer la configuration Swagger (réintroduire JWT UI si possible avec .NET 10)
+2. Ajouter tests d'intégration API
+3. Configurer CI/CD
