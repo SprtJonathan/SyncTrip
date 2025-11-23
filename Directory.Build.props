@@ -1,0 +1,7 @@
+<Project>
+  <PropertyGroup>
+    <!-- Configuration Android SDK pour .NET MAUI -->
+    <AndroidSdkDirectory Condition="'$(AndroidSdkDirectory)' == '' And Exists('$(LOCALAPPDATA)\Android\Sdk')">$(LOCALAPPDATA)\Android\Sdk</AndroidSdkDirectory>
+    <AndroidSdkDirectory Condition="'$(AndroidSdkDirectory)' == '' And Exists('$(UserProfile)\AppData\Local\Android\Sdk')">$(UserProfile)\AppData\Local\Android\Sdk</AndroidSdkDirectory>
+  </PropertyGroup>
+</Project>
