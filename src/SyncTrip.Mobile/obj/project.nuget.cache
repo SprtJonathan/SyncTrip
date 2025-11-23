@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "uMIqmHXiQG8=",
+  "dgSpecHash": "FDHdS5nwee8=",
   "success": true,
   "projectFilePath": "C:\\Users\\sprtj\\RiderProjects\\SyncTrip\\src\\SyncTrip.Mobile\\SyncTrip.Mobile.csproj",
   "expectedPackageFiles": [
@@ -73,8 +73,6 @@
     "C:\\Users\\sprtj\\.nuget\\packages\\svg.custom\\3.2.1\\svg.custom.3.2.1.nupkg.sha512",
     "C:\\Users\\sprtj\\.nuget\\packages\\svg.model\\3.2.1\\svg.model.3.2.1.nupkg.sha512",
     "C:\\Users\\sprtj\\.nuget\\packages\\svg.skia\\3.2.1\\svg.skia.3.2.1.nupkg.sha512",
-    "C:\\Users\\sprtj\\.nuget\\packages\\system.text.json\\9.0.0\\system.text.json.9.0.0.nupkg.sha512",
-    "C:\\Users\\sprtj\\.nuget\\packages\\system.valuetuple\\4.5.0\\system.valuetuple.4.5.0.nupkg.sha512",
     "C:\\Users\\sprtj\\.nuget\\packages\\topten.richtextkit\\0.4.167\\topten.richtextkit.0.4.167.nupkg.sha512",
     "C:\\Users\\sprtj\\.nuget\\packages\\xamarin.android.glide\\4.16.0.14\\xamarin.android.glide.4.16.0.14.nupkg.sha512",
     "C:\\Users\\sprtj\\.nuget\\packages\\xamarin.android.glide.annotations\\4.16.0.14\\xamarin.android.glide.annotations.4.16.0.14.nupkg.sha512",
