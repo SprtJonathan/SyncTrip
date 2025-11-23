@@ -1,0 +1,6 @@
+@SyncTrip.API_HostAddress = http://localhost:5188
+
+GET {{SyncTrip.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
