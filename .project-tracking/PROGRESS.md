@@ -1,7 +1,7 @@
 # SyncTrip - Suivi de Progression
 
-**Dernière mise à jour** : 24 Novembre 2025 - 14h00
-**Statut Global** : Feature Auth COMPLÈTE et VALIDÉE (Backend + Mobile)
+**Dernière mise à jour** : 24 Novembre 2025 - 18h00
+**Statut Global** : Features 1 & 2 COMPLÈTES (Auth + Profil/Garage)
 
 ---
 
@@ -46,6 +46,43 @@ Chaque feature est développée de bout en bout (Core → Application → Infras
 - [x] Mobile : Styles (ajout couleurs Success, Error, Warning)
 - [x] Vérification : Compilation complète réussie (toutes plateformes : Android, iOS, MacCatalyst, Windows)
 
+#### Feature 2 : Profil & Garage
+**Statut** : TERMINÉ (Backend + Mobile + Tests)
+**Progression** : 100%
+
+**Composants terminés** :
+- [x] Core : Enums (LicenseType, VehicleType)
+- [x] Core : Entités (Brand, Vehicle, UserLicense)
+- [x] Core : Relations User (Vehicles, Licenses)
+- [x] Core : Interfaces (IVehicleRepository, IBrandRepository)
+- [x] Shared : DTOs Users (UserProfileDto, UpdateUserProfileRequest)
+- [x] Shared : DTOs Vehicles (VehicleDto, CreateVehicleRequest, UpdateVehicleRequest)
+- [x] Shared : DTOs Brands (BrandDto)
+- [x] Application : Queries (GetUserProfile, GetUserVehicles, GetBrands)
+- [x] Application : Commands (UpdateUserProfile, CreateVehicle, UpdateVehicle, DeleteVehicle)
+- [x] Application : Validators FluentValidation (UpdateUserProfile, CreateVehicle, UpdateVehicle)
+- [x] Infrastructure : Repositories (VehicleRepository, BrandRepository)
+- [x] Infrastructure : Configurations EF Core (Brand, Vehicle, UserLicense)
+- [x] Infrastructure : Seed data 40 marques de véhicules (motos, voitures, utilitaires)
+- [x] Infrastructure : Migration EF Core appliquée
+- [x] Infrastructure : DependencyInjection.cs mis à jour
+- [x] API : UsersController (GET/PUT /users/me)
+- [x] API : VehiclesController (CRUD complet)
+- [x] API : BrandsController (GET /brands)
+- [x] Tests : Entités Vehicle, Brand, UserLicense (96 tests)
+- [x] Tests : Handlers (CreateVehicle, GetUserProfile, UpdateUserProfile - 55 tests)
+- [x] Vérification : Compilation sans erreur Backend
+- [x] Vérification : Tous les tests passent (151/151)
+
+**Composants Mobile ajoutés** :
+- [x] Mobile : Services (IUserService, UserService, IVehicleService, VehicleService, IBrandService, BrandService)
+- [x] Mobile : ViewModels (ProfileViewModel, GarageViewModel, AddVehicleViewModel)
+- [x] Mobile : Converters (VehicleTypeConverter, IsNotNullConverter)
+- [x] Mobile : Views (ProfilePage.xaml, GaragePage.xaml, AddVehiclePage.xaml)
+- [x] Mobile : Configuration MauiProgram.cs (Services, ViewModels, Pages)
+- [x] Mobile : Configuration AppShell.xaml (Onglets Profile et Garage, route addvehicle)
+- [x] Vérification : Configuration complète DI et navigation
+
 ---
 
 ### 🚧 EN COURS
@@ -55,19 +92,6 @@ _Aucune feature en cours pour le moment_
 ---
 
 ### 📋 À FAIRE
-
-#### Feature 2 : Profil & Garage
-**Statut** : Pas démarré
-**Priorité** : Haute
-
-**Composants** :
-- [ ] Core : Entités Vehicle, Brand, UserLicense
-- [ ] Shared : DTOs Users, Vehicles
-- [ ] Application : Commands & Queries Users/Vehicles
-- [ ] Infrastructure : Repositories & Seed Brands
-- [ ] API : Controllers (Users, Vehicles, Brands)
-- [ ] Mobile : Pages Profil + Garage
-- [ ] Tests complets
 
 ---
 
@@ -136,13 +160,14 @@ _Aucune feature en cours pour le moment_
 
 ## Métriques
 
-**Features Terminées** : 1 / 6 (Auth complet Backend + Mobile - VALIDÉ)
-**Progression Globale** : 17%
-**Dernière compilation** : 24 Nov 2025 14h00 - Succès (Backend complet)
-**Tests Passing** : 22 / 22 (100%)
-  - Core.Tests : 17 tests
-  - Application.Tests : 5 tests
+**Features Terminées** : 2 / 6 (Auth + Profil/Garage - Backend + Mobile + Tests)
+**Progression Globale** : 33%
+**Dernière compilation** : 24 Nov 2025 18h00 - Succès (Backend + Tests)
+**Tests Passing** : 151 / 151 (100%)
+  - Core.Tests : 96 tests (User, Vehicle, Brand, UserLicense)
+  - Application.Tests : 55 tests (Auth, Users, Vehicles)
 **Qualité Code** : ✅ Conforme aux spécifications (Clean Architecture, DDD, MVVM)
+**Seed Data** : 40 marques de véhicules (motos, voitures, utilitaires)
 
 ---
 
