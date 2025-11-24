@@ -226,7 +226,6 @@ C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-macc
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-maccatalyst\maccatalyst-x64\System.Text.Encodings.Web.dll
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-maccatalyst\maccatalyst-x64\System.Text.Json.dll
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-maccatalyst\maccatalyst-x64\System.Text.RegularExpressions.dll
-C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-maccatalyst\maccatalyst-x64\System.Threading.AccessControl.dll
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-maccatalyst\maccatalyst-x64\System.Threading.Channels.dll
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-maccatalyst\maccatalyst-x64\System.Threading.Overlapped.dll
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-maccatalyst\maccatalyst-x64\System.Threading.Tasks.Dataflow.dll
@@ -291,7 +290,6 @@ C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-macc
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-maccatalyst\maccatalyst-x64\SyncTrip.Shared.dll
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-maccatalyst\maccatalyst-x64\SyncTrip.Shared.pdb
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\obj\Debug\net10.0-maccatalyst\maccatalyst-x64\SyncTrip.Mobile.csproj.AssemblyReference.cache
-C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\obj\Debug\net10.0-maccatalyst\maccatalyst-x64\partialappmanifest\_PartialAppManifests.items
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\obj\Debug\net10.0-maccatalyst\maccatalyst-x64\unpack\Microsoft.Maui.Essentials\BundleResource\xml\microsoft_maui_essentials_fileprovider_file_paths.xml
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\obj\Debug\net10.0-maccatalyst\maccatalyst-x64\mauiimage.inputs
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\obj\Debug\net10.0-maccatalyst\maccatalyst-x64\mauifont.inputs
@@ -341,3 +339,7 @@ C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\obj\Debug\net10.0-macc
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\obj\Debug\net10.0-maccatalyst\maccatalyst-x64\SyncTrip.Mobile.pdb
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\obj\Debug\net10.0-maccatalyst\maccatalyst-x64\SyncTrip.Mobile.genruntimeconfig.cache
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\obj\Debug\net10.0-maccatalyst\maccatalyst-x64\ref\SyncTrip.Mobile.dll
+C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-maccatalyst\maccatalyst-x64\Microsoft.Extensions.Configuration.Binder.dll
+C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-maccatalyst\maccatalyst-x64\Microsoft.Extensions.Diagnostics.dll
+C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-maccatalyst\maccatalyst-x64\Microsoft.Extensions.Http.dll
+C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-maccatalyst\maccatalyst-x64\Microsoft.Extensions.Options.ConfigurationExtensions.dll

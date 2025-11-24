@@ -99,11 +99,6 @@ C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-wind
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-windows10.0.19041.0\win-x64\WindowsAppSdk.AppxDeploymentExtensions.Desktop.dll
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-windows10.0.19041.0\win-x64\WinUIEdit.dll
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-windows10.0.19041.0\win-x64\wuceffectsi.dll
-C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-windows10.0.19041.0\win-x64\workloads.365.json
-C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-windows10.0.19041.0\win-x64\workloads.json
-C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-windows10.0.19041.0\win-x64\workloads.lnl.json
-C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-windows10.0.19041.0\win-x64\workloads.qnn.json
-C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-windows10.0.19041.0\win-x64\workloads.stx.json
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-windows10.0.19041.0\win-x64\RestartAgent.exe
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-windows10.0.19041.0\win-x64\Microsoft.UI.Xaml\Assets\map.html
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-windows10.0.19041.0\win-x64\af-ZA\Microsoft.ui.xaml.dll.mui
@@ -367,14 +362,9 @@ C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-wind
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-windows10.0.19041.0\win-x64\Microsoft.Maui.Essentials.dll
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-windows10.0.19041.0\win-x64\Microsoft.Maui.Graphics.dll
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-windows10.0.19041.0\win-x64\Microsoft.Maui.Graphics.Win2D.WinUI.Desktop.dll
-C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-windows10.0.19041.0\win-x64\Microsoft.Graphics.Imaging.Projection.dll
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-windows10.0.19041.0\win-x64\Microsoft.InteractiveExperiences.Projection.dll
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-windows10.0.19041.0\win-x64\Microsoft.Security.Authentication.OAuth.Projection.dll
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-windows10.0.19041.0\win-x64\Microsoft.WinUI.dll
-C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-windows10.0.19041.0\win-x64\Microsoft.Windows.AI.ContentSafety.Projection.dll
-C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-windows10.0.19041.0\win-x64\Microsoft.Windows.AI.Imaging.Projection.dll
-C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-windows10.0.19041.0\win-x64\Microsoft.Windows.AI.Projection.dll
-C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-windows10.0.19041.0\win-x64\Microsoft.Windows.AI.Text.Projection.dll
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-windows10.0.19041.0\win-x64\Microsoft.Windows.AppLifecycle.Projection.dll
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-windows10.0.19041.0\win-x64\Microsoft.Windows.AppNotifications.Builder.Projection.dll
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-windows10.0.19041.0\win-x64\Microsoft.Windows.AppNotifications.Projection.dll
@@ -557,3 +547,7 @@ C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\obj\Debug\net10.0-wind
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\obj\Debug\net10.0-windows10.0.19041.0\win-x64\qualifiers.txt
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\obj\Debug\net10.0-windows10.0.19041.0\win-x64\qualifiers.txt.intermediate
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\obj\Debug\net10.0-windows10.0.19041.0\win-x64\MultipleQualifiersPerDimensionFound.txt
+C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-windows10.0.19041.0\win-x64\Microsoft.Extensions.Configuration.Binder.dll
+C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-windows10.0.19041.0\win-x64\Microsoft.Extensions.Diagnostics.dll
+C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-windows10.0.19041.0\win-x64\Microsoft.Extensions.Http.dll
+C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.Mobile\bin\Debug\net10.0-windows10.0.19041.0\win-x64\Microsoft.Extensions.Options.ConfigurationExtensions.dll

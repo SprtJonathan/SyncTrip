@@ -186,7 +186,6 @@ C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.API\bin\Debug\net10.0\SyncTri
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.API\bin\Debug\net10.0\SyncTrip.Shared.pdb
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.API\bin\Debug\net10.0\SyncTrip.Core.pdb
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.API\obj\Debug\net10.0\SyncTrip.API.csproj.AssemblyReference.cache
-C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.API\obj\Debug\net10.0\rpswa.dswa.cache.json
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.API\obj\Debug\net10.0\SyncTrip.API.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.API\obj\Debug\net10.0\SyncTrip.API.AssemblyInfoInputs.cache
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.API\obj\Debug\net10.0\SyncTrip.API.AssemblyInfo.cs
@@ -194,15 +193,11 @@ C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.API\obj\Debug\net10.0\SyncTri
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.API\obj\Debug\net10.0\SyncTrip.API.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.API\obj\Debug\net10.0\SyncTrip.API.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.API\obj\Debug\net10.0\SyncTrip.API.sourcelink.json
-C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.API\obj\Debug\net10.0\rjimswa.dswa.cache.json
-C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.API\obj\Debug\net10.0\rjsmrazor.dswa.cache.json
-C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.API\obj\Debug\net10.0\rjsmcshtml.dswa.cache.json
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.API\obj\Debug\net10.0\scopedcss\bundle\SyncTrip.API.styles.css
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.API\obj\Debug\net10.0\staticwebassets.build.json
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.API\obj\Debug\net10.0\staticwebassets.build.json.cache
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.API\obj\Debug\net10.0\staticwebassets.development.json
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.API\obj\Debug\net10.0\staticwebassets.build.endpoints.json
-C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.API\obj\Debug\net10.0\swae.build.ex.cache
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.API\obj\Debug\net10.0\SyncTrip.29FF8C31.Up2Date
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.API\obj\Debug\net10.0\SyncTrip.API.dll
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.API\obj\Debug\net10.0\refint\SyncTrip.API.dll
@@ -210,3 +205,12 @@ C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.API\obj\Debug\net10.0\SyncTri
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.API\obj\Debug\net10.0\SyncTrip.API.pdb
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.API\obj\Debug\net10.0\SyncTrip.API.genruntimeconfig.cache
 C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.API\obj\Debug\net10.0\ref\SyncTrip.API.dll
+C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.API\bin\Debug\net10.0\Microsoft.Extensions.Caching.Abstractions.dll
+C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.API\bin\Debug\net10.0\Microsoft.Extensions.Caching.Memory.dll
+C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.API\bin\Debug\net10.0\Microsoft.Extensions.Configuration.Abstractions.dll
+C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.API\bin\Debug\net10.0\Microsoft.Extensions.DependencyInjection.dll
+C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.API\bin\Debug\net10.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.API\bin\Debug\net10.0\Microsoft.Extensions.Logging.dll
+C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.API\bin\Debug\net10.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.API\bin\Debug\net10.0\Microsoft.Extensions.Options.dll
+C:\Users\sprtj\RiderProjects\SyncTrip\src\SyncTrip.API\bin\Debug\net10.0\Microsoft.Extensions.Primitives.dll

@@ -13,11 +13,11 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SyncTrip.Mobile")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+ad820eac43ab8c00d75cba5f66a182dc138096d8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+9d4b8d1b8ebefec281758226c5cb24ad924f0a7c")]
 [assembly: System.Reflection.AssemblyProductAttribute("SyncTrip.Mobile")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SyncTrip.Mobile")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
-[assembly: System.Runtime.Versioning.TargetPlatformAttribute("iOS26.1")]
+[assembly: System.Runtime.Versioning.TargetPlatformAttribute("iOS18.4")]
 [assembly: System.Runtime.Versioning.SupportedOSPlatformAttribute("iOS15.0")]
 
 // Généré par la classe MSBuild WriteCodeFragment.
