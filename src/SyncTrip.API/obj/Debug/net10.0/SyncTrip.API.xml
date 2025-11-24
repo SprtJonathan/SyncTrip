@@ -39,6 +39,97 @@
             <param name="request">Informations d'inscription de l'utilisateur.</param>
             <returns>JWT token pour l'utilisateur nouvellement créé.</returns>
         </member>
+        <member name="T:SyncTrip.API.Controllers.BrandsController">
+            <summary>
+            Contrôleur pour la gestion des marques de véhicules.
+            </summary>
+        </member>
+        <member name="M:SyncTrip.API.Controllers.BrandsController.#ctor(MediatR.IMediator,Microsoft.Extensions.Logging.ILogger{SyncTrip.API.Controllers.BrandsController})">
+            <summary>
+            Initialise une nouvelle instance du contrôleur marques.
+            </summary>
+        </member>
+        <member name="M:SyncTrip.API.Controllers.BrandsController.GetAllBrands">
+            <summary>
+            Récupère toutes les marques de véhicules disponibles.
+            </summary>
+            <returns>Liste de toutes les marques.</returns>
+            <remarks>
+            Cet endpoint est public car la liste des marques est utilisée
+            lors de l'ajout d'un véhicule et ne contient aucune donnée sensible.
+            </remarks>
+        </member>
+        <member name="T:SyncTrip.API.Controllers.UsersController">
+            <summary>
+            Contrôleur pour la gestion du profil utilisateur.
+            </summary>
+        </member>
+        <member name="M:SyncTrip.API.Controllers.UsersController.#ctor(MediatR.IMediator,Microsoft.Extensions.Logging.ILogger{SyncTrip.API.Controllers.UsersController})">
+            <summary>
+            Initialise une nouvelle instance du contrôleur utilisateurs.
+            </summary>
+        </member>
+        <member name="M:SyncTrip.API.Controllers.UsersController.GetMyProfile">
+            <summary>
+            Récupère le profil de l'utilisateur connecté.
+            </summary>
+            <returns>Profil utilisateur complet avec permis de conduire.</returns>
+        </member>
+        <member name="M:SyncTrip.API.Controllers.UsersController.UpdateMyProfile(SyncTrip.Shared.DTOs.Users.UpdateUserProfileRequest)">
+            <summary>
+            Met à jour le profil de l'utilisateur connecté.
+            </summary>
+            <param name="request">Données de mise à jour du profil.</param>
+            <returns>Confirmation de mise à jour.</returns>
+        </member>
+        <member name="M:SyncTrip.API.Controllers.UsersController.GetCurrentUserId">
+            <summary>
+            Récupère l'ID de l'utilisateur connecté depuis le JWT.
+            </summary>
+        </member>
+        <member name="T:SyncTrip.API.Controllers.VehiclesController">
+            <summary>
+            Contrôleur pour la gestion des véhicules (garage utilisateur).
+            </summary>
+        </member>
+        <member name="M:SyncTrip.API.Controllers.VehiclesController.#ctor(MediatR.IMediator,Microsoft.Extensions.Logging.ILogger{SyncTrip.API.Controllers.VehiclesController})">
+            <summary>
+            Initialise une nouvelle instance du contrôleur véhicules.
+            </summary>
+        </member>
+        <member name="M:SyncTrip.API.Controllers.VehiclesController.GetMyVehicles">
+            <summary>
+            Récupère tous les véhicules de l'utilisateur connecté.
+            </summary>
+            <returns>Liste des véhicules de l'utilisateur.</returns>
+        </member>
+        <member name="M:SyncTrip.API.Controllers.VehiclesController.CreateVehicle(SyncTrip.Shared.DTOs.Vehicles.CreateVehicleRequest)">
+            <summary>
+            Crée un nouveau véhicule pour l'utilisateur connecté.
+            </summary>
+            <param name="request">Données du véhicule à créer.</param>
+            <returns>ID du véhicule créé.</returns>
+        </member>
+        <member name="M:SyncTrip.API.Controllers.VehiclesController.UpdateVehicle(System.Guid,SyncTrip.Shared.DTOs.Vehicles.UpdateVehicleRequest)">
+            <summary>
+            Met à jour un véhicule existant.
+            </summary>
+            <param name="id">ID du véhicule à mettre à jour.</param>
+            <param name="request">Nouvelles données du véhicule.</param>
+            <returns>Confirmation de mise à jour.</returns>
+        </member>
+        <member name="M:SyncTrip.API.Controllers.VehiclesController.DeleteVehicle(System.Guid)">
+            <summary>
+            Supprime un véhicule.
+            </summary>
+            <param name="id">ID du véhicule à supprimer.</param>
+            <returns>Confirmation de suppression.</returns>
+        </member>
+        <member name="M:SyncTrip.API.Controllers.VehiclesController.GetCurrentUserId">
+            <summary>
+            Récupère l'ID de l'utilisateur connecté depuis le JWT.
+            </summary>
+        </member>
         <member name="M:Microsoft.AspNetCore.OpenApi.Generated.DocumentationCommentIdHelper.CreateDocumentationId(System.Type)">
             <summary>
             Generates a documentation comment ID for a type.
