@@ -1,4 +1,5 @@
 ﻿using SyncTrip.Mobile.Features.Authentication.Views;
+using SyncTrip.Mobile.Features.Garage.Views;
 
 namespace SyncTrip.Mobile;
 
@@ -18,5 +19,8 @@ public partial class AppShell : Shell
 		// Enregistrement des routes de navigation pour l'authentification
 		Routing.RegisterRoute("magic-link", typeof(MagicLinkPage));
 		Routing.RegisterRoute("registration", typeof(RegistrationPage));
+
+		// Enregistrement des routes de navigation pour Feature 2
+		Routing.RegisterRoute("addvehicle", typeof(AddVehiclePage));
 	}
 }

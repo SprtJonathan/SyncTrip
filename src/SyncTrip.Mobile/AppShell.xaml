@@ -4,11 +4,24 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:SyncTrip.Mobile"
-    Title="SyncTrip.Mobile">
+    xmlns:profile="clr-namespace:SyncTrip.Mobile.Features.Profile.Views"
+    xmlns:garage="clr-namespace:SyncTrip.Mobile.Features.Garage.Views"
+    Title="SyncTrip">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="main" />
+    <TabBar>
+        <!-- Profile Tab -->
+        <ShellContent
+            Title="Profil"
+            Icon="person.png"
+            ContentTemplate="{DataTemplate profile:ProfilePage}"
+            Route="profile" />
+
+        <!-- Garage Tab -->
+        <ShellContent
+            Title="Garage"
+            Icon="car.png"
+            ContentTemplate="{DataTemplate garage:GaragePage}"
+            Route="garage" />
+    </TabBar>
 
 </Shell>

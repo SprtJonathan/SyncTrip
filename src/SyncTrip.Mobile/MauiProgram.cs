@@ -2,6 +2,10 @@
 using SyncTrip.Mobile.Core.Services;
 using SyncTrip.Mobile.Features.Authentication.ViewModels;
 using SyncTrip.Mobile.Features.Authentication.Views;
+using SyncTrip.Mobile.Features.Profile.ViewModels;
+using SyncTrip.Mobile.Features.Profile.Views;
+using SyncTrip.Mobile.Features.Garage.ViewModels;
+using SyncTrip.Mobile.Features.Garage.Views;
 
 namespace SyncTrip.Mobile;
 
@@ -32,14 +36,27 @@ public static class MauiProgram
 
 		// Services
 		builder.Services.AddSingleton<IAuthenticationService, AuthenticationService>();
+		builder.Services.AddSingleton<IUserService, UserService>();
+		builder.Services.AddSingleton<IVehicleService, VehicleService>();
+		builder.Services.AddSingleton<IBrandService, BrandService>();
 
-		// ViewModels
+		// ViewModels - Authentication
 		builder.Services.AddTransient<MagicLinkViewModel>();
 		builder.Services.AddTransient<RegistrationViewModel>();
 
-		// Pages
+		// ViewModels - Profile & Garage
+		builder.Services.AddTransient<ProfileViewModel>();
+		builder.Services.AddTransient<GarageViewModel>();
+		builder.Services.AddTransient<AddVehicleViewModel>();
+
+		// Pages - Authentication
 		builder.Services.AddTransient<MagicLinkPage>();
 		builder.Services.AddTransient<RegistrationPage>();
+
+		// Pages - Profile & Garage
+		builder.Services.AddTransient<ProfilePage>();
+		builder.Services.AddTransient<GaragePage>();
+		builder.Services.AddTransient<AddVehiclePage>();
 
 		return builder.Build();
 	}

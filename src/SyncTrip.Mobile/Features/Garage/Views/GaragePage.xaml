@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SyncTrip.Mobile.Features.Garage.ViewModels"
+             xmlns:dto="clr-namespace:SyncTrip.Shared.DTOs.Vehicles;assembly=SyncTrip.Shared"
+             x:Class="SyncTrip.Mobile.Features.Garage.Views.GaragePage"
+             x:DataType="vm:GarageViewModel"
+             Title="Mon Garage">
+
+    <Grid>
+        <!-- Main Content -->
+        <RefreshView IsRefreshing="{Binding IsLoading}"
+                     Command="{Binding RefreshCommand}"
+                     Margin="0">
+
+            <ScrollView>
+                <VerticalStackLayout Padding="20" Spacing="15">
+
+                    <!-- Header -->
+                    <Label Text="Mes véhicules"
+                           FontSize="24"
+                           FontAttributes="Bold"
+                           Margin="0,20,0,10" />
+
+                    <!-- Empty State -->
+                    <VerticalStackLayout IsVisible="{Binding IsEmpty}"
+                                        Spacing="20"
+                                        Padding="20"
+                                        VerticalOptions="Center"
+                                        Margin="0,60,0,0">
+                        <Label Text="🚗"
+                               FontSize="64"
+                               HorizontalOptions="Center" />
+                        <Label Text="Aucun véhicule"
+                               FontSize="20"
+                               FontAttributes="Bold"
+                               HorizontalOptions="Center" />
+                        <Label Text="Ajoutez votre premier véhicule pour commencer"
+                               FontSize="14"
+                               TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center" />
+                    </VerticalStackLayout>
+
+                    <!-- Vehicle List -->
+                    <CollectionView ItemsSource="{Binding Vehicles}"
+                                   IsVisible="{Binding IsEmpty, Converter={StaticResource InvertedBoolConverter}}"
+                                   SelectionMode="None">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="dto:VehicleDto">
+                                <SwipeView>
+                                    <!-- Swipe Actions -->
+                                    <SwipeView.RightItems>
+                                        <SwipeItems>
+                                            <SwipeItem Text="Supprimer"
+                                                      BackgroundColor="{StaticResource Error}"
+                                                      Command="{Binding Source={RelativeSource AncestorType={x:Type vm:GarageViewModel}}, Path=DeleteVehicleCommand}"
+                                                      CommandParameter="{Binding Id}" />
+                                        </SwipeItems>
+                                    </SwipeView.RightItems>
+
+                                    <!-- Vehicle Card -->
+                                    <Frame BorderColor="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
+                                           CornerRadius="15"
+                                           Padding="0"
+                                           Margin="0,5"
+                                           HasShadow="True">
+                                        <Grid Padding="15" ColumnSpacing="15" RowSpacing="10">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="60" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <!-- Brand Logo -->
+                                            <Frame Grid.Row="0"
+                                                   Grid.RowSpan="2"
+                                                   Grid.Column="0"
+                                                   BorderColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray700}}"
+                                                   CornerRadius="10"
+                                                   Padding="5"
+                                                   HasShadow="False"
+                                                   VerticalOptions="Start">
+                                                <Image Source="{Binding BrandLogoUrl}"
+                                                       Aspect="AspectFit"
+                                                       HeightRequest="50"
+                                                       WidthRequest="50" />
+                                            </Frame>
+
+                                            <!-- Brand and Model -->
+                                            <Label Grid.Row="0"
+                                                   Grid.Column="1"
+                                                   Text="{Binding BrandName}"
+                                                   FontSize="12"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}" />
+
+                                            <Label Grid.Row="1"
+                                                   Grid.Column="1"
+                                                   Text="{Binding Model}"
+                                                   FontSize="20"
+                                                   FontAttributes="Bold" />
+
+                                            <!-- Vehicle Details -->
+                                            <HorizontalStackLayout Grid.Row="2"
+                                                                  Grid.Column="0"
+                                                                  Grid.ColumnSpan="2"
+                                                                  Spacing="15">
+
+                                                <!-- Type Badge -->
+                                                <Frame BackgroundColor="{StaticResource Primary}"
+                                                       Padding="8,4"
+                                                       CornerRadius="8"
+                                                       HasShadow="False">
+                                                    <Label Text="{Binding Type, Converter={StaticResource VehicleTypeConverter}}"
+                                                           FontSize="12"
+                                                           TextColor="White"
+                                                           FontAttributes="Bold" />
+                                                </Frame>
+
+                                                <!-- Color -->
+                                                <Label Text="{Binding Color}"
+                                                       IsVisible="{Binding Color, Converter={StaticResource IsNotNullOrEmptyConverter}}"
+                                                       FontSize="14"
+                                                       VerticalOptions="Center"
+                                                       TextColor="{AppThemeBinding Light={StaticResource Gray700}, Dark={StaticResource Gray300}}" />
+
+                                                <!-- Year -->
+                                                <Label Text="{Binding Year}"
+                                                       IsVisible="{Binding Year, Converter={StaticResource IsNotNullConverter}}"
+                                                       FontSize="14"
+                                                       VerticalOptions="Center"
+                                                       TextColor="{AppThemeBinding Light={StaticResource Gray700}, Dark={StaticResource Gray300}}" />
+
+                                            </HorizontalStackLayout>
+
+                                        </Grid>
+                                    </Frame>
+                                </SwipeView>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                    <!-- Error Message -->
+                    <Frame IsVisible="{Binding ErrorMessage, Converter={StaticResource IsNotNullOrEmptyConverter}}"
+                           BorderColor="{StaticResource Error}"
+                           BackgroundColor="Transparent"
+                           Padding="15"
+                           CornerRadius="10"
+                           HasShadow="False"
+                           Margin="0,10,0,0">
+                        <Label Text="{Binding ErrorMessage}"
+                               TextColor="{StaticResource Error}"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center" />
+                    </Frame>
+
+                    <!-- Success Message -->
+                    <Frame IsVisible="{Binding SuccessMessage, Converter={StaticResource IsNotNullOrEmptyConverter}}"
+                           BorderColor="{StaticResource Success}"
+                           BackgroundColor="Transparent"
+                           Padding="15"
+                           CornerRadius="10"
+                           HasShadow="False"
+                           Margin="0,10,0,0">
+                        <Label Text="{Binding SuccessMessage}"
+                               TextColor="{StaticResource Success}"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center" />
+                    </Frame>
+
+                </VerticalStackLayout>
+            </ScrollView>
+
+        </RefreshView>
+
+        <!-- Floating Action Button (Add Vehicle) -->
+        <Button Text="+"
+                Command="{Binding AddVehicleCommand}"
+                WidthRequest="60"
+                HeightRequest="60"
+                CornerRadius="30"
+                FontSize="32"
+                FontAttributes="Bold"
+                BackgroundColor="{StaticResource Primary}"
+                TextColor="White"
+                HorizontalOptions="End"
+                VerticalOptions="End"
+                Margin="0,0,20,20"
+                Shadow="{Shadow Brush={StaticResource Primary}, Offset='0,4', Radius=8, Opacity=0.4}" />
+
+    </Grid>
+
+</ContentPage>

@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SyncTrip.Mobile.Features.Profile.ViewModels"
+             x:Class="SyncTrip.Mobile.Features.Profile.Views.ProfilePage"
+             x:DataType="vm:ProfileViewModel"
+             Title="Mon Profil">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="30" Spacing="20">
+
+            <!-- Loading Indicator -->
+            <ActivityIndicator IsVisible="{Binding IsLoading}"
+                              IsRunning="{Binding IsLoading}"
+                              Color="{StaticResource Primary}"
+                              HeightRequest="40"
+                              Margin="0,20,0,0" />
+
+            <!-- Content - Visible when not loading -->
+            <VerticalStackLayout IsVisible="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}"
+                                Spacing="20">
+
+                <!-- Header -->
+                <Label Text="Informations personnelles"
+                       FontSize="24"
+                       FontAttributes="Bold"
+                       Margin="0,20,0,10" />
+
+                <!-- Email (Read-only) -->
+                <Label Text="Adresse email"
+                       FontSize="14"
+                       FontAttributes="Bold" />
+                <Frame BorderColor="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
+                       BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray800}}"
+                       CornerRadius="10"
+                       Padding="15"
+                       HasShadow="False">
+                    <Label Text="{Binding Email}"
+                           TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"
+                           FontSize="16" />
+                </Frame>
+
+                <!-- Username (Required) -->
+                <Label Text="Pseudo *"
+                       FontSize="14"
+                       FontAttributes="Bold" />
+                <Frame BorderColor="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
+                       CornerRadius="10"
+                       Padding="0"
+                       HasShadow="False">
+                    <Entry Placeholder="Votre pseudo"
+                           Text="{Binding Username}"
+                           MaxLength="50"
+                           IsEnabled="{Binding IsEditing}"
+                           Margin="15,0" />
+                </Frame>
+
+                <!-- FirstName (Optional) -->
+                <Label Text="Prénom"
+                       FontSize="14"
+                       FontAttributes="Bold" />
+                <Frame BorderColor="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
+                       CornerRadius="10"
+                       Padding="0"
+                       HasShadow="False">
+                    <Entry Placeholder="Votre prénom (optionnel)"
+                           Text="{Binding FirstName}"
+                           IsEnabled="{Binding IsEditing}"
+                           Margin="15,0" />
+                </Frame>
+
+                <!-- LastName (Optional) -->
+                <Label Text="Nom"
+                       FontSize="14"
+                       FontAttributes="Bold" />
+                <Frame BorderColor="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
+                       CornerRadius="10"
+                       Padding="0"
+                       HasShadow="False">
+                    <Entry Placeholder="Votre nom (optionnel)"
+                           Text="{Binding LastName}"
+                           IsEnabled="{Binding IsEditing}"
+                           Margin="15,0" />
+                </Frame>
+
+                <!-- BirthDate (Required) -->
+                <Label Text="Date de naissance *"
+                       FontSize="14"
+                       FontAttributes="Bold" />
+                <Frame BorderColor="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
+                       CornerRadius="10"
+                       Padding="15"
+                       HasShadow="False">
+                    <DatePicker Date="{Binding BirthDate}"
+                               MaximumDate="{Binding MaximumDate}"
+                               Format="dd/MM/yyyy"
+                               IsEnabled="{Binding IsEditing}" />
+                </Frame>
+
+                <Label Text="⚠️ Vous devez avoir plus de 14 ans"
+                       FontSize="12"
+                       TextColor="{StaticResource Warning}"
+                       Margin="0,-10,0,0" />
+
+                <!-- Age Display -->
+                <Label Text="{Binding Age, StringFormat='Âge : {0} ans'}"
+                       FontSize="14"
+                       TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"
+                       Margin="0,-10,0,0" />
+
+                <!-- License Types Section -->
+                <Label Text="Permis de conduire"
+                       FontSize="18"
+                       FontAttributes="Bold"
+                       Margin="0,20,0,10" />
+
+                <Label Text="Sélectionnez les permis que vous possédez :"
+                       FontSize="14"
+                       TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"
+                       Margin="0,0,0,10" />
+
+                <!-- License Types - Using CheckBox for each type -->
+                <VerticalStackLayout Spacing="10" IsEnabled="{Binding IsEditing}">
+
+                    <Frame BorderColor="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
+                           CornerRadius="10"
+                           Padding="15"
+                           HasShadow="False">
+                        <HorizontalStackLayout Spacing="15">
+                            <CheckBox x:Name="CheckboxLicenseB"
+                                     CheckedChanged="OnLicenseB_CheckedChanged" />
+                            <Label Text="Permis B (Voiture)"
+                                   VerticalOptions="Center"
+                                   FontSize="16">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnLicenseBLabel_Tapped" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </HorizontalStackLayout>
+                    </Frame>
+
+                    <Frame BorderColor="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
+                           CornerRadius="10"
+                           Padding="15"
+                           HasShadow="False">
+                        <HorizontalStackLayout Spacing="15">
+                            <CheckBox x:Name="CheckboxLicenseA"
+                                     CheckedChanged="OnLicenseA_CheckedChanged" />
+                            <Label Text="Permis A (Moto)"
+                                   VerticalOptions="Center"
+                                   FontSize="16">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnLicenseALabel_Tapped" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </HorizontalStackLayout>
+                    </Frame>
+
+                    <Frame BorderColor="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
+                           CornerRadius="10"
+                           Padding="15"
+                           HasShadow="False">
+                        <HorizontalStackLayout Spacing="15">
+                            <CheckBox x:Name="CheckboxLicenseC"
+                                     CheckedChanged="OnLicenseC_CheckedChanged" />
+                            <Label Text="Permis C (Camion)"
+                                   VerticalOptions="Center"
+                                   FontSize="16">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnLicenseCLabel_Tapped" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </HorizontalStackLayout>
+                    </Frame>
+
+                    <Frame BorderColor="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
+                           CornerRadius="10"
+                           Padding="15"
+                           HasShadow="False">
+                        <HorizontalStackLayout Spacing="15">
+                            <CheckBox x:Name="CheckboxLicenseD"
+                                     CheckedChanged="OnLicenseD_CheckedChanged" />
+                            <Label Text="Permis D (Transport en commun)"
+                                   VerticalOptions="Center"
+                                   FontSize="16">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnLicenseDLabel_Tapped" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </HorizontalStackLayout>
+                    </Frame>
+
+                </VerticalStackLayout>
+
+                <!-- Action Buttons -->
+                <VerticalStackLayout Spacing="15" Margin="0,30,0,0">
+
+                    <!-- Edit Button (when not editing) -->
+                    <Button Text="Modifier mon profil"
+                            Command="{Binding StartEditCommand}"
+                            IsVisible="{Binding IsEditing, Converter={StaticResource InvertedBoolConverter}}"
+                            HeightRequest="50"
+                            CornerRadius="25"
+                            FontAttributes="Bold"
+                            BackgroundColor="{StaticResource Primary}" />
+
+                    <!-- Save and Cancel Buttons (when editing) -->
+                    <Button Text="Sauvegarder"
+                            Command="{Binding SaveProfileCommand}"
+                            IsVisible="{Binding IsEditing}"
+                            IsEnabled="{Binding IsSaving, Converter={StaticResource InvertedBoolConverter}}"
+                            HeightRequest="50"
+                            CornerRadius="25"
+                            FontAttributes="Bold"
+                            BackgroundColor="{StaticResource Success}" />
+
+                    <Button Text="Annuler"
+                            Command="{Binding CancelEditCommand}"
+                            IsVisible="{Binding IsEditing}"
+                            IsEnabled="{Binding IsSaving, Converter={StaticResource InvertedBoolConverter}}"
+                            HeightRequest="50"
+                            CornerRadius="25"
+                            FontAttributes="Bold"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
+                            TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}" />
+
+                    <!-- Logout Button -->
+                    <Button Text="Déconnexion"
+                            Command="{Binding LogoutCommand}"
+                            IsVisible="{Binding IsEditing, Converter={StaticResource InvertedBoolConverter}}"
+                            HeightRequest="50"
+                            CornerRadius="25"
+                            FontAttributes="Bold"
+                            BackgroundColor="{StaticResource Error}"
+                            Margin="0,20,0,0" />
+
+                </VerticalStackLayout>
+
+                <!-- Saving Indicator -->
+                <ActivityIndicator IsVisible="{Binding IsSaving}"
+                                  IsRunning="{Binding IsSaving}"
+                                  Color="{StaticResource Primary}"
+                                  HeightRequest="40" />
+
+                <!-- Error Message -->
+                <Frame IsVisible="{Binding ErrorMessage, Converter={StaticResource IsNotNullOrEmptyConverter}}"
+                       BorderColor="{StaticResource Error}"
+                       BackgroundColor="Transparent"
+                       Padding="15"
+                       CornerRadius="10"
+                       HasShadow="False">
+                    <Label Text="{Binding ErrorMessage}"
+                           TextColor="{StaticResource Error}"
+                           HorizontalOptions="Center"
+                           HorizontalTextAlignment="Center" />
+                </Frame>
+
+                <!-- Success Message -->
+                <Frame IsVisible="{Binding SuccessMessage, Converter={StaticResource IsNotNullOrEmptyConverter}}"
+                       BorderColor="{StaticResource Success}"
+                       BackgroundColor="Transparent"
+                       Padding="15"
+                       CornerRadius="10"
+                       HasShadow="False">
+                    <Label Text="{Binding SuccessMessage}"
+                           TextColor="{StaticResource Success}"
+                           HorizontalOptions="Center"
+                           HorizontalTextAlignment="Center" />
+                </Frame>
+
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
