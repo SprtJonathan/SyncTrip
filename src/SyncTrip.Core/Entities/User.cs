@@ -64,6 +64,16 @@ public class User
     public DateTime? DeactivationDate { get; private set; }
 
     /// <summary>
+    /// Collection des véhicules de l'utilisateur.
+    /// </summary>
+    public ICollection<Vehicle> Vehicles { get; private set; } = new List<Vehicle>();
+
+    /// <summary>
+    /// Collection des permis de conduire de l'utilisateur.
+    /// </summary>
+    public ICollection<UserLicense> Licenses { get; private set; } = new List<UserLicense>();
+
+    /// <summary>
     /// Âge minimum requis pour utiliser l'application.
     /// </summary>
     private const int MinimumAge = 14;
