@@ -41,4 +41,30 @@ public class UserRepository : IUserRepository
         _context.Users.Update(user);
         await _context.SaveChangesAsync(cancellationToken);
     }
+
+    public async Task<User?> GetByIdWithLicensesAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await _context.Users
+            .Include(u => u.Licenses)
+            .FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
+    }
+
+    public async Task UpdateUserLicensesAsync(Guid userId, IList<Core.Enums.LicenseType> licenseTypes, CancellationToken cancellationToken = default)
+    {
+        // Supprimer les permis existants
+        var existingLicenses = await _context.Set<Core.Entities.UserLicense>()
+            .Where(ul => ul.UserId == userId)
+            .ToListAsync(cancellationToken);
+
+        _context.Set<Core.Entities.UserLicense>().RemoveRange(existingLicenses);
+
+        // Ajouter les nouveaux permis
+        foreach (var licenseType in licenseTypes)
+        {
+            var userLicense = Core.Entities.UserLicense.Create(userId, licenseType);
+            await _context.Set<Core.Entities.UserLicense>().AddAsync(userLicense, cancellationToken);
+        }
+
+        await _context.SaveChangesAsync(cancellationToken);
+    }
 }

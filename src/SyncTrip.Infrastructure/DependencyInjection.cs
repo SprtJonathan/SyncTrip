@@ -28,6 +28,8 @@ public static class DependencyInjection
         // Repositories
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IMagicLinkTokenRepository, MagicLinkTokenRepository>();
+        services.AddScoped<IVehicleRepository, VehicleRepository>();
+        services.AddScoped<IBrandRepository, BrandRepository>();
 
         // Services
         services.AddScoped<IAuthService, AuthService>();

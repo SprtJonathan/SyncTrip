@@ -36,4 +36,21 @@ public interface IUserRepository
     /// <param name="user">Utilisateur à mettre à jour.</param>
     /// <param name="cancellationToken">Token d'annulation.</param>
     Task UpdateAsync(User user, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Récupère un utilisateur par son identifiant avec ses permis de conduire.
+    /// </summary>
+    /// <param name="id">Identifiant de l'utilisateur.</param>
+    /// <param name="cancellationToken">Token d'annulation.</param>
+    /// <returns>Utilisateur avec ses permis ou null si non trouvé.</returns>
+    Task<User?> GetByIdWithLicensesAsync(Guid id, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Met à jour les permis de conduire d'un utilisateur.
+    /// Remplace la liste existante par la nouvelle liste fournie.
+    /// </summary>
+    /// <param name="userId">Identifiant de l'utilisateur.</param>
+    /// <param name="licenseTypes">Liste des types de permis.</param>
+    /// <param name="cancellationToken">Token d'annulation.</param>
+    Task UpdateUserLicensesAsync(Guid userId, IList<Core.Enums.LicenseType> licenseTypes, CancellationToken cancellationToken = default);
 }

@@ -4,12 +4,14 @@
     <projectFile profileName="http">SyncTrip.Api/SyncTrip.Api.csproj</projectFile>
     <projectFile profileName="https">SyncTrip.Api/SyncTrip.Api.csproj</projectFile>
     <projectFile kind="Uwp">SyncTrip/SyncTrip.csproj</projectFile>
+    <projectFile kind="XamarinAndroid">SyncTrip/SyncTrip.csproj</projectFile>
     <projectFile kind="XamarinIOS">SyncTrip/SyncTrip.csproj</projectFile>
     <projectFile kind="XamarinMacOS">SyncTrip/SyncTrip.csproj</projectFile>
     <projectFile profileName="Windows Machine">SyncTrip/SyncTrip.csproj</projectFile>
     <projectFile profileName="http">src/SyncTrip.API/SyncTrip.API.csproj</projectFile>
     <projectFile profileName="https">src/SyncTrip.API/SyncTrip.API.csproj</projectFile>
     <projectFile kind="Uwp">src/SyncTrip.Mobile/SyncTrip.Mobile.csproj</projectFile>
+    <projectFile kind="XamarinAndroid">src/SyncTrip.Mobile/SyncTrip.Mobile.csproj</projectFile>
     <projectFile kind="XamarinIOS">src/SyncTrip.Mobile/SyncTrip.Mobile.csproj</projectFile>
     <projectFile kind="XamarinMacOS">src/SyncTrip.Mobile/SyncTrip.Mobile.csproj</projectFile>
     <projectFile profileName="Windows Machine">src/SyncTrip.Mobile/SyncTrip.Mobile.csproj</projectFile>
@@ -18,34 +20,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2ed398ee-02b1-4c46-ba33-6a3d5af25f6b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.claude/settings.local.json" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/settings.local.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.API/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.API/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.API/SyncTrip.API.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.API/SyncTrip.API.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.API/bin/Debug/net10.0/SyncTrip.API.dll" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.API/bin/Debug/net10.0/SyncTrip.API.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.API/bin/Debug/net10.0/SyncTrip.API.exe" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.API/bin/Debug/net10.0/SyncTrip.API.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.API/bin/Debug/net10.0/SyncTrip.API.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.API/bin/Debug/net10.0/SyncTrip.API.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.API/bin/Debug/net10.0/SyncTrip.Application.dll" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.API/bin/Debug/net10.0/SyncTrip.Application.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.API/bin/Debug/net10.0/SyncTrip.Application.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.API/bin/Debug/net10.0/SyncTrip.Application.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.API/bin/Debug/net10.0/SyncTrip.Core.dll" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.API/bin/Debug/net10.0/SyncTrip.Core.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.API/bin/Debug/net10.0/SyncTrip.Core.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.API/bin/Debug/net10.0/SyncTrip.Core.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.API/bin/Debug/net10.0/SyncTrip.Infrastructure.dll" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.API/bin/Debug/net10.0/SyncTrip.Infrastructure.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.API/bin/Debug/net10.0/SyncTrip.Infrastructure.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.API/bin/Debug/net10.0/SyncTrip.Infrastructure.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.API/bin/Debug/net10.0/SyncTrip.Shared.dll" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.API/bin/Debug/net10.0/SyncTrip.Shared.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.API/bin/Debug/net10.0/SyncTrip.Shared.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.API/bin/Debug/net10.0/SyncTrip.Shared.pdb" afterDir="false" />
+    <list default="true" id="f60dbf88-0665-45ec-9052-5a94ce3c0662" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.API/obj/Debug/net10.0/SyncTrip.API.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.API/obj/Debug/net10.0/SyncTrip.API.AssemblyInfo.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.API/obj/Debug/net10.0/SyncTrip.API.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.API/obj/Debug/net10.0/SyncTrip.API.AssemblyInfoInputs.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.API/obj/Debug/net10.0/SyncTrip.API.assets.cache" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.API/obj/Debug/net10.0/SyncTrip.API.assets.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.API/obj/Debug/net10.0/SyncTrip.API.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.API/obj/Debug/net10.0/SyncTrip.API.csproj.AssemblyReference.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.API/obj/Debug/net10.0/SyncTrip.API.csproj.CoreCompileInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.API/obj/Debug/net10.0/SyncTrip.API.csproj.CoreCompileInputs.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.API/obj/Debug/net10.0/SyncTrip.API.dll" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.API/obj/Debug/net10.0/SyncTrip.API.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.API/obj/Debug/net10.0/SyncTrip.API.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.API/obj/Debug/net10.0/SyncTrip.API.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.API/obj/Debug/net10.0/SyncTrip.API.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.API/obj/Debug/net10.0/SyncTrip.API.sourcelink.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.API/obj/Debug/net10.0/apphost.exe" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.API/obj/Debug/net10.0/apphost.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.API/obj/Debug/net10.0/ref/SyncTrip.API.dll" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.API/obj/Debug/net10.0/ref/SyncTrip.API.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.API/obj/Debug/net10.0/refint/SyncTrip.API.dll" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.API/obj/Debug/net10.0/refint/SyncTrip.API.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.API/obj/Debug/net10.0/rjsmcshtml.dswa.cache.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.API/obj/Debug/net10.0/rjsmcshtml.dswa.cache.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.API/obj/Debug/net10.0/rjsmrazor.dswa.cache.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.API/obj/Debug/net10.0/rjsmrazor.dswa.cache.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.API/obj/SyncTrip.API.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.API/obj/SyncTrip.API.csproj.nuget.dgspec.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.API/obj/SyncTrip.API.csproj.nuget.g.targets" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.API/obj/SyncTrip.API.csproj.nuget.g.targets" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.API/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.API/obj/project.assets.json" afterDir="false" />
@@ -53,97 +32,90 @@
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.API/obj/project.packagespec.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.API/obj/project.packagespec.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.API/obj/rider.project.model.nuget.info" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.API/obj/rider.project.model.nuget.info" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.API/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.API/obj/rider.project.restore.info" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Application/bin/Debug/net10.0/SyncTrip.Application.dll" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Application/bin/Debug/net10.0/SyncTrip.Application.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Application/bin/Debug/net10.0/SyncTrip.Application.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Application/bin/Debug/net10.0/SyncTrip.Application.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Application/bin/Debug/net10.0/SyncTrip.Core.dll" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Application/bin/Debug/net10.0/SyncTrip.Core.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Application/bin/Debug/net10.0/SyncTrip.Core.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Application/bin/Debug/net10.0/SyncTrip.Core.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Application/bin/Debug/net10.0/SyncTrip.Shared.dll" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Application/bin/Debug/net10.0/SyncTrip.Shared.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Application/bin/Debug/net10.0/SyncTrip.Shared.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Application/bin/Debug/net10.0/SyncTrip.Shared.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Application/obj/Debug/net10.0/SyncTrip.Application.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Application/obj/Debug/net10.0/SyncTrip.Application.AssemblyInfo.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Application/obj/Debug/net10.0/SyncTrip.Application.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Application/obj/Debug/net10.0/SyncTrip.Application.AssemblyInfoInputs.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Application/obj/Debug/net10.0/SyncTrip.Application.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Application/obj/Debug/net10.0/SyncTrip.Application.csproj.AssemblyReference.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Application/obj/Debug/net10.0/SyncTrip.Application.dll" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Application/obj/Debug/net10.0/SyncTrip.Application.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Application/obj/Debug/net10.0/SyncTrip.Application.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Application/obj/Debug/net10.0/SyncTrip.Application.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Application/obj/Debug/net10.0/SyncTrip.Application.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Application/obj/Debug/net10.0/SyncTrip.Application.sourcelink.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Application/obj/Debug/net10.0/ref/SyncTrip.Application.dll" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Application/obj/Debug/net10.0/ref/SyncTrip.Application.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Application/obj/Debug/net10.0/refint/SyncTrip.Application.dll" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Application/obj/Debug/net10.0/refint/SyncTrip.Application.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Application/obj/SyncTrip.Application.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Application/obj/SyncTrip.Application.csproj.nuget.dgspec.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Application/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Application/obj/project.assets.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Application/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Application/obj/project.nuget.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Application/obj/project.packagespec.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Application/obj/project.packagespec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Application/obj/rider.project.model.nuget.info" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Application/obj/rider.project.model.nuget.info" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Application/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Application/obj/rider.project.restore.info" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Core/bin/Debug/net10.0/SyncTrip.Core.dll" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Core/bin/Debug/net10.0/SyncTrip.Core.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Core/bin/Debug/net10.0/SyncTrip.Core.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Core/bin/Debug/net10.0/SyncTrip.Core.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Core/bin/Debug/net10.0/SyncTrip.Shared.dll" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Core/bin/Debug/net10.0/SyncTrip.Shared.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Core/bin/Debug/net10.0/SyncTrip.Shared.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Core/bin/Debug/net10.0/SyncTrip.Shared.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Core/obj/Debug/net10.0/SyncTrip.Core.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Core/obj/Debug/net10.0/SyncTrip.Core.AssemblyInfo.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Core/obj/Debug/net10.0/SyncTrip.Core.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Core/obj/Debug/net10.0/SyncTrip.Core.AssemblyInfoInputs.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Core/obj/Debug/net10.0/SyncTrip.Core.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Core/obj/Debug/net10.0/SyncTrip.Core.csproj.AssemblyReference.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Core/obj/Debug/net10.0/SyncTrip.Core.dll" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Core/obj/Debug/net10.0/SyncTrip.Core.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Core/obj/Debug/net10.0/SyncTrip.Core.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Core/obj/Debug/net10.0/SyncTrip.Core.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Core/obj/Debug/net10.0/SyncTrip.Core.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Core/obj/Debug/net10.0/SyncTrip.Core.sourcelink.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Core/obj/Debug/net10.0/ref/SyncTrip.Core.dll" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Core/obj/Debug/net10.0/ref/SyncTrip.Core.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Core/obj/Debug/net10.0/refint/SyncTrip.Core.dll" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Core/obj/Debug/net10.0/refint/SyncTrip.Core.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Core/obj/SyncTrip.Core.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Core/obj/SyncTrip.Core.csproj.nuget.dgspec.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Core/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Core/obj/project.assets.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Core/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Core/obj/project.nuget.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Core/obj/project.packagespec.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Core/obj/project.packagespec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Core/obj/rider.project.model.nuget.info" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Core/obj/rider.project.model.nuget.info" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Core/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Core/obj/rider.project.restore.info" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/bin/Debug/net10.0/SyncTrip.Application.dll" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/bin/Debug/net10.0/SyncTrip.Application.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/bin/Debug/net10.0/SyncTrip.Application.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/bin/Debug/net10.0/SyncTrip.Application.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/bin/Debug/net10.0/SyncTrip.Core.dll" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/bin/Debug/net10.0/SyncTrip.Core.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/bin/Debug/net10.0/SyncTrip.Core.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/bin/Debug/net10.0/SyncTrip.Core.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/bin/Debug/net10.0/SyncTrip.Infrastructure.dll" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/bin/Debug/net10.0/SyncTrip.Infrastructure.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/bin/Debug/net10.0/SyncTrip.Infrastructure.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/bin/Debug/net10.0/SyncTrip.Infrastructure.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/bin/Debug/net10.0/SyncTrip.Shared.dll" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/bin/Debug/net10.0/SyncTrip.Shared.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/bin/Debug/net10.0/SyncTrip.Shared.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/bin/Debug/net10.0/SyncTrip.Shared.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/obj/Debug/net10.0/SyncTrip.Infrastructure.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/obj/Debug/net10.0/SyncTrip.Infrastructure.AssemblyInfo.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/obj/Debug/net10.0/SyncTrip.Infrastructure.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/obj/Debug/net10.0/SyncTrip.Infrastructure.AssemblyInfoInputs.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/obj/Debug/net10.0/SyncTrip.Infrastructure.assets.cache" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/obj/Debug/net10.0/SyncTrip.Infrastructure.assets.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/obj/Debug/net10.0/SyncTrip.Infrastructure.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/obj/Debug/net10.0/SyncTrip.Infrastructure.csproj.AssemblyReference.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/obj/Debug/net10.0/SyncTrip.Infrastructure.dll" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/obj/Debug/net10.0/SyncTrip.Infrastructure.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/obj/Debug/net10.0/SyncTrip.Infrastructure.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/obj/Debug/net10.0/SyncTrip.Infrastructure.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/obj/Debug/net10.0/SyncTrip.Infrastructure.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/obj/Debug/net10.0/SyncTrip.Infrastructure.sourcelink.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/obj/Debug/net10.0/ref/SyncTrip.Infrastructure.dll" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/obj/Debug/net10.0/ref/SyncTrip.Infrastructure.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/obj/Debug/net10.0/refint/SyncTrip.Infrastructure.dll" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/obj/Debug/net10.0/refint/SyncTrip.Infrastructure.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/obj/SyncTrip.Infrastructure.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/obj/SyncTrip.Infrastructure.csproj.nuget.dgspec.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/obj/SyncTrip.Infrastructure.csproj.nuget.g.targets" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/obj/SyncTrip.Infrastructure.csproj.nuget.g.targets" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/obj/project.assets.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/obj/project.nuget.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/obj/project.packagespec.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/obj/project.packagespec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/obj/rider.project.model.nuget.info" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/obj/rider.project.model.nuget.info" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Infrastructure/obj/rider.project.restore.info" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-android/SyncTrip.Mobile.assets.cache" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-android/SyncTrip.Mobile.assets.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-ios/iossimulator-x64/SyncTrip.Mobile.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-ios/iossimulator-x64/SyncTrip.Mobile.AssemblyInfo.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-ios/iossimulator-x64/SyncTrip.Mobile.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-ios/iossimulator-x64/SyncTrip.Mobile.AssemblyInfoInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-ios/iossimulator-x64/SyncTrip.Mobile.GeneratedMSBuildEditorConfig.editorconfig" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-ios/iossimulator-x64/SyncTrip.Mobile.GeneratedMSBuildEditorConfig.editorconfig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-ios/iossimulator-x64/SyncTrip.Mobile.assets.cache" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-ios/iossimulator-x64/SyncTrip.Mobile.assets.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-ios/iossimulator-x64/SyncTrip.Mobile.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-ios/iossimulator-x64/SyncTrip.Mobile.csproj.AssemblyReference.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-ios/iossimulator-x64/SyncTrip.Mobile.nfloat.g.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-ios/iossimulator-x64/SyncTrip.Mobile.nfloat.g.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-maccatalyst/maccatalyst-x64/SyncTrip.Mobile.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-maccatalyst/maccatalyst-x64/SyncTrip.Mobile.AssemblyInfo.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-maccatalyst/maccatalyst-x64/SyncTrip.Mobile.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-maccatalyst/maccatalyst-x64/SyncTrip.Mobile.AssemblyInfoInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-maccatalyst/maccatalyst-x64/SyncTrip.Mobile.GeneratedMSBuildEditorConfig.editorconfig" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-maccatalyst/maccatalyst-x64/SyncTrip.Mobile.GeneratedMSBuildEditorConfig.editorconfig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-maccatalyst/maccatalyst-x64/SyncTrip.Mobile.assets.cache" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-maccatalyst/maccatalyst-x64/SyncTrip.Mobile.assets.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-maccatalyst/maccatalyst-x64/SyncTrip.Mobile.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-maccatalyst/maccatalyst-x64/SyncTrip.Mobile.csproj.AssemblyReference.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-windows10.0.19041.0/win-x64/Platforms/Windows/App.g.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-windows10.0.19041.0/win-x64/Platforms/Windows/App.g.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-maccatalyst/maccatalyst-x64/SyncTrip.Mobile.nfloat.g.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-maccatalyst/maccatalyst-x64/SyncTrip.Mobile.nfloat.g.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-windows10.0.19041.0/win-x64/Manifests/WindowsAppSDK.manifest" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-windows10.0.19041.0/win-x64/Manifests/WindowsAppSDK.manifest" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-windows10.0.19041.0/win-x64/Manifests/app.manifest" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-windows10.0.19041.0/win-x64/Manifests/app.manifest" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-windows10.0.19041.0/win-x64/Platforms/Windows/App.g.cs.backup" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-windows10.0.19041.0/win-x64/Platforms/Windows/App.g.cs.backup" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-windows10.0.19041.0/win-x64/Platforms/Windows/App.g.i.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-windows10.0.19041.0/win-x64/Platforms/Windows/App.g.i.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-windows10.0.19041.0/win-x64/Platforms/Windows/App.xaml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-windows10.0.19041.0/win-x64/SyncTrip.Mobile.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-windows10.0.19041.0/win-x64/SyncTrip.Mobile.AssemblyInfo.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-windows10.0.19041.0/win-x64/SyncTrip.Mobile.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-windows10.0.19041.0/win-x64/SyncTrip.Mobile.AssemblyInfoInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-windows10.0.19041.0/win-x64/SyncTrip.Mobile.GeneratedMSBuildEditorConfig.editorconfig" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-windows10.0.19041.0/win-x64/SyncTrip.Mobile.GeneratedMSBuildEditorConfig.editorconfig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-windows10.0.19041.0/win-x64/SyncTrip.Mobile.assets.cache" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-windows10.0.19041.0/win-x64/SyncTrip.Mobile.assets.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-windows10.0.19041.0/win-x64/SyncTrip.Mobile.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-windows10.0.19041.0/win-x64/SyncTrip.Mobile.csproj.AssemblyReference.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-windows10.0.19041.0/win-x64/XamlTypeInfo.g.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-windows10.0.19041.0/win-x64/XamlTypeInfo.g.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-windows10.0.19041.0/win-x64/XamlSaveStateFile.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-windows10.0.19041.0/win-x64/XamlSaveStateFile.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-windows10.0.19041.0/win-x64/input.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-windows10.0.19041.0/win-x64/input.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-windows10.0.19041.0/win-x64/output.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/Debug/net10.0-windows10.0.19041.0/win-x64/output.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/SyncTrip.Mobile.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/SyncTrip.Mobile.csproj.nuget.dgspec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/SyncTrip.Mobile.csproj.nuget.g.props" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/SyncTrip.Mobile.csproj.nuget.g.props" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/SyncTrip.Mobile.csproj.nuget.g.targets" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/SyncTrip.Mobile.csproj.nuget.g.targets" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/project.assets.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/project.nuget.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/project.packagespec.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/project.packagespec.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Mobile/obj/rider.project.restore.info" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Shared/bin/Debug/net10.0/SyncTrip.Shared.dll" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Shared/bin/Debug/net10.0/SyncTrip.Shared.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Shared/bin/Debug/net10.0/SyncTrip.Shared.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Shared/bin/Debug/net10.0/SyncTrip.Shared.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Shared/obj/Debug/net10.0/SyncTrip.Shared.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Shared/obj/Debug/net10.0/SyncTrip.Shared.AssemblyInfo.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Shared/obj/Debug/net10.0/SyncTrip.Shared.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Shared/obj/Debug/net10.0/SyncTrip.Shared.AssemblyInfoInputs.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Shared/obj/Debug/net10.0/SyncTrip.Shared.dll" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Shared/obj/Debug/net10.0/SyncTrip.Shared.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Shared/obj/Debug/net10.0/SyncTrip.Shared.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Shared/obj/Debug/net10.0/SyncTrip.Shared.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Shared/obj/Debug/net10.0/SyncTrip.Shared.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Shared/obj/Debug/net10.0/SyncTrip.Shared.sourcelink.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Shared/obj/Debug/net10.0/ref/SyncTrip.Shared.dll" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Shared/obj/Debug/net10.0/ref/SyncTrip.Shared.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Shared/obj/Debug/net10.0/refint/SyncTrip.Shared.dll" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Shared/obj/Debug/net10.0/refint/SyncTrip.Shared.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Shared/obj/SyncTrip.Shared.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Shared/obj/SyncTrip.Shared.csproj.nuget.dgspec.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Shared/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Shared/obj/project.assets.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Shared/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Shared/obj/project.nuget.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Shared/obj/project.packagespec.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Shared/obj/project.packagespec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SyncTrip.Shared/obj/rider.project.model.nuget.info" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Shared/obj/rider.project.model.nuget.info" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SyncTrip.Shared/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/src/SyncTrip.Shared/obj/rider.project.restore.info" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/SyncTrip.Application.Tests/obj/Debug/net10.0/SyncTrip.Application.Tests.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/SyncTrip.Application.Tests/obj/Debug/net10.0/SyncTrip.Application.Tests.AssemblyInfo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/SyncTrip.Application.Tests/obj/Debug/net10.0/SyncTrip.Application.Tests.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/tests/SyncTrip.Application.Tests/obj/Debug/net10.0/SyncTrip.Application.Tests.AssemblyInfoInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/SyncTrip.Application.Tests/obj/Debug/net10.0/SyncTrip.Application.Tests.assets.cache" beforeDir="false" afterPath="$PROJECT_DIR$/tests/SyncTrip.Application.Tests/obj/Debug/net10.0/SyncTrip.Application.Tests.assets.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/SyncTrip.Application.Tests/obj/Debug/net10.0/SyncTrip.Application.Tests.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/tests/SyncTrip.Application.Tests/obj/Debug/net10.0/SyncTrip.Application.Tests.csproj.AssemblyReference.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/SyncTrip.Application.Tests/obj/SyncTrip.Application.Tests.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/tests/SyncTrip.Application.Tests/obj/SyncTrip.Application.Tests.csproj.nuget.dgspec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/SyncTrip.Application.Tests/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/tests/SyncTrip.Application.Tests/obj/project.assets.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/SyncTrip.Application.Tests/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/tests/SyncTrip.Application.Tests/obj/project.nuget.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/SyncTrip.Core.Tests/obj/Debug/net10.0/SyncTrip.Core.Tests.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/SyncTrip.Core.Tests/obj/Debug/net10.0/SyncTrip.Core.Tests.AssemblyInfo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/SyncTrip.Core.Tests/obj/Debug/net10.0/SyncTrip.Core.Tests.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/tests/SyncTrip.Core.Tests/obj/Debug/net10.0/SyncTrip.Core.Tests.AssemblyInfoInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/SyncTrip.Core.Tests/obj/Debug/net10.0/SyncTrip.Core.Tests.assets.cache" beforeDir="false" afterPath="$PROJECT_DIR$/tests/SyncTrip.Core.Tests/obj/Debug/net10.0/SyncTrip.Core.Tests.assets.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/SyncTrip.Core.Tests/obj/Debug/net10.0/SyncTrip.Core.Tests.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/tests/SyncTrip.Core.Tests/obj/Debug/net10.0/SyncTrip.Core.Tests.csproj.AssemblyReference.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/SyncTrip.Core.Tests/obj/SyncTrip.Core.Tests.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/tests/SyncTrip.Core.Tests/obj/SyncTrip.Core.Tests.csproj.nuget.dgspec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/SyncTrip.Core.Tests/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/tests/SyncTrip.Core.Tests/obj/project.assets.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/SyncTrip.Core.Tests/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/tests/SyncTrip.Core.Tests/obj/project.nuget.cache" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -165,21 +137,26 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/SprtJonathan/SyncTrip.git&quot;,
-    &quot;accountId&quot;: &quot;ca663a84-dd80-4a67-b253-971143a3b18b&quot;
+    &quot;accountId&quot;: &quot;3a43600c-da3c-4249-b694-154433ed6aab&quot;
   }
 }</component>
-  <component name="KubernetesApiPersistence">{}</component>
-  <component name="KubernetesApiProvider">{
-  &quot;isMigrated&quot;: true
-}</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="mock://diff.cs" root0="SKIP_HIGHLIGHTING" />
+  </component>
+  <component name="InvalidFacetManager">
+    <ignored-facets>
+      <facet id="SyncTrip.Mobile/invalid/Android Facet - SyncTrip.Mobile" />
+      <facet id="SyncTrip/invalid/Android Facet - SyncTrip" />
+    </ignored-facets>
+  </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="SWEA" />
+    <option name="selectedTabId" value="Toolset" />
   </component>
   <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 5
+  &quot;associatedIndex&quot;: 8
 }</component>
-  <component name="ProjectId" id="35YgbIVe8f9ADfeop4av0sFIqde" />
+  <component name="ProjectId" id="35bB3IYKp9uCyN9jnCT2HllnUgV" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -187,6 +164,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     ".NET Launch Settings Profile.SyncTrip.Api: http.executor": "Run",
+    ".NET Launch Settings Profile.SyncTrip: Windows Machine.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
@@ -198,7 +176,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "configurable.group.appearance",
+    "settings.editor.selected.configurable": "preferences.updates",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -313,6 +291,20 @@
         <option name="Build" />
       </method>
     </configuration>
+    <configuration name="SyncTrip" type="XamarinAndroidProject" factoryName="Xamarin.Android">
+      <option name="PROJECT_PATH" value="$PROJECT_DIR$/SyncTrip/SyncTrip.csproj" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
+      <option name="DEPLOY_BEHAVIOUR_NAME" value="Default" />
+      <method v="2" />
+    </configuration>
+    <configuration name="SyncTrip.Mobile" type="XamarinAndroidProject" factoryName="Xamarin.Android">
+      <option name="PROJECT_PATH" value="$PROJECT_DIR$/src/SyncTrip.Mobile/SyncTrip.Mobile.csproj" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
+      <option name="DEPLOY_BEHAVIOUR_NAME" value="Default" />
+      <method v="2" />
+    </configuration>
     <configuration name="SyncTrip" type="XamarinIOSProject" factoryName="Xamarin.iOS">
       <option name="PROJECT_PATH" value="$PROJECT_DIR$/SyncTrip/SyncTrip.csproj" />
       <option name="PROGRAM_PARAMETERS" value="" />
@@ -350,24 +342,16 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="2ed398ee-02b1-4c46-ba33-6a3d5af25f6b" name="Changes" comment="" />
-      <created>1763291337509</created>
+      <changelist id="f60dbf88-0665-45ec-9052-5a94ce3c0662" name="Changes" comment="" />
+      <created>1763368689979</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1763291337509</updated>
-      <workItem from="1763291340596" duration="161000" />
-      <workItem from="1763292491067" duration="24758000" />
-      <workItem from="1763899558639" duration="6276000" />
+      <updated>1763368689979</updated>
+      <workItem from="1763368691188" duration="357000" />
+      <workItem from="1763369788837" duration="33188000" />
+      <workItem from="1763589025843" duration="10595000" />
+      <workItem from="1763720290709" duration="14084000" />
     </task>
-    <task id="LOCAL-00001" summary="Initial Commit - Done API project and test project">
-      <option name="closed" value="true" />
-      <created>1763318495213</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1763318495213</updated>
-    </task>
-    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -375,10 +359,19 @@
   </component>
   <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Initial Commit - Done API project and test project" />
-    <option name="LAST_COMMIT_MESSAGE" value="Initial Commit - Done API project and test project" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
