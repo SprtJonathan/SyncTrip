@@ -51,7 +51,7 @@ public class CompleteRegistrationCommandHandlerTests
 
         var expectedJwt = "fake-jwt-token";
         _authServiceMock
-            .Setup(x => x.GenerateJwtToken(It.IsAny<User>()))
+            .Setup(x => x.GenerateJwtToken(It.IsAny<User>(), It.IsAny<Dictionary<string, string>?>()))
             .Returns(expectedJwt);
 
         // Act
@@ -77,7 +77,7 @@ public class CompleteRegistrationCommandHandlerTests
         );
 
         _authServiceMock.Verify(
-            x => x.GenerateJwtToken(It.IsAny<User>()),
+            x => x.GenerateJwtToken(It.IsAny<User>(), It.IsAny<Dictionary<string, string>?>()),
             Times.Once
         );
     }
@@ -152,7 +152,7 @@ public class CompleteRegistrationCommandHandlerTests
 
         var expectedJwt = "fake-jwt-token";
         _authServiceMock
-            .Setup(x => x.GenerateJwtToken(It.IsAny<User>()))
+            .Setup(x => x.GenerateJwtToken(It.IsAny<User>(), It.IsAny<Dictionary<string, string>?>()))
             .Returns(expectedJwt);
 
         // Act
@@ -187,7 +187,7 @@ public class CompleteRegistrationCommandHandlerTests
 
         var expectedJwt = "fake-jwt-token";
         _authServiceMock
-            .Setup(x => x.GenerateJwtToken(It.IsAny<User>()))
+            .Setup(x => x.GenerateJwtToken(It.IsAny<User>(), It.IsAny<Dictionary<string, string>?>()))
             .Returns(expectedJwt);
 
         // Act
