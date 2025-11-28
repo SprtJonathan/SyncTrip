@@ -16,9 +16,6 @@ public class VehicleConfiguration : IEntityTypeConfiguration<Vehicle>
 
         builder.HasKey(v => v.Id);
 
-        builder.Property(v => v.Id)
-            .ValueGeneratedNever(); // Géré par l'entité
-
         builder.Property(v => v.UserId)
             .IsRequired();
 
