@@ -1,7 +1,7 @@
 # SyncTrip - Suivi de Progression
 
-**Dernière mise à jour** : 24 Novembre 2025 - 18h00
-**Statut Global** : Features 1 & 2 COMPLÈTES (Auth + Profil/Garage)
+**Dernière mise à jour** : 28 Novembre 2025 - 10h30
+**Statut Global** : Features 1 & 2 COMPLÈTES + Sécurisation Production (P0)
 
 ---
 
@@ -83,6 +83,65 @@ Chaque feature est développée de bout en bout (Core → Application → Infras
 - [x] Mobile : Configuration AppShell.xaml (Onglets Profile et Garage, route addvehicle)
 - [x] Vérification : Configuration complète DI et navigation
 
+#### Sécurisation Production (P0 - Critical)
+**Statut** : TERMINÉ
+**Date** : 28 Novembre 2025
+**Progression** : 100%
+
+**Contexte** :
+Audit de sécurité complet réalisé avec l'agent dotnet-maui-expert. Identification et résolution de 5 problèmes critiques (P0) bloquants pour la production.
+
+**Composants sécurisés** :
+- [x] **.gitignore** : Création fichier complet .NET/MAUI pour prévenir commit de secrets
+  - Exclusion appsettings.*.json (sauf appsettings.json)
+  - Exclusion secrets.json, certificats *.pfx/*.p12
+  - Exclusion base de données locale, logs, binaires
+  - Protection bin/, obj/, .vs/, .idea/
+
+- [x] **User Secrets** : Configuration stockage sécurisé des secrets en développement
+  - ConnectionStrings:DefaultConnection (PostgreSQL)
+  - JwtSettings:SecretKey
+  - EmailSettings:SmtpUser et SmtpPassword
+  - Commande : `dotnet user-secrets set "Key" "Value"`
+
+- [x] **appsettings.json** : Nettoyage des secrets en clair
+  - Remplacement ConnectionString par placeholder
+  - Remplacement JwtSettings:SecretKey par placeholder
+  - Remplacement EmailSettings (SmtpUser, SmtpPassword) par placeholders
+  - Message explicite : "SET_VIA_USER_SECRETS_OR_ENVIRONMENT_VARIABLES"
+
+- [x] **Global Error Handling** : Middleware gestion d'erreurs Production
+  - `Program.cs` : UseExceptionHandler avec réponse générique
+  - Pas d'exposition de stack traces en production
+  - Logging complet des erreurs avec TraceId
+  - Réponse JSON standardisée avec message utilisateur + TraceId
+  - HSTS activé en production
+
+- [x] **Rate Limiting** : Protection contre brute force et abus API
+  - Rate limiter global : 100 requêtes/minute par IP
+  - Rate limiter spécifique auth : 5 requêtes/10 minutes par IP
+  - Middleware UseRateLimiter activé
+  - Attribut [EnableRateLimiting("auth")] sur AuthController
+  - Réponse HTTP 429 avec RetryAfter en cas de dépassement
+
+- [x] **EF Core Warnings** : Suppression du masquage de warnings
+  - ApplicationDbContext : Retrait ConfigureWarnings
+  - Détection proactive des changements de schéma
+  - Meilleure visibilité des migrations pendantes
+
+- [x] **Documentation** : Mise à jour ARCHITECTURE.md
+  - Version 1.1 (28 Novembre 2025)
+  - Mention explicite ".NET 10 LTS (Long Term Support)"
+  - Confirmation version stable pour production
+
+**Tests** :
+- [x] Compilation Backend sans erreur
+- [x] Tous les tests passent (151/151 - 100%)
+- [x] Vérification User Secrets fonctionnels
+
+**Commit** :
+- `1152142` - Security hardening for production readiness
+
 ---
 
 ### 🚧 EN COURS
@@ -161,12 +220,15 @@ _Aucune feature en cours pour le moment_
 ## Métriques
 
 **Features Terminées** : 2 / 6 (Auth + Profil/Garage - Backend + Mobile + Tests)
+**Sécurité Production** : ✅ P0 Critical Issues Résolus (5/5)
 **Progression Globale** : 33%
-**Dernière compilation** : 24 Nov 2025 18h00 - Succès (Backend + Tests)
+**Dernière compilation** : 28 Nov 2025 10h30 - Succès (Backend + Tests)
 **Tests Passing** : 151 / 151 (100%)
   - Core.Tests : 96 tests (User, Vehicle, Brand, UserLicense)
   - Application.Tests : 55 tests (Auth, Users, Vehicles)
 **Qualité Code** : ✅ Conforme aux spécifications (Clean Architecture, DDD, MVVM)
+**Sécurité** : ✅ Production Ready (Rate Limiting, Error Handling, Secrets Management)
+**Stack** : .NET 10 LTS (Long Term Support)
 **Seed Data** : 40 marques de véhicules (motos, voitures, utilitaires)
 
 ---
@@ -226,27 +288,60 @@ _Aucune feature en cours pour le moment_
 
 **Total commits** : 18 commits au total
 
+### Session du 28 Novembre 2025
+
+#### Sécurisation Production (Matin - 10h30)
+19. **97c98bf** - `feat(mobile): ajoute ViewModels MVVM pour Feature 2`
+20. **10f1eaf** - `docs: met à jour PROGRESS.md avec Feature 2 complète`
+21. **6c2dd4f** - `feat(infrastructure): add EF Core migration for Profile & Garage feature`
+22. **1152142** - `security: hardening for production readiness`
+    - Création .gitignore complet .NET/MAUI
+    - Configuration User Secrets pour développement
+    - Sécurisation appsettings.json (retrait secrets en clair)
+    - Ajout middleware global error handling (production)
+    - Implémentation rate limiting (global + auth-specific)
+    - Retrait suppression warnings EF Core
+    - Mise à jour ARCHITECTURE.md vers v1.1 (.NET 10 LTS)
+23. **En cours** - `docs: update PROGRESS.md with security hardening`
+
+**Validation effectuée** :
+- ✅ Audit de sécurité complet avec dotnet-maui-expert
+- ✅ Résolution 5 problèmes critiques P0
+- ✅ Tous les tests passent (151/151 - 100%)
+- ✅ Configuration User Secrets fonctionnelle
+- ✅ Rate Limiting opérationnel
+- ✅ Error Handling production-ready
+
+**Total commits session du 28 Nov** : 5 commits (Sécurité + Documentation)
+
 ---
 
 ## Prochaines Actions
 
 ### Priorité Haute
-1. **Tests End-to-End Feature Auth**
-   - Tester manuellement l'API avec Swagger/Postman
-   - Tester le flux complet Mobile → API
+1. **Feature 3 : Convois** (Prochaine feature à développer)
+   - Entités Convoy, ConvoyMember
+   - Service ConvoyCodeGenerator (codes 6 caractères)
+   - CRUD Convoys (Create, Join, Leave)
+   - Controllers API + Tests
+   - Pages Mobile (Create/Join/Lobby)
+
+2. **Tests End-to-End Features 1 & 2**
+   - Tester flux complet Auth Magic Link (Mobile → API)
+   - Tester CRUD Profil et Véhicules
    - Vérifier connexion PostgreSQL et email service
 
-2. **Feature 2 : Profil & Garage** (Prochaine à développer)
-   - Entités Vehicle, Brand, UserLicense
-   - CRUD Utilisateurs et Véhicules
-   - Pages Mobile Profil + Garage
-
 ### Priorité Moyenne
-1. Ajouter tests unitaires Mobile (ViewModels)
-2. Ajouter tests d'intégration API
-3. Configurer environnements (Dev, Staging, Prod)
+1. **Résoudre issues P1 restantes** (de l'audit sécurité)
+   - Réactiver Swagger (quand compatible .NET 10)
+   - Créer migration EF Core si changements détectés
+   - Ajouter Android SDK pour compilation Mobile
+
+2. Ajouter tests unitaires Mobile (ViewModels)
+3. Ajouter tests d'intégration API
+4. Configurer environnements (Dev, Staging, Prod)
 
 ### Priorité Basse
 1. Améliorer UI/UX Mobile avec animations
 2. Configurer CI/CD
-3. Améliorer configuration Swagger
+3. Résoudre issues P2 (de l'audit sécurité)
