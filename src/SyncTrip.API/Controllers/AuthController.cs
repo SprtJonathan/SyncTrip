@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using SyncTrip.Application.Auth.Commands;
 using SyncTrip.Shared.DTOs.Auth;
 
@@ -33,6 +34,7 @@ public class AuthController : ControllerBase
     /// Le message de retour est toujours identique pour éviter l'énumération de comptes.
     /// </remarks>
     [HttpPost("magic-link")]
+    [EnableRateLimiting("auth")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> SendMagicLink([FromBody] MagicLinkRequest request)
     {
@@ -47,6 +49,7 @@ public class AuthController : ControllerBase
     /// <param name="request">Requête contenant le token à vérifier.</param>
     /// <returns>Réponse contenant le JWT ou indiquant qu'une inscription est requise.</returns>
     [HttpPost("verify")]
+    [EnableRateLimiting("auth")]
     [ProducesResponseType<VerifyTokenResponse>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> VerifyToken([FromBody] VerifyTokenRequest request)
@@ -66,6 +69,7 @@ public class AuthController : ControllerBase
     /// <param name="request">Informations d'inscription de l'utilisateur.</param>
     /// <returns>JWT token pour l'utilisateur nouvellement créé.</returns>
     [HttpPost("register")]
+    [EnableRateLimiting("auth")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CompleteRegistration([FromBody] CompleteRegistrationRequest request)

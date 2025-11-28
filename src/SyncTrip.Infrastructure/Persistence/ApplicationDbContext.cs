@@ -39,6 +39,11 @@ public class ApplicationDbContext : DbContext
     /// </summary>
     public DbSet<UserLicense> UserLicenses => Set<UserLicense>();
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        base.OnConfiguring(optionsBuilder);
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
