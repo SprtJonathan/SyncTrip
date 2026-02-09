@@ -1,7 +1,7 @@
 # SyncTrip - Suivi de Progression
 
-**Dernière mise à jour** : 28 Novembre 2025 - 10h30
-**Statut Global** : Features 1 & 2 COMPLÈTES + Sécurisation Production (P0)
+**Dernière mise à jour** : 9 Février 2026
+**Statut Global** : Features 1, 2 & 3 COMPLÈTES + Sécurisation Production (P0)
 
 ---
 
@@ -83,6 +83,44 @@ Chaque feature est développée de bout en bout (Core → Application → Infras
 - [x] Mobile : Configuration AppShell.xaml (Onglets Profile et Garage, route addvehicle)
 - [x] Vérification : Configuration complète DI et navigation
 
+#### Feature 3 : Convois
+**Statut** : TERMINÉ (Backend + Mobile + Tests)
+**Progression** : 100%
+
+**Composants terminés** :
+- [x] Core : Enum ConvoyRole (Member, Leader)
+- [x] Core : Entité Convoy (factory method, JoinCode 6 chars crypto-sécurisé, gestion membres)
+- [x] Core : Entité ConvoyMember (composite PK, rôles Leader/Member)
+- [x] Core : Interface IConvoyRepository
+- [x] Shared : DTOs Convoys (CreateConvoyRequest, JoinConvoyRequest, ConvoyDto, ConvoyMemberDto, ConvoyDetailsDto)
+- [x] Application : Commands (CreateConvoy, JoinConvoy, LeaveConvoy, KickMember, TransferLeadership, DissolveConvoy)
+- [x] Application : Queries (GetConvoyByCode, GetUserConvoys)
+- [x] Application : Validators FluentValidation (CreateConvoy, JoinConvoy)
+- [x] Infrastructure : ConvoyRepository avec Include chains (Members → User, Vehicle → Brand)
+- [x] Infrastructure : Configurations EF Core (Convoy, ConvoyMember) avec index unique JoinCode
+- [x] Infrastructure : Migration EF Core AddConvoyFeature
+- [x] Infrastructure : DependencyInjection.cs mis à jour
+- [x] API : ConvoysController avec 7 endpoints [Authorize]
+  - POST /api/convoys (créer)
+  - GET /api/convoys/{code} (détails)
+  - GET /api/convoys/my (mes convois)
+  - POST /api/convoys/{code}/join (rejoindre)
+  - POST /api/convoys/{code}/leave (quitter)
+  - POST /api/convoys/{code}/kick/{targetUserId} (exclure)
+  - POST /api/convoys/{code}/transfer/{newLeaderUserId} (transférer leadership)
+  - DELETE /api/convoys/{code} (dissoudre)
+- [x] Tests : ConvoyTests (22 tests) + ConvoyMemberTests (6 tests)
+- [x] Tests : CreateConvoyCommandHandlerTests (5 tests) + JoinConvoyCommandHandlerTests (4 tests)
+- [x] Vérification : Compilation sans erreur Backend + Mobile
+- [x] Vérification : Tous les tests passent (188/188)
+
+**Composants Mobile ajoutés** :
+- [x] Mobile : Services (IConvoyService, ConvoyService)
+- [x] Mobile : ViewModels (ConvoyLobbyViewModel, CreateConvoyViewModel, JoinConvoyViewModel)
+- [x] Mobile : Views (ConvoyLobbyPage, CreateConvoyPage, JoinConvoyPage)
+- [x] Mobile : Configuration MauiProgram.cs (ConvoyService, ViewModels, Pages)
+- [x] Mobile : Configuration AppShell.xaml (onglet Convois) + routes navigation
+
 #### Sécurisation Production (P0 - Critical)
 **Statut** : TERMINÉ
 **Date** : 28 Novembre 2025
@@ -154,22 +192,6 @@ _Aucune feature en cours pour le moment_
 
 ---
 
-#### Feature 3 : Convois
-**Statut** : Pas démarré
-**Priorité** : Haute
-
-**Composants** :
-- [ ] Core : Entités Convoy, ConvoyMember
-- [ ] Core : Service ConvoyCodeGenerator
-- [ ] Shared : DTOs Convoys
-- [ ] Application : Commands Convoy
-- [ ] Infrastructure : ConvoyRepository
-- [ ] API : ConvoysController
-- [ ] Mobile : Pages Convoy (Create/Join/Lobby)
-- [ ] Tests complets
-
----
-
 #### Feature 4 : Navigation GPS
 **Statut** : Pas démarré
 **Priorité** : Haute
@@ -219,13 +241,13 @@ _Aucune feature en cours pour le moment_
 
 ## Métriques
 
-**Features Terminées** : 2 / 6 (Auth + Profil/Garage - Backend + Mobile + Tests)
+**Features Terminées** : 3 / 6 (Auth + Profil/Garage + Convois - Backend + Mobile + Tests)
 **Sécurité Production** : ✅ P0 Critical Issues Résolus (5/5)
-**Progression Globale** : 33%
-**Dernière compilation** : 28 Nov 2025 10h30 - Succès (Backend + Tests)
-**Tests Passing** : 151 / 151 (100%)
-  - Core.Tests : 96 tests (User, Vehicle, Brand, UserLicense)
-  - Application.Tests : 55 tests (Auth, Users, Vehicles)
+**Progression Globale** : 50%
+**Dernière compilation** : 9 Fév 2026 - Succès (Backend + Mobile + Tests)
+**Tests Passing** : 188 / 188 (100%)
+  - Core.Tests : 124 tests (User, Vehicle, Brand, UserLicense, Convoy, ConvoyMember)
+  - Application.Tests : 64 tests (Auth, Users, Vehicles, Convoys)
 **Qualité Code** : ✅ Conforme aux spécifications (Clean Architecture, DDD, MVVM)
 **Sécurité** : ✅ Production Ready (Rate Limiting, Error Handling, Secrets Management)
 **Stack** : .NET 10 LTS (Long Term Support)
@@ -314,27 +336,66 @@ _Aucune feature en cours pour le moment_
 
 **Total commits session du 28 Nov** : 5 commits (Sécurité + Documentation)
 
+### Session du 9 Février 2026
+
+#### Nettoyage Git + Feature 3 : Convois
+24. **a34a1fc** - `chore: nettoie l'index git et complète le .gitignore`
+    - Suppression 7669 fichiers trackés inutiles (bin/, obj/, .idea/, .claude/)
+    - Ajout `.claude/` au .gitignore
+25. **360f812** - `feat(core): ajoute entités Convoy, ConvoyMember et IConvoyRepository`
+    - Enum ConvoyRole (Member, Leader)
+    - Entité Convoy avec factory method, JoinCode crypto-sécurisé (6 chars, sans caractères ambigus)
+    - Entité ConvoyMember avec PK composite, gestion rôles
+    - Interface IConvoyRepository
+26. **8435bd7** - `feat(shared): ajoute DTOs pour les Convois`
+    - CreateConvoyRequest, JoinConvoyRequest
+    - ConvoyDto, ConvoyMemberDto, ConvoyDetailsDto
+27. **c4f4b98** - `feat(application): ajoute commands, queries et validators pour les Convois`
+    - 6 Commands (Create, Join, Leave, Kick, Transfer, Dissolve)
+    - 2 Queries (GetByCode, GetUserConvoys)
+    - 2 Validators FluentValidation
+28. **e1342c9** - `feat(infrastructure): ajoute repository, configurations EF Core et migration Convoys`
+    - ConvoyRepository avec Include chains
+    - Configurations EF Core (index unique JoinCode, PK composite ConvoyMembers)
+    - Migration AddConvoyFeature
+29. **a8ef1af** - `feat(api): ajoute ConvoysController avec 7 endpoints`
+    - 7 endpoints REST [Authorize] pour gestion complète des convois
+30. **5260b0d** - `test: ajoute tests unitaires pour les Convois (37 tests)`
+    - ConvoyTests (22), ConvoyMemberTests (6), Handlers (9)
+31. **7dace97** - `feat(mobile): ajoute pages Convoy (Lobby, Create, Join)`
+    - Services, ViewModels MVVM, Pages XAML
+    - Configuration DI et navigation Shell
+
+**Validation effectuée** :
+- ✅ Compilation sans erreur (API, Mobile Windows, Tests)
+- ✅ Tous les tests passent (188/188 - 100%)
+- ✅ Structure conforme Clean Architecture + CQRS
+- ✅ JoinCode cryptographiquement sécurisé (RandomNumberGenerator)
+- ✅ Domaine riche (validation métier dans les entités)
+
+**Total commits session du 9 Fév** : 8 commits (1 nettoyage + 7 Feature 3)
+
 ---
 
 ## Prochaines Actions
 
 ### Priorité Haute
-1. **Feature 3 : Convois** (Prochaine feature à développer)
-   - Entités Convoy, ConvoyMember
-   - Service ConvoyCodeGenerator (codes 6 caractères)
-   - CRUD Convoys (Create, Join, Leave)
-   - Controllers API + Tests
-   - Pages Mobile (Create/Join/Lobby)
+1. **Feature 4 : Navigation GPS** (Prochaine feature à développer)
+   - Entités Trip, TripWaypoint, LocationHistory
+   - TripHub SignalR pour temps réel
+   - CockpitPage + MapControl (Mapsui)
+   - LocationService (foreground)
+   - Tests complets
 
-2. **Tests End-to-End Features 1 & 2**
+2. **Tests End-to-End Features 1, 2 & 3**
    - Tester flux complet Auth Magic Link (Mobile → API)
    - Tester CRUD Profil et Véhicules
+   - Tester création/rejoindre/quitter convois
    - Vérifier connexion PostgreSQL et email service
 
 ### Priorité Moyenne
 1. **Résoudre issues P1 restantes** (de l'audit sécurité)
    - Réactiver Swagger (quand compatible .NET 10)
-   - Créer migration EF Core si changements détectés
    - Ajouter Android SDK pour compilation Mobile
 
 2. Ajouter tests unitaires Mobile (ViewModels)
