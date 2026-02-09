@@ -6,6 +6,8 @@ using SyncTrip.Mobile.Features.Profile.ViewModels;
 using SyncTrip.Mobile.Features.Profile.Views;
 using SyncTrip.Mobile.Features.Garage.ViewModels;
 using SyncTrip.Mobile.Features.Garage.Views;
+using SyncTrip.Mobile.Features.Convoy.ViewModels;
+using SyncTrip.Mobile.Features.Convoy.Views;
 
 namespace SyncTrip.Mobile;
 
@@ -39,6 +41,7 @@ public static class MauiProgram
 		builder.Services.AddSingleton<IUserService, UserService>();
 		builder.Services.AddSingleton<IVehicleService, VehicleService>();
 		builder.Services.AddSingleton<IBrandService, BrandService>();
+		builder.Services.AddSingleton<IConvoyService, ConvoyService>();
 
 		// ViewModels - Authentication
 		builder.Services.AddTransient<MagicLinkViewModel>();
@@ -49,6 +52,11 @@ public static class MauiProgram
 		builder.Services.AddTransient<GarageViewModel>();
 		builder.Services.AddTransient<AddVehicleViewModel>();
 
+		// ViewModels - Convoy
+		builder.Services.AddTransient<ConvoyLobbyViewModel>();
+		builder.Services.AddTransient<CreateConvoyViewModel>();
+		builder.Services.AddTransient<JoinConvoyViewModel>();
+
 		// Pages - Authentication
 		builder.Services.AddTransient<MagicLinkPage>();
 		builder.Services.AddTransient<RegistrationPage>();
@@ -57,6 +65,11 @@ public static class MauiProgram
 		builder.Services.AddTransient<ProfilePage>();
 		builder.Services.AddTransient<GaragePage>();
 		builder.Services.AddTransient<AddVehiclePage>();
+
+		// Pages - Convoy
+		builder.Services.AddTransient<ConvoyLobbyPage>();
+		builder.Services.AddTransient<CreateConvoyPage>();
+		builder.Services.AddTransient<JoinConvoyPage>();
 
 		return builder.Build();
 	}

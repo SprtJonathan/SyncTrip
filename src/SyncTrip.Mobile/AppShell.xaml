@@ -6,6 +6,7 @@
     xmlns:local="clr-namespace:SyncTrip.Mobile"
     xmlns:profile="clr-namespace:SyncTrip.Mobile.Features.Profile.Views"
     xmlns:garage="clr-namespace:SyncTrip.Mobile.Features.Garage.Views"
+    xmlns:convoy="clr-namespace:SyncTrip.Mobile.Features.Convoy.Views"
     Title="SyncTrip">
 
     <TabBar>
@@ -22,6 +23,13 @@
             Icon="car.png"
             ContentTemplate="{DataTemplate garage:GaragePage}"
             Route="garage" />
+
+        <!-- Convoy Tab -->
+        <ShellContent
+            Title="Convois"
+            Icon="car.png"
+            ContentTemplate="{DataTemplate convoy:ConvoyLobbyPage}"
+            Route="convoys" />
     </TabBar>
 
 </Shell>

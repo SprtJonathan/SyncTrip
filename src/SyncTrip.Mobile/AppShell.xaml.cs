@@ -1,4 +1,5 @@
 ﻿using SyncTrip.Mobile.Features.Authentication.Views;
+using SyncTrip.Mobile.Features.Convoy.Views;
 using SyncTrip.Mobile.Features.Garage.Views;
 
 namespace SyncTrip.Mobile;
@@ -22,5 +23,9 @@ public partial class AppShell : Shell
 
 		// Enregistrement des routes de navigation pour Feature 2
 		Routing.RegisterRoute("addvehicle", typeof(AddVehiclePage));
+
+		// Enregistrement des routes de navigation pour Feature 3
+		Routing.RegisterRoute("createconvoy", typeof(CreateConvoyPage));
+		Routing.RegisterRoute("joinconvoy", typeof(JoinConvoyPage));
 	}
 }
