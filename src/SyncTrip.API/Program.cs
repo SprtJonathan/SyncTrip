@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
+using SyncTrip.API.Hubs;
 using SyncTrip.Application.Auth.Validators;
 using SyncTrip.Infrastructure;
 using SyncTrip.Infrastructure.Persistence;
@@ -56,6 +57,21 @@ builder.Services.AddAuthentication(options =>
         ValidAudience = jwtSettings["Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
         ClockSkew = TimeSpan.Zero
+    };
+
+    // Support JWT via query string pour SignalR
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            var accessToken = context.Request.Query["access_token"];
+            var path = context.HttpContext.Request.Path;
+            if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))
+            {
+                context.Token = accessToken;
+            }
+            return Task.CompletedTask;
+        }
     };
 });
 
@@ -108,6 +124,9 @@ builder.Services.AddMediatR(cfg =>
 // Add FluentValidation
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<CompleteRegistrationValidator>();
+
+// Add SignalR
+builder.Services.AddSignalR();
 
 // Add Infrastructure services (includes DbContext, Repositories, Services)
 builder.Services.AddInfrastructure(builder.Configuration, builder.Environment);
@@ -188,5 +207,8 @@ app.UseAuthorization();
 app.UseRateLimiter();
 
 app.MapControllers();
+
+// Map SignalR Hub
+app.MapHub<TripHub>("/hubs/trip");
 
 app.Run();
