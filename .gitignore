@@ -518,3 +518,6 @@ logs/
 **/Android/Resource.designer.cs
 **/iOS/**/*.storyboard
 **/Resources/Resource.designer.cs
+
+# Claude Code local settings
+.claude/
