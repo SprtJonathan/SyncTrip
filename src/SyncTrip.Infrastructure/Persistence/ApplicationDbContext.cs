@@ -39,6 +39,16 @@ public class ApplicationDbContext : DbContext
     /// </summary>
     public DbSet<UserLicense> UserLicenses => Set<UserLicense>();
 
+    /// <summary>
+    /// Table des convois.
+    /// </summary>
+    public DbSet<Convoy> Convoys => Set<Convoy>();
+
+    /// <summary>
+    /// Table des membres de convois.
+    /// </summary>
+    public DbSet<ConvoyMember> ConvoyMembers => Set<ConvoyMember>();
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder);

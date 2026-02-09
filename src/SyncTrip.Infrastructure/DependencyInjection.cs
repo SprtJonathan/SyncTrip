@@ -30,6 +30,7 @@ public static class DependencyInjection
         services.AddScoped<IMagicLinkTokenRepository, MagicLinkTokenRepository>();
         services.AddScoped<IVehicleRepository, VehicleRepository>();
         services.AddScoped<IBrandRepository, BrandRepository>();
+        services.AddScoped<IConvoyRepository, ConvoyRepository>();
 
         // Services
         services.AddScoped<IAuthService, AuthService>();
