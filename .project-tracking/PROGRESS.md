@@ -1,7 +1,7 @@
 # SyncTrip - Suivi de Progression
 
 **Dernière mise à jour** : 9 Février 2026
-**Statut Global** : Features 1, 2 & 3 COMPLÈTES + Sécurisation Production (P0)
+**Statut Global** : Features 1, 2 & 3 COMPLÈTES + Feature 4 Backend COMPLET
 
 ---
 
@@ -184,27 +184,36 @@ Audit de sécurité complet réalisé avec l'agent dotnet-maui-expert. Identific
 
 ### 🚧 EN COURS
 
-_Aucune feature en cours pour le moment_
+#### Feature 4 : Navigation GPS
+**Statut** : Backend TERMINÉ — Mobile à faire
+**Progression** : 50% (Backend complet, Mobile restant)
+
+**Composants Backend terminés** :
+- [x] Core : Enums (TripStatus, RouteProfile, WaypointType)
+- [x] Core : Entités Trip, TripWaypoint (factory methods, domain validation)
+- [x] Core : Modification Convoy (ajout collection Trips)
+- [x] Core : Interface ITripRepository
+- [x] Shared : 6 DTOs Trips (StartTripRequest, CreateWaypointRequest, AddWaypointRequest, TripDto, TripDetailsDto, TripWaypointDto)
+- [x] Application : 4 Commands (StartTrip, EndTrip, AddWaypoint, RemoveWaypoint)
+- [x] Application : 3 Queries (GetTripById, GetActiveTripByConvoyId, GetConvoyTrips)
+- [x] Application : 2 Validators (StartTripValidator, AddWaypointValidator)
+- [x] Infrastructure : 2 EF Configurations (TripConfiguration, TripWaypointConfiguration)
+- [x] Infrastructure : TripRepository avec Include chains
+- [x] Infrastructure : DI registration + Migration AddTripFeature
+- [x] API : TripsController (7 endpoints REST nested sous convoys)
+- [x] API : TripHub SignalR (positions temps réel éphémères)
+- [x] API : Program.cs (AddSignalR, JWT query string, MapHub)
+- [x] Tests Core : 27 tests (Trip 14, TripWaypoint 13)
+- [x] Tests Application : 15 tests (StartTrip 5, EndTrip 4, AddWaypoint 4, GetTripById 2)
+
+**Composants Mobile restants** :
+- [ ] Mobile : CockpitPage + MapControl (Mapsui)
+- [ ] Mobile : LocationService (foreground only)
+- [ ] Mobile : SignalR client integration
 
 ---
 
 ### 📋 À FAIRE
-
----
-
-#### Feature 4 : Navigation GPS
-**Statut** : Pas démarré
-**Priorité** : Haute
-
-**Composants** :
-- [ ] Core : Entités Trip, TripWaypoint, LocationHistory
-- [ ] Shared : DTOs Trips, Location
-- [ ] Application : Commands Trip
-- [ ] Infrastructure : TripRepository
-- [ ] API : TripsController + TripHub (SignalR)
-- [ ] Mobile : CockpitPage + MapControl (Mapsui)
-- [ ] Mobile : LocationService (foreground only)
-- [ ] Tests complets
 
 ---
 
@@ -242,12 +251,13 @@ _Aucune feature en cours pour le moment_
 ## Métriques
 
 **Features Terminées** : 3 / 6 (Auth + Profil/Garage + Convois - Backend + Mobile + Tests)
+**Features Backend Terminé** : 4 / 6 (+ Navigation GPS Backend)
 **Sécurité Production** : ✅ P0 Critical Issues Résolus (5/5)
-**Progression Globale** : 50%
-**Dernière compilation** : 9 Fév 2026 - Succès (Backend + Mobile + Tests)
-**Tests Passing** : 188 / 188 (100%)
-  - Core.Tests : 124 tests (User, Vehicle, Brand, UserLicense, Convoy, ConvoyMember)
-  - Application.Tests : 64 tests (Auth, Users, Vehicles, Convoys)
+**Progression Globale** : ~58%
+**Dernière compilation** : 9 Fév 2026 - Succès (Backend + Tests)
+**Tests Passing** : 230 / 230 (100%)
+  - Core.Tests : 151 tests (User, Vehicle, Brand, UserLicense, Convoy, ConvoyMember, Trip, TripWaypoint)
+  - Application.Tests : 79 tests (Auth, Users, Vehicles, Convoys, Trips)
 **Qualité Code** : ✅ Conforme aux spécifications (Clean Architecture, DDD, MVVM)
 **Sécurité** : ✅ Production Ready (Rate Limiting, Error Handling, Secrets Management)
 **Stack** : .NET 10 LTS (Long Term Support)
@@ -375,34 +385,94 @@ _Aucune feature en cours pour le moment_
 
 **Total commits session du 9 Fév** : 8 commits (1 nettoyage + 7 Feature 3)
 
+32. **b8c5635** - `fix(mobile): remplace DisplayAlert par DisplayAlertAsync (.NET 10)`
+33. **ee48665** - `docs: met à jour PROGRESS.md avec Feature 3 complète`
+
+#### Configuration Docker & API
+34. **a1bc96e** - `feat(infra): ajoute Docker, Scalar et configuration API pour dev local`
+    - Dockerfile multi-stage + docker-compose (PostgreSQL 17 + API)
+    - Scalar remplace Swagger (compatible .NET 10) → `/scalar/v1`
+    - DevelopmentEmailService (log magic link en console)
+    - Ports alignés 5000/5001
+    - User Secrets configurés (DB, JWT, SMTP)
+    - .dockerignore
+
+**Note** : Docker non testé (virtualisation désactivée sur le poste). À valider quand la virtualisation sera réactivée :
+- `docker compose up --build` → API sur `http://localhost:5000`, Scalar sur `http://localhost:5000/scalar/v1`
+- Vérifier migrations auto, endpoints Auth, magic link en console
+
+**Total commits session du 9 Fév (suite)** : 3 commits (2 fixes + 1 Docker/Scalar)
+
+#### Feature 4 : Navigation GPS — Backend
+35. **8df5d14** - `feat(core): ajoute entités Trip, TripWaypoint et enums GPS`
+    - 3 Enums : TripStatus (Recording/MonitorOnly/Finished), RouteProfile (Fast/Scenic), WaypointType (Start/Stopover/Destination)
+    - Entité Trip : factory Create(), Finish(), AddWaypoint(), RemoveWaypoint() — validation domaine
+    - Entité TripWaypoint : factory Create() avec validation lat [-90,90], lon [-180,180] — UpdateOrder()
+    - Modification Convoy : ajout collection `ICollection<Trip> Trips`
+    - Interface ITripRepository (GetById, GetActiveByConvoyId, GetByConvoyId, Add, Update)
+36. **e820e89** - `feat(shared): ajoute DTOs pour les Voyages GPS`
+    - StartTripRequest, CreateWaypointRequest, AddWaypointRequest (records, int pour enums)
+    - TripDto, TripDetailsDto, TripWaypointDto (classes, int pour enums)
+    - Respect architecture : Shared ne référence PAS Core → enums en `int`, Application fait le cast
+37. **19dbebf** - `feat(application): ajoute commands, queries et validators pour les Voyages`
+    - 4 Commands + Handlers : StartTrip, EndTrip, AddWaypoint, RemoveWaypoint
+    - 3 Queries + Handlers : GetTripById, GetActiveTripByConvoyId, GetConvoyTrips
+    - 2 Validators FluentValidation : StartTripValidator, AddWaypointValidator
+38. **6acc7a1** - `feat(infrastructure): ajoute repository, configurations EF Core et migration Trip`
+    - TripConfiguration : Table "Trips", FK Convoy (Cascade), enum→int, index (ConvoyId, Status)
+    - TripWaypointConfiguration : Table "TripWaypoints", FK Trip (Cascade), FK User (Restrict), lat/lon precision(10,7)
+    - TripRepository avec Include chains (Convoy.Members, Waypoints.AddedByUser)
+    - DI registration ITripRepository → TripRepository
+    - Migration AddTripFeature
+39. **b3ca00b** - `feat(api): ajoute TripsController et TripHub SignalR`
+    - TripsController : 7 endpoints REST nested sous `/api/convoys/{convoyId:guid}/trips`
+      - POST `/` (StartTrip), GET `/active`, GET `/{tripId}`, GET `/` (historique)
+      - POST `/{tripId}/end`, POST `/{tripId}/waypoints`, DELETE `/{tripId}/waypoints/{waypointId}`
+    - TripHub SignalR : JoinTrip, LeaveTrip, SendLocationUpdate, SendRouteUpdate
+    - Positions GPS éphémères (relayées via SignalR, PAS stockées en DB)
+    - Program.cs : AddSignalR(), JWT query string `access_token` pour SignalR, MapHub("/hubs/trip")
+40. **935a623** - `test: ajoute tests unitaires pour les Voyages GPS (42 tests)`
+    - TripTests (14) : Create valid/Recording/MonitorOnly/Finished→exception/EmptyConvoyId, StartTime/EndTime, Finish, AddWaypoint, RemoveWaypoint
+    - TripWaypointTests (13) : Create valid/empty fields/lat-lon boundaries, UpdateOrder
+    - StartTripCommandHandlerTests (5) : valid/with waypoints/convoy not found/not leader/active trip exists
+    - EndTripCommandHandlerTests (4) : valid/trip not found/not leader/already finished
+    - AddWaypointCommandHandlerTests (4) : valid/trip not found/not member/finished trip
+    - GetTripByIdQueryHandlerTests (2) : found/not found
+
+41. **9270307** - `docs: met à jour PROGRESS.md avec Feature 4 Backend complète`
+
+**Validation effectuée** :
+- ✅ Build API : 0 erreurs
+- ✅ Tous les tests passent (230/230 - 100%)
+  - Core.Tests : 151 (124 existants + 27 nouveaux)
+  - Application.Tests : 79 (64 existants + 15 nouveaux)
+- ✅ Migration EF Core générée sans erreur
+- ✅ Architecture respectée (Shared sans ref Core, enums castés dans Application)
+
+**Total commits Feature 4 Backend** : 7 commits (core + shared + application + infrastructure + api + tests + docs)
+
 ---
 
 ## Prochaines Actions
 
 ### Priorité Haute
-1. **Feature 4 : Navigation GPS** (Prochaine feature à développer)
-   - Entités Trip, TripWaypoint, LocationHistory
-   - TripHub SignalR pour temps réel
+1. **Feature 4 : Navigation GPS Mobile**
    - CockpitPage + MapControl (Mapsui)
    - LocationService (foreground)
-   - Tests complets
+   - SignalR client integration
 
-2. **Tests End-to-End Features 1, 2 & 3**
-   - Tester flux complet Auth Magic Link (Mobile → API)
-   - Tester CRUD Profil et Véhicules
-   - Tester création/rejoindre/quitter convois
-   - Vérifier connexion PostgreSQL et email service
+2. **Valider Docker** (quand virtualisation réactivée)
+   - `docker compose up --build`
+   - Tester flux Auth complet via Scalar UI
+   - Tester CRUD Profil, Véhicules, Convois, Trips
 
 ### Priorité Moyenne
-1. **Résoudre issues P1 restantes** (de l'audit sécurité)
-   - Réactiver Swagger (quand compatible .NET 10)
-   - Ajouter Android SDK pour compilation Mobile
-
-2. Ajouter tests unitaires Mobile (ViewModels)
+1. Feature 5 : Système de Vote
+2. Feature 6 : Chat
 3. Ajouter tests d'intégration API
-4. Configurer environnements (Dev, Staging, Prod)
 
 ### Priorité Basse
-1. Améliorer UI/UX Mobile avec animations
-2. Configurer CI/CD
-3. Résoudre issues P2 (de l'audit sécurité)
+1. Ajouter Android SDK pour compilation Mobile
+2. Ajouter tests unitaires Mobile (ViewModels)
+3. Améliorer UI/UX Mobile avec animations
+4. Configurer CI/CD
