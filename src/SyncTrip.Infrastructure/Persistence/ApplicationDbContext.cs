@@ -49,6 +49,16 @@ public class ApplicationDbContext : DbContext
     /// </summary>
     public DbSet<ConvoyMember> ConvoyMembers => Set<ConvoyMember>();
 
+    /// <summary>
+    /// Table des voyages.
+    /// </summary>
+    public DbSet<Trip> Trips => Set<Trip>();
+
+    /// <summary>
+    /// Table des points de passage.
+    /// </summary>
+    public DbSet<TripWaypoint> TripWaypoints => Set<TripWaypoint>();
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder);

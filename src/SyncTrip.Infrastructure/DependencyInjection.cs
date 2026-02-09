@@ -33,6 +33,7 @@ public static class DependencyInjection
         services.AddScoped<IVehicleRepository, VehicleRepository>();
         services.AddScoped<IBrandRepository, BrandRepository>();
         services.AddScoped<IConvoyRepository, ConvoyRepository>();
+        services.AddScoped<ITripRepository, TripRepository>();
 
         // Services
         services.AddScoped<IAuthService, AuthService>();
