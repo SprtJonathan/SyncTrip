@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using SyncTrip.Core.Interfaces;
 using SyncTrip.Infrastructure.Persistence;
 using SyncTrip.Infrastructure.Repositories;
@@ -18,7 +19,8 @@ public static class DependencyInjection
     /// </summary>
     public static IServiceCollection AddInfrastructure(
         this IServiceCollection services,
-        IConfiguration configuration)
+        IConfiguration configuration,
+        IHostEnvironment environment)
     {
         // Base de données PostgreSQL
         var connectionString = configuration.GetConnectionString("DefaultConnection");
@@ -34,7 +36,11 @@ public static class DependencyInjection
 
         // Services
         services.AddScoped<IAuthService, AuthService>();
-        services.AddScoped<IEmailService, EmailService>();
+
+        if (environment.IsDevelopment())
+            services.AddScoped<IEmailService, DevelopmentEmailService>();
+        else
+            services.AddScoped<IEmailService, EmailService>();
 
         return services;
     }

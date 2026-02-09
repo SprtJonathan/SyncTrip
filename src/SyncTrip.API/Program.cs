@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Scalar.AspNetCore;
 using SyncTrip.Application.Auth.Validators;
 using SyncTrip.Infrastructure;
 using SyncTrip.Infrastructure.Persistence;
@@ -19,9 +20,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-// Configure Swagger (temporairement désactivé pour .NET 10 Preview)
-// TODO: Réactiver quand Swashbuckle sera compatible avec .NET 10
-// builder.Services.AddSwaggerGen();
+// OpenAPI + Scalar (remplacement de Swagger pour .NET 10)
+builder.Services.AddOpenApi();
 
 // Configure CORS
 builder.Services.AddCors(options =>
@@ -110,7 +110,7 @@ builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<CompleteRegistrationValidator>();
 
 // Add Infrastructure services (includes DbContext, Repositories, Services)
-builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddInfrastructure(builder.Configuration, builder.Environment);
 
 var app = builder.Build();
 
@@ -171,15 +171,11 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Configure the HTTP request pipeline
-// Swagger temporairement désactivé pour .NET 10 Preview
-// if (app.Environment.IsDevelopment())
-// {
-//     app.UseSwagger();
-//     app.UseSwaggerUI(c =>
-//     {
-//         c.SwaggerEndpoint("/swagger/v1/swagger.json", "SyncTrip API v1");
-//     });
-// }
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+    app.MapScalarApiReference();
+}
 
 app.UseHttpsRedirection();
 

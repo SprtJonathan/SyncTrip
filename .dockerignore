@@ -1,0 +1,17 @@
+**/bin/
+**/obj/
+**/.vs/
+**/.idea/
+**/.vscode/
+**/.git/
+**/.claude/
+**/node_modules/
+**/TestResults/
+**/*.user
+**/*.suo
+*.md
+.gitignore
+.dockerignore
+*.sln.iml
+tests/
+src/SyncTrip.Mobile/
