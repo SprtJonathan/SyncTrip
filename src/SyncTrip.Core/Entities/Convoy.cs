@@ -40,6 +40,11 @@ public class Convoy
     public ICollection<ConvoyMember> Members { get; private set; } = new List<ConvoyMember>();
 
     /// <summary>
+    /// Collection des voyages du convoi.
+    /// </summary>
+    public ICollection<Trip> Trips { get; private set; } = new List<Trip>();
+
+    /// <summary>
     /// Caractères autorisés pour le code de convoi (sans ambiguïté visuelle : 0/O, 1/I/L exclus).
     /// </summary>
     private const string CodeCharacters = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
