@@ -89,7 +89,7 @@ public partial class ConvoyLobbyViewModel : ObservableObject
     {
         try
         {
-            var confirm = await Shell.Current.DisplayAlert(
+            var confirm = await Shell.Current.DisplayAlertAsync(
                 "Confirmation",
                 "Voulez-vous vraiment quitter ce convoi ?",
                 "Oui",

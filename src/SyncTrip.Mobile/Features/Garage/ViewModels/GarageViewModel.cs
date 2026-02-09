@@ -120,7 +120,7 @@ public partial class GarageViewModel : ObservableObject
             if (vehicle == null)
                 return;
 
-            var confirm = await Shell.Current.DisplayAlert(
+            var confirm = await Shell.Current.DisplayAlertAsync(
                 "Confirmation",
                 $"Voulez-vous vraiment supprimer {vehicle.BrandName} {vehicle.Model} ?",
                 "Oui",
