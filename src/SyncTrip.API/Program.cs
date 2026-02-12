@@ -128,6 +128,9 @@ builder.Services.AddValidatorsFromAssemblyContaining<CompleteRegistrationValidat
 // Add SignalR
 builder.Services.AddSignalR();
 
+// Add Trip Notification Service (SignalR abstraction for Application layer)
+builder.Services.AddScoped<SyncTrip.Application.Voting.Services.ITripNotificationService, SyncTrip.API.Services.TripNotificationService>();
+
 // Add Infrastructure services (includes DbContext, Repositories, Services)
 builder.Services.AddInfrastructure(builder.Configuration, builder.Environment);
 
