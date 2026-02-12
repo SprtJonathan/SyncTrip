@@ -59,6 +59,16 @@ public class ApplicationDbContext : DbContext
     /// </summary>
     public DbSet<TripWaypoint> TripWaypoints => Set<TripWaypoint>();
 
+    /// <summary>
+    /// Table des propositions d'arrêt.
+    /// </summary>
+    public DbSet<StopProposal> StopProposals => Set<StopProposal>();
+
+    /// <summary>
+    /// Table des votes.
+    /// </summary>
+    public DbSet<Vote> Votes => Set<Vote>();
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder);

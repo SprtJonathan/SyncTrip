@@ -34,6 +34,7 @@ public static class DependencyInjection
         services.AddScoped<IBrandRepository, BrandRepository>();
         services.AddScoped<IConvoyRepository, ConvoyRepository>();
         services.AddScoped<ITripRepository, TripRepository>();
+        services.AddScoped<IStopProposalRepository, StopProposalRepository>();
 
         // Services
         services.AddScoped<IAuthService, AuthService>();
@@ -42,6 +43,9 @@ public static class DependencyInjection
             services.AddScoped<IEmailService, DevelopmentEmailService>();
         else
             services.AddScoped<IEmailService, EmailService>();
+
+        // Background Services
+        services.AddHostedService<ProposalResolutionService>();
 
         return services;
     }
