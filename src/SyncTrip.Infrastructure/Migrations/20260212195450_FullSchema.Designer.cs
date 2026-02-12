@@ -2,18 +2,21 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SyncTrip.Infrastructure.Persistence;
 
 #nullable disable
 
-namespace SyncTrip.Infrastructure.Persistence.Migrations
+namespace SyncTrip.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260212195450_FullSchema")]
+    partial class FullSchema
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -379,6 +382,88 @@ namespace SyncTrip.Infrastructure.Persistence.Migrations
                     b.ToTable("MagicLinkTokens", (string)null);
                 });
 
+            modelBuilder.Entity("SyncTrip.Core.Entities.Message", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<Guid>("ConvoyId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("SenderId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("SentAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SenderId");
+
+                    b.HasIndex("ConvoyId", "SentAt")
+                        .IsDescending(false, true);
+
+                    b.ToTable("Messages", (string)null);
+                });
+
+            modelBuilder.Entity("SyncTrip.Core.Entities.StopProposal", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedWaypointId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<double>("Latitude")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("LocationName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<double>("Longitude")
+                        .HasColumnType("double precision");
+
+                    b.Property<Guid>("ProposedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("ResolvedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("StopType")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("TripId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProposedByUserId");
+
+                    b.HasIndex("Status", "ExpiresAt");
+
+                    b.HasIndex("TripId", "Status");
+
+                    b.ToTable("StopProposals", (string)null);
+                });
+
             modelBuilder.Entity("SyncTrip.Core.Entities.Trip", b =>
                 {
                     b.Property<Guid>("Id")
@@ -556,6 +641,34 @@ namespace SyncTrip.Infrastructure.Persistence.Migrations
                     b.ToTable("Vehicles", (string)null);
                 });
 
+            modelBuilder.Entity("SyncTrip.Core.Entities.Vote", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("IsYes")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("StopProposalId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("VotedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("StopProposalId", "UserId")
+                        .IsUnique();
+
+                    b.ToTable("Votes", (string)null);
+                });
+
             modelBuilder.Entity("SyncTrip.Core.Entities.ConvoyMember", b =>
                 {
                     b.HasOne("SyncTrip.Core.Entities.Convoy", "Convoy")
@@ -581,6 +694,44 @@ namespace SyncTrip.Infrastructure.Persistence.Migrations
                     b.Navigation("User");
 
                     b.Navigation("Vehicle");
+                });
+
+            modelBuilder.Entity("SyncTrip.Core.Entities.Message", b =>
+                {
+                    b.HasOne("SyncTrip.Core.Entities.Convoy", "Convoy")
+                        .WithMany()
+                        .HasForeignKey("ConvoyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SyncTrip.Core.Entities.User", "Sender")
+                        .WithMany()
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Convoy");
+
+                    b.Navigation("Sender");
+                });
+
+            modelBuilder.Entity("SyncTrip.Core.Entities.StopProposal", b =>
+                {
+                    b.HasOne("SyncTrip.Core.Entities.User", "ProposedByUser")
+                        .WithMany()
+                        .HasForeignKey("ProposedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SyncTrip.Core.Entities.Trip", "Trip")
+                        .WithMany()
+                        .HasForeignKey("TripId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProposedByUser");
+
+                    b.Navigation("Trip");
                 });
 
             modelBuilder.Entity("SyncTrip.Core.Entities.Trip", b =>
@@ -643,6 +794,25 @@ namespace SyncTrip.Infrastructure.Persistence.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("SyncTrip.Core.Entities.Vote", b =>
+                {
+                    b.HasOne("SyncTrip.Core.Entities.StopProposal", "StopProposal")
+                        .WithMany("Votes")
+                        .HasForeignKey("StopProposalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SyncTrip.Core.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("StopProposal");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("SyncTrip.Core.Entities.Brand", b =>
                 {
                     b.Navigation("Vehicles");
@@ -653,6 +823,11 @@ namespace SyncTrip.Infrastructure.Persistence.Migrations
                     b.Navigation("Members");
 
                     b.Navigation("Trips");
+                });
+
+            modelBuilder.Entity("SyncTrip.Core.Entities.StopProposal", b =>
+                {
+                    b.Navigation("Votes");
                 });
 
             modelBuilder.Entity("SyncTrip.Core.Entities.Trip", b =>

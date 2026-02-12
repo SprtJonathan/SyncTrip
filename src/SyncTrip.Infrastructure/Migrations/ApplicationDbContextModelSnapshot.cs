@@ -379,6 +379,36 @@ namespace SyncTrip.Infrastructure.Migrations
                     b.ToTable("MagicLinkTokens", (string)null);
                 });
 
+            modelBuilder.Entity("SyncTrip.Core.Entities.Message", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<Guid>("ConvoyId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("SenderId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("SentAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SenderId");
+
+                    b.HasIndex("ConvoyId", "SentAt")
+                        .IsDescending(false, true);
+
+                    b.ToTable("Messages", (string)null);
+                });
+
             modelBuilder.Entity("SyncTrip.Core.Entities.StopProposal", b =>
                 {
                     b.Property<Guid>("Id")
@@ -661,6 +691,25 @@ namespace SyncTrip.Infrastructure.Migrations
                     b.Navigation("User");
 
                     b.Navigation("Vehicle");
+                });
+
+            modelBuilder.Entity("SyncTrip.Core.Entities.Message", b =>
+                {
+                    b.HasOne("SyncTrip.Core.Entities.Convoy", "Convoy")
+                        .WithMany()
+                        .HasForeignKey("ConvoyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SyncTrip.Core.Entities.User", "Sender")
+                        .WithMany()
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Convoy");
+
+                    b.Navigation("Sender");
                 });
 
             modelBuilder.Entity("SyncTrip.Core.Entities.StopProposal", b =>
