@@ -35,6 +35,7 @@ public static class DependencyInjection
         services.AddScoped<IConvoyRepository, ConvoyRepository>();
         services.AddScoped<ITripRepository, TripRepository>();
         services.AddScoped<IStopProposalRepository, StopProposalRepository>();
+        services.AddScoped<IMessageRepository, MessageRepository>();
 
         // Services
         services.AddScoped<IAuthService, AuthService>();

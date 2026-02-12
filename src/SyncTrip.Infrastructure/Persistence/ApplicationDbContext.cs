@@ -69,6 +69,11 @@ public class ApplicationDbContext : DbContext
     /// </summary>
     public DbSet<Vote> Votes => Set<Vote>();
 
+    /// <summary>
+    /// Table des messages de chat.
+    /// </summary>
+    public DbSet<Message> Messages => Set<Message>();
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder);
