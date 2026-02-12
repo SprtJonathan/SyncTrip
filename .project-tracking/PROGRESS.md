@@ -1,7 +1,7 @@
 # SyncTrip - Suivi de Progression
 
-**Dernière mise à jour** : 9 Février 2026
-**Statut Global** : Features 1, 2 & 3 COMPLÈTES + Feature 4 Backend COMPLET
+**Dernière mise à jour** : 12 Février 2026
+**Statut Global** : Features 1, 2 & 3 COMPLÈTES + Features 4 & 5 Backend COMPLET
 
 ---
 
@@ -218,18 +218,35 @@ Audit de sécurité complet réalisé avec l'agent dotnet-maui-expert. Identific
 ---
 
 #### Feature 5 : Système de Vote
-**Statut** : Pas démarré
-**Priorité** : Moyenne
+**Statut** : Backend TERMINÉ — Mobile à faire
+**Progression** : 50% (Backend complet, Mobile restant)
 
-**Composants** :
-- [ ] Core : Entités StopProposal, Vote
-- [ ] Core : Logique "règle du silence"
-- [ ] Shared : DTOs Voting
-- [ ] Application : Commands Voting
-- [ ] Infrastructure : VotingRepository + Background Job
-- [ ] API : VotingController + SignalR events
+**Composants Backend terminés** :
+- [x] Core : Enums (StopType, ProposalStatus)
+- [x] Core : Entités StopProposal (factory, CastVote, Resolve règle du silence, AllMembersVoted, SetCreatedWaypoint)
+- [x] Core : Entité Vote (factory method)
+- [x] Core : Interface IStopProposalRepository
+- [x] Shared : 4 DTOs Voting (ProposeStopRequest, CastVoteRequest, StopProposalDto, VoteDto)
+- [x] Application : 2 Commands (ProposeStop, CastVote) avec auto-vote YES et résolution anticipée
+- [x] Application : 2 Queries (GetActiveProposal, GetProposalHistory)
+- [x] Application : 2 Validators FluentValidation (ProposeStop, CastVote)
+- [x] Application : Interface ITripNotificationService (abstraction SignalR)
+- [x] Infrastructure : StopProposalRepository avec Include chains
+- [x] Infrastructure : 2 Configurations EF Core (StopProposal, Vote) avec index composites
+- [x] Infrastructure : ProposalResolutionService (BackgroundService, poll 5s, résout propositions expirées)
+- [x] Infrastructure : DI registration + Migration AddVotingSystem
+- [x] API : VotingController (4 endpoints REST nested sous convoys/trips/proposals)
+  - POST `.../proposals` (proposer arrêt → 201)
+  - GET `.../proposals/active` (proposition active → 200/404)
+  - GET `.../proposals` (historique → 200)
+  - POST `.../proposals/{proposalId}/vote` (voter → 200/400/404)
+- [x] API : TripNotificationService (implémentation ITripNotificationService via IHubContext<TripHub>)
+- [x] API : Program.cs (registration ITripNotificationService)
+- [x] Tests Core : 34 tests (StopProposal 28, Vote 6)
+- [x] Tests Application : 19 tests (ProposeStop 7, CastVote 8, GetActiveProposal 2, GetProposalHistory 2)
+
+**Composants Mobile restants** :
 - [ ] Mobile : VotingModal + DeckControl
-- [ ] Tests complets (surtout règle du silence)
 
 ---
 
@@ -251,13 +268,13 @@ Audit de sécurité complet réalisé avec l'agent dotnet-maui-expert. Identific
 ## Métriques
 
 **Features Terminées** : 3 / 6 (Auth + Profil/Garage + Convois - Backend + Mobile + Tests)
-**Features Backend Terminé** : 4 / 6 (+ Navigation GPS Backend)
+**Features Backend Terminé** : 5 / 6 (+ Navigation GPS Backend + Vote Backend)
 **Sécurité Production** : ✅ P0 Critical Issues Résolus (5/5)
-**Progression Globale** : ~58%
-**Dernière compilation** : 9 Fév 2026 - Succès (Backend + Tests)
-**Tests Passing** : 230 / 230 (100%)
-  - Core.Tests : 151 tests (User, Vehicle, Brand, UserLicense, Convoy, ConvoyMember, Trip, TripWaypoint)
-  - Application.Tests : 79 tests (Auth, Users, Vehicles, Convoys, Trips)
+**Progression Globale** : ~67%
+**Dernière compilation** : 12 Fév 2026 - Succès (Backend + Tests)
+**Tests Passing** : 290 / 290 (100%)
+  - Core.Tests : 192 tests (User, Vehicle, Brand, UserLicense, Convoy, ConvoyMember, Trip, TripWaypoint, StopProposal, Vote)
+  - Application.Tests : 98 tests (Auth, Users, Vehicles, Convoys, Trips, Voting)
 **Qualité Code** : ✅ Conforme aux spécifications (Clean Architecture, DDD, MVVM)
 **Sécurité** : ✅ Production Ready (Rate Limiting, Error Handling, Secrets Management)
 **Stack** : .NET 10 LTS (Long Term Support)
@@ -453,6 +470,54 @@ Audit de sécurité complet réalisé avec l'agent dotnet-maui-expert. Identific
 
 ---
 
+### Session du 12 Février 2026
+
+#### Feature 5 : Système de Vote — Backend
+42. **3a3d1a1** - `feat(core): ajoute entités StopProposal, Vote et enums pour le système de vote`
+    - 2 Enums : StopType (Fuel/Break/Food/Photo), ProposalStatus (Pending/Accepted/Rejected)
+    - Entité StopProposal : factory Create(), CastVote(), Resolve(règle du silence), AllMembersVoted(), SetCreatedWaypoint()
+    - Entité Vote : factory Create() avec validation
+    - Interface IStopProposalRepository (GetById, GetPendingByTripId, GetExpiredPending, GetByTripId, Add, Update)
+43. **e3ab1d1** - `feat(shared): ajoute DTOs pour le système de vote`
+    - ProposeStopRequest, CastVoteRequest (records, int pour enums)
+    - StopProposalDto, VoteDto (classes, YesCount/NoCount calculés)
+44. **65bd577** - `feat(application): ajoute commands, queries et validators pour le système de vote`
+    - 2 Commands + Handlers : ProposeStop (auto-vote YES), CastVote (résolution anticipée + waypoint auto)
+    - 2 Queries + Handlers : GetActiveProposal, GetProposalHistory
+    - 2 Validators FluentValidation
+    - Interface ITripNotificationService (abstraction SignalR dans Application)
+45. **0e39d89** - `feat(infrastructure): ajoute repository, configurations EF Core et background service pour le vote`
+    - StopProposalRepository avec Include chains
+    - StopProposalConfiguration : Table "StopProposals", FK Trip (Cascade), FK User (Restrict), index (TripId,Status) et (Status,ExpiresAt)
+    - VoteConfiguration : Table "Votes", FK StopProposal (Cascade), FK User (Restrict), index unique (StopProposalId,UserId)
+    - ProposalResolutionService : BackgroundService poll 5s, résolution propositions expirées, création waypoints auto
+    - DI registration + Migration AddVotingSystem
+46. **d8a07f4** - `feat(api): ajoute VotingController et TripNotificationService`
+    - VotingController : 4 endpoints nested sous `/api/convoys/{convoyId}/trips/{tripId}/proposals`
+    - TripNotificationService : implémentation ITripNotificationService via IHubContext<TripHub>
+    - Events SignalR : StopProposed, VoteUpdate, ProposalResolved
+    - Program.cs : registration ITripNotificationService
+47. **2dbb5f9** - `test: ajoute tests unitaires pour le système de vote (60 tests)`
+    - StopProposalTests (28) : Create, CastVote, Resolve règle du silence, AllMembersVoted, SetCreatedWaypoint
+    - VoteTests (6) : Create, guards
+    - ProposeStopCommandHandlerTests (7) : success, auto-vote, notification, trip not found, finished trip, not member, existing proposal
+    - CastVoteCommandHandlerTests (8) : yes/no vote, notification, early resolution, waypoint creation, not found, not member, already voted
+    - GetActiveProposalQueryHandlerTests (2) : found, not found
+    - GetProposalHistoryQueryHandlerTests (2) : list, empty
+
+**Validation effectuée** :
+- ✅ Build API : 0 erreurs
+- ✅ Tous les tests passent (290/290 - 100%)
+  - Core.Tests : 192 (151 existants + 41 nouveaux)
+  - Application.Tests : 98 (79 existants + 19 nouveaux)
+- ✅ Migration EF Core générée sans erreur
+- ✅ Architecture respectée (Shared sans ref Core, enums castés dans Application)
+- ✅ Règle du silence : majorité absolue NON requise pour rejeter, sinon acceptée par défaut
+
+**Total commits Feature 5 Backend** : 6 commits (core + shared + application + infrastructure + api + tests)
+
+---
+
 ## Prochaines Actions
 
 ### Priorité Haute
@@ -467,7 +532,7 @@ Audit de sécurité complet réalisé avec l'agent dotnet-maui-expert. Identific
    - Tester CRUD Profil, Véhicules, Convois, Trips
 
 ### Priorité Moyenne
-1. Feature 5 : Système de Vote
+1. Feature 5 : Système de Vote Mobile (VotingModal + DeckControl)
 2. Feature 6 : Chat
 3. Ajouter tests d'intégration API
 
