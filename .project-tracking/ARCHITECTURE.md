@@ -1,7 +1,7 @@
 # SyncTrip - Documentation Architecture
 
-**Version** : 1.0
-**Date** : 23 Novembre 2025
+**Version** : 1.2
+**Date** : 12 Février 2026
 
 ---
 
@@ -68,10 +68,9 @@ SyncTrip/
 **Responsabilité** : Contient la logique métier pure et les règles du domaine.
 
 **Contenu** :
-- **Entities** : User, Convoy, Trip, Vehicle, StopProposal, Vote, etc.
-- **Interfaces** : IUserRepository, IConvoyRepository, IAuthService, etc.
-- **Value Objects** : JoinCode, Coordinates, etc.
-- **Enums** : LicenseType, TripStatus, VoteChoice, etc.
+- **Entities** : User, MagicLinkToken, Vehicle, Brand, UserLicense, Convoy, ConvoyMember, Trip, TripWaypoint, StopProposal, Vote
+- **Interfaces** : IUserRepository, IMagicLinkTokenRepository, IVehicleRepository, IBrandRepository, IConvoyRepository, ITripRepository, IStopProposalRepository, IAuthService, IEmailService
+- **Enums** : LicenseType, VehicleType, ConvoyRole, TripStatus, RouteProfile, WaypointType, StopType, ProposalStatus
 
 **Règles** :
 - Aucune dépendance externe (pas de EF Core, pas de HttpClient)
@@ -85,13 +84,16 @@ SyncTrip/
 **Responsabilité** : DTOs partagés entre l'API et l'application Mobile.
 
 **Contenu** :
-- **DTOs** : Tous les DTOs (Request, Response)
-- **Enums partagés** : Réutilisation des enums de Core
-- **Contrats SignalR** : Interfaces des Hubs
+- **DTOs** : Tous les DTOs Request/Response organisés par domaine (Auth, Users, Vehicles, Brands, Convoys, Trips, Voting)
+- **Enums** : Enums en `int` (Shared ne référence PAS Core — l'Application fait le cast)
 
 **Avantage** :
 - Évite la duplication de code entre API et Mobile
 - Contrat clair entre backend et frontend
+
+**Règle importante** :
+- Shared ne dépend PAS de Core — les enums sont représentés en `int` dans les DTOs
+- L'Application est responsable du cast `int` → enum Core
 
 ---
 
@@ -100,19 +102,21 @@ SyncTrip/
 **Responsabilité** : Orchestration des use cases métier.
 
 **Contenu** :
-- **Commands** : Actions qui modifient l'état (CreateConvoy, SendMagicLink)
-- **Queries** : Récupération de données (GetUserProfile, GetConvoyDetails)
+- **Commands** : Actions qui modifient l'état (CreateConvoy, SendMagicLink, ProposeStop, CastVote)
+- **Queries** : Récupération de données (GetUserProfile, GetConvoyDetails, GetActiveProposal)
 - **Handlers** : Implémentation des Commands/Queries (MediatR)
 - **Validators** : Validation des inputs (FluentValidation)
-- **Mappings** : AutoMapper pour Entity ↔ DTO
+- **Services (interfaces)** : Abstractions pour services cross-layer (ITripNotificationService)
 
 **Pattern utilisé** : CQRS (Command Query Responsibility Segregation)
 
 **Dépendances** :
 - MediatR
 - FluentValidation
-- AutoMapper
 - SyncTrip.Core (interfaces seulement)
+- SyncTrip.Shared (DTOs)
+
+**Note** : Le mapping Entity → DTO est fait manuellement dans les handlers (pas d'AutoMapper).
 
 ---
 
@@ -121,16 +125,14 @@ SyncTrip/
 **Responsabilité** : Implémentation technique des interfaces du Core.
 
 **Contenu** :
-- **Persistence** : DbContext (EF Core), Repositories, Migrations
-- **Services** : AuthService, EmailService, GeocodingService, etc.
-- **External APIs** : Intégrations tierces
-- **Caching** : Redis (StackExchange.Redis)
+- **Persistence** : ApplicationDbContext (EF Core), Repositories, Migrations, Configurations, Seed Data
+- **Services** : AuthService, EmailService/DevelopmentEmailService, ProposalResolutionService (BackgroundService)
+- **Repositories** : UserRepository, MagicLinkTokenRepository, VehicleRepository, BrandRepository, ConvoyRepository, TripRepository, StopProposalRepository
 
 **Dépendances** :
-- Entity Framework Core (PostgreSQL)
+- Entity Framework Core (PostgreSQL via Npgsql)
 - StackExchange.Redis
-- MailKit (pour emails)
-- Npgsql
+- System.IdentityModel.Tokens.Jwt
 
 ---
 
@@ -139,22 +141,23 @@ SyncTrip/
 **Responsabilité** : Exposition des endpoints REST et SignalR.
 
 **Contenu** :
-- **Controllers** : Endpoints REST
-- **Hubs** : SignalR (ConvoyHub, TripHub)
-- **Middleware** : Exception handling, JWT validation
-- **Configuration** : DI, CORS, Authentication
+- **Controllers** : AuthController, UsersController, VehiclesController, BrandsController, ConvoysController, TripsController, VotingController
+- **Hubs** : TripHub (positions GPS, votes temps réel)
+- **Services** : TripNotificationService (implémente ITripNotificationService via IHubContext<TripHub>)
+- **Middleware** : Global exception handling, JWT validation, Rate Limiting
+- **Configuration** : DI, CORS, Authentication, SignalR, Scalar (OpenAPI)
 
 **Endpoints principaux** :
-- `/auth/*` : Authentification
-- `/users/*` : Gestion profil
-- `/vehicles/*` : Garage
-- `/convoys/*` : Convois
-- `/trips/*` : Voyages
-- `/voting/*` : Système de vote
-- `/hub/convoy` : SignalR Convoy
-- `/hub/trip` : SignalR Trip
+- `POST/GET /api/auth/*` : Authentification Magic Link
+- `GET/PUT /api/users/me` : Profil utilisateur
+- `CRUD /api/vehicles/*` : Garage véhicules
+- `GET /api/brands` : Marques véhicules
+- `CRUD /api/convoys/*` : Gestion convois
+- `CRUD /api/convoys/{id}/trips/*` : Voyages GPS
+- `CRUD /api/convoys/{id}/trips/{id}/proposals/*` : Système de vote
+- `/hubs/trip` : SignalR Hub (positions, votes)
 
-**Authentification** : JWT Bearer Token
+**Authentification** : JWT Bearer Token (query string pour SignalR)
 
 ---
 
@@ -247,9 +250,9 @@ public class UserRepository : IUserRepository
 Tous les services sont enregistrés via DI.
 
 **Lifetimes** :
-- **Scoped** : DbContext, Repositories (API)
-- **Singleton** : Redis, EmailService, SignalR connections
-- **Transient** : Validators, Mappers
+- **Scoped** : DbContext, Repositories, AuthService, EmailService, TripNotificationService
+- **Singleton** : ProposalResolutionService (BackgroundService, crée son propre scope via IServiceScopeFactory)
+- **Transient** : Validators (enregistrés via AddValidatorsFromAssembly)
 
 ---
 
@@ -280,19 +283,36 @@ dotnet ef database update --project SyncTrip.Infrastructure --startup-project Sy
 
 ## Communication Temps Réel : SignalR
 
-### ConvoyHub
-- Gestion du chat
-- Notifications membres (join/leave)
+### TripHub (`/hubs/trip`)
 
-### TripHub
-- Mise à jour position GPS
-- Propositions d'arrêt
-- Votes temps réel
+**Méthodes client → serveur** :
+- `JoinTrip(Guid tripId)` : Rejoindre le groupe d'un voyage
+- `LeaveTrip(Guid tripId)` : Quitter le groupe d'un voyage
+- `SendLocationUpdate(Guid tripId, double lat, double lon)` : Envoyer position GPS
+- `SendRouteUpdate(Guid tripId, string geoJson)` : Envoyer mise à jour route
+
+**Events serveur → client** (via IHubContext, pas de méthode hub) :
+- `ReceiveLocationUpdate` : Position GPS d'un membre
+- `ReceiveRouteUpdate` : Mise à jour route d'un membre
+- `StopProposed(StopProposalDto)` : Nouvelle proposition d'arrêt
+- `VoteUpdate({ ProposalId, YesCount, NoCount })` : Vote enregistré
+- `ProposalResolved(StopProposalDto)` : Proposition résolue
+
+**Groupes** : `trip-{tripId}` — tous les membres connectés au voyage
+
+**Architecture notifications vote** :
+- `ITripNotificationService` (interface dans Application)
+- `TripNotificationService` (implémentation dans API, utilise `IHubContext<TripHub>`)
+- Évite les dépendances circulaires Application ↔ API
 
 **Authentification** : JWT Bearer dans query string
 ```
-wss://api.synctrip.com/hub/trip?access_token=<JWT>
+wss://api.synctrip.com/hubs/trip?access_token=<JWT>
 ```
+
+### ConvoyHub (Feature 6 — à faire)
+- Gestion du chat
+- Notifications membres (join/leave)
 
 ---
 
@@ -389,18 +409,23 @@ wss://api.synctrip.com/hub/trip?access_token=<JWT>
 ## Notes Importantes
 
 ### Règles Métier Critiques
-1. **Âge minimum** : > 14 ans (validation partout)
+1. **Âge minimum** : > 14 ans (validation dans entité User)
 2. **Véhicule obligatoire** : Pour rejoindre un convoi
-3. **Vote implicite** : Le proposant vote OUI automatiquement
-4. **Règle du silence** : Timeout → Acceptation par défaut
-5. **Foreground GPS** : Pas de tracking silencieux
+3. **Vote implicite** : Le proposant vote OUI automatiquement (auto-vote dans ProposeStopCommandHandler)
+4. **Règle du silence** : Si majorité absolue de NON → Rejeté, sinon → Accepté (silence = consentement)
+5. **Un seul vote actif** : Une seule proposition Pending par voyage à la fois
+6. **Résolution anticipée** : Si tous les membres ont voté, résolution immédiate sans attendre le timer
+7. **Timer 30s** : ProposalResolutionService poll toutes les 5s, résout les propositions expirées
+8. **Waypoint automatique** : Sur acceptation, un TripWaypoint de type Stopover est créé automatiquement
+9. **Foreground GPS** : Pas de tracking silencieux
+10. **Positions éphémères** : GPS relayé via SignalR, PAS stocké en DB
 
 ### Points d'Attention
 - Gestion propre des déconnexions SignalR
-- Validation côté client ET serveur
+- Validation côté client ET serveur (FluentValidation + domain validation)
 - Messages d'erreur clairs et en français
-- Logs structurés (Serilog)
+- Logs structurés avec ILogger<T>
 
 ---
 
-**Dernière mise à jour** : 23 Novembre 2025
+**Dernière mise à jour** : 12 Février 2026

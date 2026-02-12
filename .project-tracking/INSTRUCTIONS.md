@@ -1,7 +1,7 @@
 # SyncTrip - Instructions pour le Développement
 
-**Version** : 1.0
-**Date** : 23 Novembre 2025
+**Version** : 1.1
+**Date** : 12 Février 2026
 
 ---
 
@@ -123,17 +123,23 @@ Pour chaque feature, développer dans cet ordre :
 1. Créer les Commands/Queries
 2. Créer les Handlers
 3. Créer les Validators (FluentValidation)
-4. Configurer AutoMapper
-5. **Commits multiples** :
+4. Mapping Entity → DTO manuellement dans les handlers
+5. Créer les interfaces de services cross-layer si nécessaire (ex: ITripNotificationService)
+6. **Commits multiples** :
    - `feat(application): ajoute command X et handler`
    - `feat(application): ajoute validator pour X`
 
 **Étape 4 : Infrastructure**
 1. Créer les repositories
-2. Créer les services
-3. Créer la migration EF Core
-4. Appliquer la migration
-5. **Commits multiples** :
+2. Créer les configurations EF Core (IEntityTypeConfiguration)
+3. Créer les services (BackgroundService si besoin)
+4. Mettre à jour ApplicationDbContext (DbSet)
+5. Mettre à jour DependencyInjection.cs
+6. Créer la migration EF Core :
+   ```bash
+   dotnet ef migrations add NomMigration --project "src/SyncTrip.Infrastructure" --startup-project "src/SyncTrip.API"
+   ```
+7. **Commits multiples** :
    - `feat(infrastructure): ajoute repository X`
    - `feat(infrastructure): ajoute service Y`
    - `feat(infrastructure): ajoute migration pour feature X`
@@ -429,9 +435,9 @@ private async Task CreateConvoy()
 
 ### Application
 - [ ] Commands/Queries créés
-- [ ] Handlers implémentés
+- [ ] Handlers implémentés (mapping Entity → DTO manuel)
 - [ ] Validators FluentValidation créés
-- [ ] AutoMapper configuré
+- [ ] Interfaces de services cross-layer si nécessaire
 - [ ] Tests unitaires passent
 - [ ] Compile sans erreur
 
@@ -445,8 +451,9 @@ private async Task CreateConvoy()
 
 ### API
 - [ ] Controller créé
-- [ ] Endpoints documentés (Swagger)
-- [ ] Authentication configurée
+- [ ] Endpoints documentés (Scalar / OpenAPI)
+- [ ] Authentication configurée ([Authorize])
+- [ ] Services d'implémentation cross-layer si nécessaire (ex: TripNotificationService)
 - [ ] DI configuré dans Program.cs
 - [ ] Tests d'intégration (si applicable)
 - [ ] Compile sans erreur
@@ -554,7 +561,7 @@ dotnet ef migrations script \
 
 ---
 
-**Dernière mise à jour** : 23 Novembre 2025
+**Dernière mise à jour** : 12 Février 2026
 
 ---
 
