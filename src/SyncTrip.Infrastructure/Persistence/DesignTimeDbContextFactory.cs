@@ -15,7 +15,7 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<Applicatio
         var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
 
         // Utiliser une connection string par défaut
-        optionsBuilder.UseNpgsql("Host=localhost;Database=synctrip_db;Username=postgres;Password=postgres");
+        optionsBuilder.UseNpgsql("Host=localhost;Port=5433;Database=synctrip;Username=postgres;Password=synctrip_dev_2026");
 
         return new ApplicationDbContext(optionsBuilder.Options);
     }
