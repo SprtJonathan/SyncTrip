@@ -68,8 +68,8 @@ SyncTrip/
 **Responsabilité** : Contient la logique métier pure et les règles du domaine.
 
 **Contenu** :
-- **Entities** : User, MagicLinkToken, Vehicle, Brand, UserLicense, Convoy, ConvoyMember, Trip, TripWaypoint, StopProposal, Vote
-- **Interfaces** : IUserRepository, IMagicLinkTokenRepository, IVehicleRepository, IBrandRepository, IConvoyRepository, ITripRepository, IStopProposalRepository, IAuthService, IEmailService
+- **Entities** : User, MagicLinkToken, Vehicle, Brand, UserLicense, Convoy, ConvoyMember, Trip, TripWaypoint, StopProposal, Vote, Message
+- **Interfaces** : IUserRepository, IMagicLinkTokenRepository, IVehicleRepository, IBrandRepository, IConvoyRepository, ITripRepository, IStopProposalRepository, IMessageRepository, IAuthService, IEmailService
 - **Enums** : LicenseType, VehicleType, ConvoyRole, TripStatus, RouteProfile, WaypointType, StopType, ProposalStatus
 
 **Règles** :
@@ -84,7 +84,7 @@ SyncTrip/
 **Responsabilité** : DTOs partagés entre l'API et l'application Mobile.
 
 **Contenu** :
-- **DTOs** : Tous les DTOs Request/Response organisés par domaine (Auth, Users, Vehicles, Brands, Convoys, Trips, Voting)
+- **DTOs** : Tous les DTOs Request/Response organisés par domaine (Auth, Users, Vehicles, Brands, Convoys, Trips, Voting, Chat)
 - **Enums** : Enums en `int` (Shared ne référence PAS Core — l'Application fait le cast)
 
 **Avantage** :
@@ -102,11 +102,11 @@ SyncTrip/
 **Responsabilité** : Orchestration des use cases métier.
 
 **Contenu** :
-- **Commands** : Actions qui modifient l'état (CreateConvoy, SendMagicLink, ProposeStop, CastVote)
-- **Queries** : Récupération de données (GetUserProfile, GetConvoyDetails, GetActiveProposal)
+- **Commands** : Actions qui modifient l'état (CreateConvoy, SendMagicLink, ProposeStop, CastVote, SendMessage)
+- **Queries** : Récupération de données (GetUserProfile, GetConvoyDetails, GetActiveProposal, GetConvoyMessages)
 - **Handlers** : Implémentation des Commands/Queries (MediatR)
 - **Validators** : Validation des inputs (FluentValidation)
-- **Services (interfaces)** : Abstractions pour services cross-layer (ITripNotificationService)
+- **Services (interfaces)** : Abstractions pour services cross-layer (ITripNotificationService, IConvoyNotificationService)
 
 **Pattern utilisé** : CQRS (Command Query Responsibility Segregation)
 
@@ -127,7 +127,7 @@ SyncTrip/
 **Contenu** :
 - **Persistence** : ApplicationDbContext (EF Core), Repositories, Migrations, Configurations, Seed Data
 - **Services** : AuthService, EmailService/DevelopmentEmailService, ProposalResolutionService (BackgroundService)
-- **Repositories** : UserRepository, MagicLinkTokenRepository, VehicleRepository, BrandRepository, ConvoyRepository, TripRepository, StopProposalRepository
+- **Repositories** : UserRepository, MagicLinkTokenRepository, VehicleRepository, BrandRepository, ConvoyRepository, TripRepository, StopProposalRepository, MessageRepository
 
 **Dépendances** :
 - Entity Framework Core (PostgreSQL via Npgsql)
@@ -141,9 +141,9 @@ SyncTrip/
 **Responsabilité** : Exposition des endpoints REST et SignalR.
 
 **Contenu** :
-- **Controllers** : AuthController, UsersController, VehiclesController, BrandsController, ConvoysController, TripsController, VotingController
-- **Hubs** : TripHub (positions GPS, votes temps réel)
-- **Services** : TripNotificationService (implémente ITripNotificationService via IHubContext<TripHub>)
+- **Controllers** : AuthController, UsersController, VehiclesController, BrandsController, ConvoysController, TripsController, VotingController, MessagesController
+- **Hubs** : TripHub (positions GPS, votes temps réel), ConvoyHub (chat temps réel)
+- **Services** : TripNotificationService (implémente ITripNotificationService via IHubContext<TripHub>), ConvoyNotificationService (implémente IConvoyNotificationService via IHubContext<ConvoyHub>)
 - **Middleware** : Global exception handling, JWT validation, Rate Limiting
 - **Configuration** : DI, CORS, Authentication, SignalR, Scalar (OpenAPI)
 
@@ -155,7 +155,9 @@ SyncTrip/
 - `CRUD /api/convoys/*` : Gestion convois
 - `CRUD /api/convoys/{id}/trips/*` : Voyages GPS
 - `CRUD /api/convoys/{id}/trips/{id}/proposals/*` : Système de vote
+- `POST/GET /api/convoys/{id}/messages` : Chat convoi
 - `/hubs/trip` : SignalR Hub (positions, votes)
+- `/hubs/convoy` : SignalR Hub (chat)
 
 **Authentification** : JWT Bearer Token (query string pour SignalR)
 
@@ -250,7 +252,7 @@ public class UserRepository : IUserRepository
 Tous les services sont enregistrés via DI.
 
 **Lifetimes** :
-- **Scoped** : DbContext, Repositories, AuthService, EmailService, TripNotificationService
+- **Scoped** : DbContext, Repositories, AuthService, EmailService, TripNotificationService, ConvoyNotificationService
 - **Singleton** : ProposalResolutionService (BackgroundService, crée son propre scope via IServiceScopeFactory)
 - **Transient** : Validators (enregistrés via AddValidatorsFromAssembly)
 
@@ -310,9 +312,28 @@ dotnet ef database update --project SyncTrip.Infrastructure --startup-project Sy
 wss://api.synctrip.com/hubs/trip?access_token=<JWT>
 ```
 
-### ConvoyHub (Feature 6 — à faire)
-- Gestion du chat
-- Notifications membres (join/leave)
+### ConvoyHub (`/hubs/convoy`)
+
+**Méthodes client → serveur** :
+- `JoinConvoy(Guid convoyId)` : Rejoindre le groupe d'un convoi
+- `LeaveConvoy(Guid convoyId)` : Quitter le groupe d'un convoi
+
+**Events serveur → client** (via IHubContext, pas de méthode hub) :
+- `ReceiveMessage(MessageDto)` : Nouveau message de chat
+
+**Groupes** : `convoy-{convoyId}` — tous les membres connectés au convoi
+
+**Architecture notifications chat** :
+- `IConvoyNotificationService` (interface dans Application)
+- `ConvoyNotificationService` (implémentation dans API, utilise `IHubContext<ConvoyHub>`)
+- Même pattern que ITripNotificationService
+
+**Authentification** : JWT Bearer dans query string
+```
+wss://api.synctrip.com/hubs/convoy?access_token=<JWT>
+```
+
+**Note** : Les messages sont persistés en DB (contrairement aux positions GPS qui sont éphémères)
 
 ---
 
@@ -419,6 +440,8 @@ wss://api.synctrip.com/hubs/trip?access_token=<JWT>
 8. **Waypoint automatique** : Sur acceptation, un TripWaypoint de type Stopover est créé automatiquement
 9. **Foreground GPS** : Pas de tracking silencieux
 10. **Positions éphémères** : GPS relayé via SignalR, PAS stocké en DB
+11. **Messages persistés** : Chat stocké en DB, historique consultable avec pagination curseur (before + pageSize)
+12. **Messages max 500 chars** : Validation dans l'entité Message et FluentValidation
 
 ### Points d'Attention
 - Gestion propre des déconnexions SignalR
