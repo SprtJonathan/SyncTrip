@@ -1,7 +1,7 @@
 # SyncTrip - Suivi de Progression
 
 **Dernière mise à jour** : 12 Février 2026
-**Statut Global** : Features 1, 2 & 3 COMPLÈTES + Features 4 & 5 Backend COMPLET
+**Statut Global** : Features 1, 2 & 3 COMPLÈTES + Features 4, 5 & 6 Backend COMPLET
 
 ---
 
@@ -268,30 +268,44 @@ Audit de sécurité complet réalisé avec l'agent dotnet-maui-expert. Identific
 ---
 
 #### Feature 6 : Chat
-**Statut** : Pas démarré
-**Priorité** : Basse
+**Statut** : Backend TERMINÉ — Mobile à faire
+**Progression** : 50% (Backend complet, Mobile restant)
 
-**Composants** :
-- [ ] Core : Entité Message
-- [ ] Shared : DTOs Messages
-- [ ] Application : Commands Messages
-- [ ] Infrastructure : MessageRepository
-- [ ] API : ConvoyHub (SignalR)
+**Composants Backend terminés** :
+- [x] Core : Entité Message (factory Create, validation contenu max 500 chars)
+- [x] Core : Interface IMessageRepository (GetByConvoyIdAsync avec pagination curseur, AddAsync)
+- [x] Shared : 2 DTOs Chat (SendMessageRequest record, MessageDto class avec SenderUsername/AvatarUrl)
+- [x] Application : 1 Command (SendMessage) — crée message + persiste + notifie SignalR
+- [x] Application : 1 Query (GetConvoyMessages) — pagination curseur (before + pageSize)
+- [x] Application : 1 Validator FluentValidation (SendMessageValidator)
+- [x] Application : Interface IConvoyNotificationService (abstraction SignalR dans Application)
+- [x] Infrastructure : MessageRepository avec Include Sender
+- [x] Infrastructure : MessageConfiguration EF Core (FK Convoy Cascade, FK User Restrict, index ConvoyId+SentAt DESC)
+- [x] Infrastructure : DI registration IMessageRepository → MessageRepository
+- [x] API : ConvoyHub SignalR `/hubs/convoy` (JoinConvoy, LeaveConvoy)
+- [x] API : MessagesController (2 endpoints REST nested sous `/api/convoys/{convoyId}/messages`)
+  - POST `/` (envoyer message → 201)
+  - GET `/?pageSize=50&before=...` (historique paginé → 200)
+- [x] API : ConvoyNotificationService (implémentation IConvoyNotificationService via IHubContext<ConvoyHub>)
+- [x] API : Program.cs (registration IConvoyNotificationService, MapHub ConvoyHub)
+- [x] Tests Core : 7 tests (Create valid, 500 chars OK, empty convoyId, empty senderId, empty content, whitespace, >500 chars)
+- [x] Tests Application : 9 tests (SendMessage 5, GetConvoyMessages 4)
+
+**Composants Mobile restants** :
 - [ ] Mobile : ChatPage + ChatStreamControl
-- [ ] Tests complets
 
 ---
 
 ## Métriques
 
 **Features Terminées** : 3 / 6 (Auth + Profil/Garage + Convois - Backend + Mobile + Tests)
-**Features Backend Terminé** : 5 / 6 (+ Navigation GPS Backend + Vote Backend)
+**Features Backend Terminé** : 6 / 6 (+ Navigation GPS + Vote + Chat Backend)
 **Sécurité Production** : ✅ P0 Critical Issues Résolus (5/5)
-**Progression Globale** : ~67%
+**Progression Globale** : ~75%
 **Dernière compilation** : 12 Fév 2026 - Succès (Backend + Tests)
-**Tests Passing** : 290 / 290 (100%)
-  - Core.Tests : 192 tests (User, Vehicle, Brand, UserLicense, Convoy, ConvoyMember, Trip, TripWaypoint, StopProposal, Vote)
-  - Application.Tests : 98 tests (Auth, Users, Vehicles, Convoys, Trips, Voting)
+**Tests Passing** : 306 / 306 (100%)
+  - Core.Tests : 199 tests (User, Vehicle, Brand, UserLicense, Convoy, ConvoyMember, Trip, TripWaypoint, StopProposal, Vote, Message)
+  - Application.Tests : 107 tests (Auth, Users, Vehicles, Convoys, Trips, Voting, Chat)
 **Qualité Code** : ✅ Conforme aux spécifications (Clean Architecture, DDD, MVVM)
 **Sécurité** : ✅ Production Ready (Rate Limiting, Error Handling, Secrets Management)
 **Stack** : .NET 10 LTS (Long Term Support)
@@ -542,7 +556,41 @@ Audit de sécurité complet réalisé avec l'agent dotnet-maui-expert. Identific
     - AuthorizationMessageHandler (JWT Bearer automatique)
     - AddVehiclePage.xaml.cs créé, icônes SVG, typos corrigés, MainPage supprimé
 
-**Total commits session du 12 Fév** : 9 commits (6 Feature 5 + 2 docs + 1 fix mobile)
+**Total commits session du 12 Fév (Feature 5 + docs + fix)** : 9 commits (6 Feature 5 + 2 docs + 1 fix mobile)
+
+#### Feature 6 : Chat — Backend
+50. `feat(core): ajoute entite Message et IMessageRepository pour le chat`
+    - Entité Message : factory Create(), validation contenu (non vide, max 500 chars)
+    - Interface IMessageRepository (GetByConvoyIdAsync pagination curseur, AddAsync)
+51. `feat(shared): ajoute DTOs pour le chat`
+    - SendMessageRequest (record), MessageDto (class avec SenderUsername, SenderAvatarUrl)
+52. `feat(application): ajoute commands, queries et validators pour le chat`
+    - SendMessageCommand + Handler (crée message, persiste, notifie SignalR)
+    - GetConvoyMessagesQuery + Handler (pagination curseur before + pageSize)
+    - SendMessageValidator FluentValidation
+    - Interface IConvoyNotificationService
+53. `feat(infrastructure): ajoute repository et configuration EF Core pour le chat`
+    - MessageRepository avec Include Sender
+    - MessageConfiguration (FK Convoy Cascade, FK User Restrict, index ConvoyId+SentAt DESC)
+    - DI registration
+54. `feat(api): ajoute MessagesController, ConvoyHub et ConvoyNotificationService`
+    - MessagesController : POST + GET sous `/api/convoys/{convoyId}/messages`
+    - ConvoyHub SignalR `/hubs/convoy` (JoinConvoy, LeaveConvoy)
+    - ConvoyNotificationService via IHubContext<ConvoyHub>
+    - Program.cs : registration + MapHub
+55. `test: ajoute tests unitaires pour le chat`
+    - MessageTests (7) : Create valid, 500 chars OK, empty convoyId, empty senderId, empty/whitespace content, >500 chars
+    - SendMessageCommandHandlerTests (5) : success + notification + DTO mapping + convoy not found + not member
+    - GetConvoyMessagesQueryHandlerTests (4) : returns messages, empty list, convoy not found, not member
+
+**Validation effectuée** :
+- ✅ Build API : 0 erreurs
+- ✅ Tous les tests passent (306/306 - 100%)
+  - Core.Tests : 199 (192 existants + 7 nouveaux)
+  - Application.Tests : 107 (98 existants + 9 nouveaux)
+- ✅ Architecture respectée (nouveau ConvoyHub séparé du TripHub, IConvoyNotificationService)
+
+**Total commits Feature 6 Backend** : 6 commits (core + shared + application + infrastructure + api + tests)
 
 ---
 
@@ -561,7 +609,7 @@ Audit de sécurité complet réalisé avec l'agent dotnet-maui-expert. Identific
 
 ### Priorité Moyenne
 1. Feature 5 : Système de Vote Mobile (VotingModal + DeckControl)
-2. Feature 6 : Chat
+2. Feature 6 : Chat Mobile (ChatPage + ChatStreamControl)
 3. Ajouter tests d'intégration API
 
 ### Priorité Basse
