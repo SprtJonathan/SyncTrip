@@ -184,6 +184,23 @@ Audit de sécurité complet réalisé avec l'agent dotnet-maui-expert. Identific
 
 ### 🚧 EN COURS
 
+#### Correctifs Mobile — Fondations
+**Statut** : TERMINÉ
+**Date** : 12 Février 2026
+**Priorité** : CRITIQUE (bloquant pour toutes les features Mobile)
+
+**Corrections appliquées** :
+- [x] Restructuration AppShell : routes login/main séparées (ShellContent + TabBar)
+- [x] App.xaml.cs : vérification `IsAuthenticatedAsync()` au démarrage → redirect vers main si authentifié
+- [x] AuthorizationMessageHandler : DelegatingHandler qui injecte le JWT Bearer automatiquement
+- [x] AddVehiclePage.xaml.cs créé (code-behind avec LoadBrands au OnAppearing)
+- [x] Icônes SVG ajoutées : person.svg, car.svg, convoy.svg dans Resources/Images
+- [x] Typos accents français corrigés dans CreateConvoyPage.xaml et JoinConvoyPage.xaml
+- [x] Route de déconnexion corrigée dans ProfileViewModel (`"//login"`)
+- [x] MainPage.xaml/MainPage.xaml.cs inutilisés supprimés
+
+---
+
 #### Feature 4 : Navigation GPS
 **Statut** : Backend TERMINÉ — Mobile à faire
 **Progression** : 50% (Backend complet, Mobile restant)
@@ -515,6 +532,17 @@ Audit de sécurité complet réalisé avec l'agent dotnet-maui-expert. Identific
 - ✅ Règle du silence : majorité absolue NON requise pour rejeter, sinon acceptée par défaut
 
 **Total commits Feature 5 Backend** : 6 commits (core + shared + application + infrastructure + api + tests)
+
+#### Documentation & Correctifs Mobile
+48. **ca772c6** - `docs: met à jour ARCHITECTURE.md et INSTRUCTIONS.md avec état actuel du projet`
+    - ARCHITECTURE.md v1.0→v1.2 : entités Voting, SignalR events, DI lifetimes, business rules
+    - INSTRUCTIONS.md v1.0→v1.1 : cross-layer services pattern, checklists mis à jour
+49. **18b9a7c** - `fix(mobile): corrige les fondations de l'application mobile`
+    - Restructuration AppShell (login/main séparés)
+    - AuthorizationMessageHandler (JWT Bearer automatique)
+    - AddVehiclePage.xaml.cs créé, icônes SVG, typos corrigés, MainPage supprimé
+
+**Total commits session du 12 Fév** : 9 commits (6 Feature 5 + 2 docs + 1 fix mobile)
 
 ---
 
