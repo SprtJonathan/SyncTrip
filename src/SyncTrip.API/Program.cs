@@ -131,6 +131,9 @@ builder.Services.AddSignalR();
 // Add Trip Notification Service (SignalR abstraction for Application layer)
 builder.Services.AddScoped<SyncTrip.Application.Voting.Services.ITripNotificationService, SyncTrip.API.Services.TripNotificationService>();
 
+// Add Convoy Notification Service (SignalR abstraction for chat)
+builder.Services.AddScoped<SyncTrip.Application.Chat.Services.IConvoyNotificationService, SyncTrip.API.Services.ConvoyNotificationService>();
+
 // Add Infrastructure services (includes DbContext, Repositories, Services)
 builder.Services.AddInfrastructure(builder.Configuration, builder.Environment);
 
@@ -211,7 +214,8 @@ app.UseRateLimiter();
 
 app.MapControllers();
 
-// Map SignalR Hub
+// Map SignalR Hubs
 app.MapHub<TripHub>("/hubs/trip");
+app.MapHub<SyncTrip.API.Hubs.ConvoyHub>("/hubs/convoy");
 
 app.Run();
