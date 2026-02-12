@@ -32,10 +32,10 @@
 
             <!-- Vehicle Picker -->
             <VerticalStackLayout Spacing="8">
-                <Label Text="Vehicule"
+                <Label Text="Véhicule"
                        FontSize="14"
                        FontAttributes="Bold" />
-                <Picker Title="Selectionnez un vehicule"
+                <Picker Title="Sélectionnez un véhicule"
                         ItemsSource="{Binding Vehicles}"
                         SelectedItem="{Binding SelectedVehicle}"
                         ItemDisplayBinding="{Binding Model}" />

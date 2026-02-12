@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using SyncTrip.Mobile.Core.Http;
 using SyncTrip.Mobile.Core.Services;
 using SyncTrip.Mobile.Features.Authentication.ViewModels;
 using SyncTrip.Mobile.Features.Authentication.Views;
@@ -29,12 +30,14 @@ public static class MauiProgram
 #endif
 
 		// Configuration HttpClient et ApiService
+		builder.Services.AddTransient<AuthorizationMessageHandler>();
 		builder.Services.AddHttpClient<IApiService, ApiService>(client =>
 		{
 			// URL de base pour le développement (à configurer selon l'environnement)
 			client.BaseAddress = new Uri("https://localhost:5001");
 			client.Timeout = TimeSpan.FromSeconds(30);
-		});
+		})
+		.AddHttpMessageHandler<AuthorizationMessageHandler>();
 
 		// Services
 		builder.Services.AddSingleton<IAuthenticationService, AuthenticationService>();

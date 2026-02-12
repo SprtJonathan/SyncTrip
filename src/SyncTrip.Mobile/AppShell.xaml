@@ -4,30 +4,39 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:SyncTrip.Mobile"
+    xmlns:auth="clr-namespace:SyncTrip.Mobile.Features.Authentication.Views"
     xmlns:profile="clr-namespace:SyncTrip.Mobile.Features.Profile.Views"
     xmlns:garage="clr-namespace:SyncTrip.Mobile.Features.Garage.Views"
     xmlns:convoy="clr-namespace:SyncTrip.Mobile.Features.Convoy.Views"
     Title="SyncTrip">
 
-    <TabBar>
+    <!-- Login (visible quand non authentifié) -->
+    <ShellContent
+        Route="login"
+        ContentTemplate="{DataTemplate auth:MagicLinkPage}"
+        Shell.TabBarIsVisible="False"
+        Shell.NavBarIsVisible="False" />
+
+    <!-- Tabs principales (visible quand authentifié) -->
+    <TabBar Route="main">
         <!-- Profile Tab -->
         <ShellContent
             Title="Profil"
-            Icon="person.png"
+            Icon="person.svg"
             ContentTemplate="{DataTemplate profile:ProfilePage}"
             Route="profile" />
 
         <!-- Garage Tab -->
         <ShellContent
             Title="Garage"
-            Icon="car.png"
+            Icon="car.svg"
             ContentTemplate="{DataTemplate garage:GaragePage}"
             Route="garage" />
 
         <!-- Convoy Tab -->
         <ShellContent
             Title="Convois"
-            Icon="car.png"
+            Icon="convoy.svg"
             ContentTemplate="{DataTemplate convoy:ConvoyLobbyPage}"
             Route="convoys" />
     </TabBar>

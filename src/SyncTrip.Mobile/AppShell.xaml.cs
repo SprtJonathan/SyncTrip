@@ -1,4 +1,4 @@
-﻿using SyncTrip.Mobile.Features.Authentication.Views;
+using SyncTrip.Mobile.Features.Authentication.Views;
 using SyncTrip.Mobile.Features.Convoy.Views;
 using SyncTrip.Mobile.Features.Garage.Views;
 
@@ -17,14 +17,13 @@ public partial class AppShell : Shell
 	{
 		InitializeComponent();
 
-		// Enregistrement des routes de navigation pour l'authentification
-		Routing.RegisterRoute("magic-link", typeof(MagicLinkPage));
+		// Routes d'authentification
 		Routing.RegisterRoute("registration", typeof(RegistrationPage));
 
-		// Enregistrement des routes de navigation pour Feature 2
+		// Routes Garage
 		Routing.RegisterRoute("addvehicle", typeof(AddVehiclePage));
 
-		// Enregistrement des routes de navigation pour Feature 3
+		// Routes Convois
 		Routing.RegisterRoute("createconvoy", typeof(CreateConvoyPage));
 		Routing.RegisterRoute("joinconvoy", typeof(JoinConvoyPage));
 	}

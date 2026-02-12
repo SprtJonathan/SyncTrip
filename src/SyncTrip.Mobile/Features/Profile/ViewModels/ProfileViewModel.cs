@@ -277,7 +277,7 @@ public partial class ProfileViewModel : ObservableObject
         try
         {
             await _authService.ClearTokenAsync();
-            await Shell.Current.GoToAsync("//login");
+            await Shell.Current.GoToAsync("//login", true);
         }
         catch (Exception ex)
         {
