@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="clr-namespace:SyncTrip.App.Features.Convoy.ViewModels"
              xmlns:dto="clr-namespace:SyncTrip.Shared.DTOs.Convoys;assembly=SyncTrip.Shared"
+             xmlns:nav="clr-namespace:SyncTrip.Shared.DTOs.Navigation;assembly=SyncTrip.Shared"
              x:Class="SyncTrip.App.Features.Convoy.Views.ConvoyDetailView"
              x:DataType="vm:ConvoyDetailViewModel">
 
@@ -57,25 +58,73 @@
                     <StackPanel Spacing="12">
                         <TextBlock Text="Destination du voyage" FontSize="16" FontWeight="Bold" />
 
-                        <TextBlock Text="Nom de la destination" FontSize="13" Foreground="{DynamicResource Gray500Brush}" />
+                        <!-- Address Search -->
+                        <TextBlock Text="Rechercher une adresse" FontSize="13" Foreground="{DynamicResource Gray500Brush}" />
                         <Border BorderBrush="{DynamicResource Gray300Brush}" BorderThickness="1" CornerRadius="10" Padding="10,6">
-                            <TextBox Watermark="Ex: Lyon, Marseille..." Text="{Binding DestinationName}" BorderThickness="0" />
+                            <TextBox Watermark="Rechercher une adresse..." Text="{Binding SearchQuery}" BorderThickness="0" />
                         </Border>
 
-                        <Grid ColumnDefinitions="*,10,*">
-                            <StackPanel Grid.Column="0" Spacing="4">
-                                <TextBlock Text="Latitude" FontSize="13" Foreground="{DynamicResource Gray500Brush}" />
-                                <Border BorderBrush="{DynamicResource Gray300Brush}" BorderThickness="1" CornerRadius="10" Padding="10,6">
-                                    <TextBox Watermark="48.8566" Text="{Binding DestinationLatitude}" BorderThickness="0" />
-                                </Border>
-                            </StackPanel>
-                            <StackPanel Grid.Column="2" Spacing="4">
-                                <TextBlock Text="Longitude" FontSize="13" Foreground="{DynamicResource Gray500Brush}" />
-                                <Border BorderBrush="{DynamicResource Gray300Brush}" BorderThickness="1" CornerRadius="10" Padding="10,6">
-                                    <TextBox Watermark="2.3522" Text="{Binding DestinationLongitude}" BorderThickness="0" />
-                                </Border>
-                            </StackPanel>
-                        </Grid>
+                        <!-- Search Loading -->
+                        <ProgressBar IsVisible="{Binding IsSearching}" IsIndeterminate="True" Height="3" />
+
+                        <!-- Search Results -->
+                        <Border IsVisible="{Binding ShowSearchResults}"
+                                BorderBrush="{DynamicResource Gray300Brush}" BorderThickness="1"
+                                CornerRadius="10" MaxHeight="200">
+                            <ScrollViewer>
+                                <ItemsControl ItemsSource="{Binding SearchResults}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate x:DataType="nav:AddressResultDto">
+                                            <Button Command="{Binding $parent[ItemsControl].((vm:ConvoyDetailViewModel)DataContext).SelectAddressCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    Background="Transparent" HorizontalAlignment="Stretch"
+                                                    HorizontalContentAlignment="Left" Padding="12,8" CornerRadius="0">
+                                                <StackPanel Spacing="2">
+                                                    <TextBlock Text="{Binding DisplayName}" TextTrimming="CharacterEllipsis" FontSize="13" />
+                                                    <TextBlock Text="{Binding Type}" FontSize="11" Foreground="{DynamicResource Gray500Brush}" />
+                                                </StackPanel>
+                                            </Button>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </Border>
+
+                        <!-- Selected Address -->
+                        <Border IsVisible="{Binding SelectedAddress, Converter={StaticResource IsNotNullConverter}}"
+                                Background="{DynamicResource SuccessBrush}" CornerRadius="10" Padding="12,8">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <StackPanel Grid.Column="0" Spacing="2" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding SelectedAddress.DisplayName}" TextTrimming="CharacterEllipsis"
+                                               FontSize="13" Foreground="White" FontWeight="SemiBold" />
+                                    <TextBlock Text="{Binding SelectedAddress.Type}" FontSize="11" Foreground="White" Opacity="0.8" />
+                                </StackPanel>
+                                <Button Grid.Column="1" Content="X"
+                                        Command="{Binding ClearAddressCommand}"
+                                        Background="Transparent" Foreground="White"
+                                        FontWeight="Bold" FontSize="14"
+                                        Width="32" Height="32" Padding="0"
+                                        HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                        VerticalAlignment="Center" />
+                            </Grid>
+                        </Border>
+
+                        <!-- Route Profile -->
+                        <TextBlock Text="Profil de route" FontSize="13" Foreground="{DynamicResource Gray500Brush}" />
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <RadioButton Content="Rapide" IsChecked="True"
+                                         GroupName="RouteProfile"
+                                         Checked="OnRouteProfileFast" />
+                            <RadioButton Content="Panoramique"
+                                         GroupName="RouteProfile"
+                                         Checked="OnRouteProfileScenic" />
+                        </StackPanel>
+
+                        <!-- Destination Name (optional override) -->
+                        <TextBlock Text="Nom personnalise (optionnel)" FontSize="13" Foreground="{DynamicResource Gray500Brush}" />
+                        <Border BorderBrush="{DynamicResource Gray300Brush}" BorderThickness="1" CornerRadius="10" Padding="10,6">
+                            <TextBox Watermark="Ex: Chez mamie, Point de rendez-vous..." Text="{Binding DestinationName}" BorderThickness="0" />
+                        </Border>
 
                         <Grid ColumnDefinitions="*,10,*" Margin="0,5,0,0">
                             <Button Grid.Column="0" Content="Annuler"
@@ -92,21 +141,27 @@
                     </StackPanel>
                 </Border>
 
-                <!-- Open Cockpit (active trip exists) -->
-                <Button Content="Ouvrir le cockpit"
-                        Command="{Binding OpenCockpitCommand}"
-                        IsVisible="{Binding HasActiveTrip}"
-                        Height="50" CornerRadius="25" FontWeight="Bold"
-                        Background="{DynamicResource PrimaryBrush}" Foreground="White"
-                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
-
-                <!-- End Trip (leader only, active trip) -->
-                <Button Content="Terminer le voyage"
-                        Command="{Binding EndTripCommand}"
-                        IsVisible="{Binding HasActiveTrip}"
-                        Height="50" CornerRadius="25" FontWeight="Bold"
-                        Background="{DynamicResource ErrorBrush}" Foreground="White"
-                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
+                <!-- Active Trip Panel -->
+                <Border IsVisible="{Binding HasActiveTrip}"
+                        Background="{DynamicResource PrimaryBrush}" CornerRadius="15" Padding="20">
+                    <StackPanel Spacing="12">
+                        <TextBlock Text="Voyage en cours" FontSize="18" FontWeight="Bold" Foreground="White" />
+                        <TextBlock Text="{Binding ActiveTripDestination, StringFormat='Destination : {0}'}"
+                                   IsVisible="{Binding ActiveTripDestination, Converter={StaticResource IsNotNullOrEmptyConverter}}"
+                                   FontSize="14" Foreground="White" Opacity="0.9" />
+                        <Button Content="Ouvrir le cockpit"
+                                Command="{Binding OpenCockpitCommand}"
+                                Height="50" CornerRadius="25" FontWeight="Bold"
+                                Background="White" Foreground="{DynamicResource PrimaryBrush}"
+                                HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
+                        <Button Content="Terminer le voyage"
+                                Command="{Binding EndTripCommand}"
+                                Height="40" CornerRadius="20" FontWeight="Bold"
+                                Background="Transparent" Foreground="White"
+                                BorderBrush="White" BorderThickness="1"
+                                HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
+                    </StackPanel>
+                </Border>
             </StackPanel>
 
             <!-- Members -->

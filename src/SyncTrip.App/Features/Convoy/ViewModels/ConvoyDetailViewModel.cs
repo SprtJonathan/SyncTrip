@@ -1,8 +1,10 @@
+using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SyncTrip.App.Core.Platform;
 using SyncTrip.App.Core.Services;
 using SyncTrip.Shared.DTOs.Convoys;
+using SyncTrip.Shared.DTOs.Navigation;
 using SyncTrip.Shared.DTOs.Trips;
 
 namespace SyncTrip.App.Features.Convoy.ViewModels;
@@ -14,6 +16,9 @@ public partial class ConvoyDetailViewModel : ObservableObject
     private readonly IUserService _userService;
     private readonly INavigationService _navigationService;
     private readonly IDialogService _dialogService;
+    private readonly INavigationApiService _navigationApiService;
+
+    private CancellationTokenSource? _searchCts;
 
     [ObservableProperty]
     private string convoyId = string.Empty;
@@ -40,6 +45,9 @@ public partial class ConvoyDetailViewModel : ObservableObject
     private bool canShowStartTripButton;
 
     [ObservableProperty]
+    private string? activeTripDestination;
+
+    [ObservableProperty]
     private bool isLoading;
 
     [ObservableProperty]
@@ -49,26 +57,106 @@ public partial class ConvoyDetailViewModel : ObservableObject
     private bool showStartTripForm;
 
     [ObservableProperty]
+    private int selectedRouteProfile = 1;
+
+    [ObservableProperty]
     private string destinationName = string.Empty;
 
     [ObservableProperty]
-    private string destinationLatitude = string.Empty;
+    private string searchQuery = string.Empty;
 
     [ObservableProperty]
-    private string destinationLongitude = string.Empty;
+    private AddressResultDto? selectedAddress;
+
+    [ObservableProperty]
+    private bool isSearching;
+
+    [ObservableProperty]
+    private bool showSearchResults;
+
+    public ObservableCollection<AddressResultDto> SearchResults { get; } = [];
 
     public ConvoyDetailViewModel(IConvoyService convoyService, ITripService tripService, IUserService userService,
-        INavigationService navigationService, IDialogService dialogService)
+        INavigationService navigationService, IDialogService dialogService, INavigationApiService navigationApiService)
     {
         _convoyService = convoyService;
         _tripService = tripService;
         _userService = userService;
         _navigationService = navigationService;
         _dialogService = dialogService;
+        _navigationApiService = navigationApiService;
     }
 
     partial void OnCanStartTripChanged(bool value) => CanShowStartTripButton = value && !ShowStartTripForm;
     partial void OnShowStartTripFormChanged(bool value) => CanShowStartTripButton = CanStartTrip && !value;
+
+    partial void OnSearchQueryChanged(string value)
+    {
+        _searchCts?.Cancel();
+
+        if (SelectedAddress is not null && value == SelectedAddress.DisplayName)
+            return;
+
+        SelectedAddress = null;
+
+        if (string.IsNullOrWhiteSpace(value) || value.Length < 2)
+        {
+            SearchResults.Clear();
+            ShowSearchResults = false;
+            return;
+        }
+
+        _searchCts = new CancellationTokenSource();
+        _ = SearchAddressWithDebounceAsync(value, _searchCts.Token);
+    }
+
+    private async Task SearchAddressWithDebounceAsync(string query, CancellationToken ct)
+    {
+        try
+        {
+            IsSearching = true;
+            await Task.Delay(400, ct);
+
+            var results = await _navigationApiService.SearchAddressAsync(query, 5, ct);
+
+            ct.ThrowIfCancellationRequested();
+
+            SearchResults.Clear();
+            foreach (var result in results)
+                SearchResults.Add(result);
+
+            ShowSearchResults = SearchResults.Count > 0;
+        }
+        catch (OperationCanceledException)
+        {
+            // Debounce cancelled — ignored
+        }
+        finally
+        {
+            IsSearching = false;
+        }
+    }
+
+    [RelayCommand]
+    private void SelectAddress(AddressResultDto address)
+    {
+        SelectedAddress = address;
+        SearchQuery = address.DisplayName;
+        SearchResults.Clear();
+        ShowSearchResults = false;
+
+        if (string.IsNullOrWhiteSpace(DestinationName))
+            DestinationName = address.DisplayName;
+    }
+
+    [RelayCommand]
+    private void ClearAddress()
+    {
+        SelectedAddress = null;
+        SearchQuery = string.Empty;
+        SearchResults.Clear();
+        ShowSearchResults = false;
+    }
 
     public void Initialize(string convoyId, string joinCode)
     {
@@ -100,6 +188,7 @@ public partial class ConvoyDetailViewModel : ObservableObject
             ActiveTrip = trip;
             HasActiveTrip = trip is not null;
             CanStartTrip = IsLeader && !HasActiveTrip;
+            ActiveTripDestination = trip?.Waypoints.FirstOrDefault(w => w.Type == 3)?.Name;
         }
         catch (Exception ex)
         {
@@ -125,43 +214,31 @@ public partial class ConvoyDetailViewModel : ObservableObject
         {
             if (Convoy is null) return;
 
-            if (string.IsNullOrWhiteSpace(DestinationName))
+            if (SelectedAddress is null)
             {
-                ErrorMessage = "Veuillez entrer un nom de destination.";
-                return;
-            }
-
-            if (!double.TryParse(DestinationLatitude, System.Globalization.NumberStyles.Float,
-                    System.Globalization.CultureInfo.InvariantCulture, out var lat) ||
-                lat < -90 || lat > 90)
-            {
-                ErrorMessage = "Latitude invalide (entre -90 et 90).";
-                return;
-            }
-
-            if (!double.TryParse(DestinationLongitude, System.Globalization.NumberStyles.Float,
-                    System.Globalization.CultureInfo.InvariantCulture, out var lon) ||
-                lon < -180 || lon > 180)
-            {
-                ErrorMessage = "Longitude invalide (entre -180 et 180).";
+                ErrorMessage = "Veuillez rechercher et selectionner une adresse.";
                 return;
             }
 
             IsLoading = true;
             ErrorMessage = null;
 
+            var name = string.IsNullOrWhiteSpace(DestinationName)
+                ? SelectedAddress.DisplayName
+                : DestinationName.Trim();
+
             var request = new StartTripRequest
             {
                 Status = 1,
-                RouteProfile = 1,
+                RouteProfile = SelectedRouteProfile,
                 Waypoints = new List<CreateWaypointRequest>
                 {
                     new()
                     {
                         OrderIndex = 0,
-                        Latitude = lat,
-                        Longitude = lon,
-                        Name = DestinationName.Trim(),
+                        Latitude = SelectedAddress.Latitude,
+                        Longitude = SelectedAddress.Longitude,
+                        Name = name,
                         Type = 3 // Destination
                     }
                 }
