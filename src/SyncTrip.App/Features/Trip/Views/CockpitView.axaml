@@ -2,6 +2,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mapsui="clr-namespace:Mapsui.UI.Avalonia;assembly=Mapsui.UI.Avalonia"
              xmlns:vm="clr-namespace:SyncTrip.App.Features.Trip.ViewModels"
+             xmlns:votingVm="clr-namespace:SyncTrip.App.Features.Voting.ViewModels"
+             xmlns:chatVm="clr-namespace:SyncTrip.App.Features.Chat.ViewModels"
+             xmlns:dto="clr-namespace:SyncTrip.Shared.DTOs.Chat;assembly=SyncTrip.Shared"
+             xmlns:votingDto="clr-namespace:SyncTrip.Shared.DTOs.Voting;assembly=SyncTrip.Shared"
              x:Class="SyncTrip.App.Features.Trip.Views.CockpitView"
              x:DataType="vm:CockpitViewModel">
 
@@ -10,7 +14,7 @@
         <!-- Map -->
         <mapsui:MapControl x:Name="MapControl" Grid.Row="0" />
 
-        <!-- Overlay panel -->
+        <!-- Overlay panel (top-left) -->
         <Border Grid.Row="0" Background="#80000000" Padding="15" CornerRadius="15"
                 HorizontalAlignment="Left" VerticalAlignment="Top" Margin="15">
             <StackPanel Spacing="8">
@@ -18,9 +22,141 @@
                 <TextBlock Text="{Binding DestinationName, StringFormat='Destination: {0}'}"
                            IsVisible="{Binding DestinationName, Converter={StaticResource IsNotNullOrEmptyConverter}}"
                            FontSize="14" Foreground="#FFA500" FontWeight="Bold" />
+                <StackPanel Orientation="Horizontal" Spacing="12"
+                            IsVisible="{Binding DistanceText, Converter={StaticResource IsNotNullOrEmptyConverter}}">
+                    <TextBlock Text="{Binding DistanceText}" FontSize="13" Foreground="#90CAF9" FontWeight="Bold" />
+                    <TextBlock Text="{Binding DurationText}" FontSize="13" Foreground="#90CAF9" FontWeight="Bold" />
+                </StackPanel>
                 <TextBlock Text="{Binding MemberPositions.Count, StringFormat='{}{0} membre(s) connecte(s)'}"
                            FontSize="14" Foreground="White" />
             </StackPanel>
+        </Border>
+
+        <!-- Voting overlay panel (right side) -->
+        <Border Grid.Row="0" IsVisible="{Binding ShowVotingPanel}"
+                Background="#F0FFFFFF" Margin="60,10,10,10" CornerRadius="15"
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Grid RowDefinitions="Auto,*" DataContext="{Binding VotingViewModel}">
+                <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="15,10">
+                    <TextBlock Grid.Column="0" Text="Vote" FontSize="18" FontWeight="Bold" VerticalAlignment="Center" />
+                    <Button Grid.Column="1" Content="X" Background="Transparent" FontWeight="Bold"
+                            Command="{Binding $parent[UserControl].((vm:CockpitViewModel)DataContext).ToggleVotingCommand}" />
+                </Grid>
+                <ScrollViewer Grid.Row="1">
+                    <StackPanel Margin="15,0,15,15" Spacing="12" x:DataType="votingVm:VotingViewModel">
+                        <ProgressBar IsVisible="{Binding IsLoading}" IsIndeterminate="True" Height="3" />
+
+                        <!-- Active proposal -->
+                        <Border IsVisible="{Binding HasActiveProposal}"
+                                BorderBrush="{DynamicResource PrimaryBrush}" BorderThickness="2"
+                                CornerRadius="12" Padding="15">
+                            <StackPanel Spacing="10">
+                                <TextBlock Text="Vote en cours" FontSize="16" FontWeight="Bold"
+                                           Foreground="{DynamicResource PrimaryBrush}" />
+                                <TextBlock Text="{Binding ActiveProposal.LocationName}" FontSize="14" FontWeight="Bold" />
+                                <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+                                    <TextBlock Text="Temps:" FontSize="13" VerticalAlignment="Center" />
+                                    <TextBlock Text="{Binding Countdown}" FontSize="20" FontWeight="Bold"
+                                               Foreground="{DynamicResource WarningBrush}" />
+                                </StackPanel>
+                                <Grid ColumnDefinitions="*,*">
+                                    <TextBlock Grid.Column="0" Text="{Binding ActiveProposal.YesCount, StringFormat='OUI: {0}'}"
+                                               HorizontalAlignment="Center" Foreground="{DynamicResource SuccessBrush}" FontWeight="Bold" />
+                                    <TextBlock Grid.Column="1" Text="{Binding ActiveProposal.NoCount, StringFormat='NON: {0}'}"
+                                               HorizontalAlignment="Center" Foreground="{DynamicResource ErrorBrush}" FontWeight="Bold" />
+                                </Grid>
+                                <Grid ColumnDefinitions="*,8,*">
+                                    <Button Grid.Column="0" Content="OUI" Command="{Binding VoteYesCommand}"
+                                            Height="40" CornerRadius="20" FontWeight="Bold"
+                                            Background="{DynamicResource SuccessBrush}" Foreground="White"
+                                            HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
+                                    <Button Grid.Column="2" Content="NON" Command="{Binding VoteNoCommand}"
+                                            Height="40" CornerRadius="20" FontWeight="Bold"
+                                            Background="{DynamicResource ErrorBrush}" Foreground="White"
+                                            HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Propose new stop -->
+                        <Border IsVisible="{Binding HasActiveProposal, Converter={StaticResource InvertedBoolConverter}}"
+                                BorderBrush="{DynamicResource Gray300Brush}" BorderThickness="1"
+                                CornerRadius="12" Padding="15">
+                            <StackPanel Spacing="10">
+                                <TextBlock Text="Proposer un arret" FontSize="16" FontWeight="Bold" />
+                                <ComboBox ItemsSource="{Binding StopTypes}" SelectedItem="{Binding SelectedStopTypeItem}"
+                                          HorizontalAlignment="Stretch">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Name}" />
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                                <Border BorderBrush="{DynamicResource Gray300Brush}" BorderThickness="1" CornerRadius="8" Padding="8,4">
+                                    <TextBox Watermark="Nom du lieu..." Text="{Binding LocationName}" BorderThickness="0" />
+                                </Border>
+                                <Button Content="Proposer" Command="{Binding ProposeStopCommand}"
+                                        Height="40" CornerRadius="20" FontWeight="Bold"
+                                        Background="{DynamicResource PrimaryBrush}" Foreground="White"
+                                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Success/Error -->
+                        <TextBlock IsVisible="{Binding SuccessMessage, Converter={StaticResource IsNotNullOrEmptyConverter}}"
+                                   Text="{Binding SuccessMessage}" Foreground="{DynamicResource SuccessBrush}" FontSize="12" />
+                        <TextBlock IsVisible="{Binding ErrorMessage, Converter={StaticResource IsNotNullOrEmptyConverter}}"
+                                   Text="{Binding ErrorMessage}" Foreground="{DynamicResource ErrorBrush}" FontSize="12" />
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+        </Border>
+
+        <!-- Chat overlay panel (right side) -->
+        <Border Grid.Row="0" IsVisible="{Binding ShowChatPanel}"
+                Background="#F0FFFFFF" Margin="60,10,10,10" CornerRadius="15"
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Grid RowDefinitions="Auto,*,Auto" DataContext="{Binding ChatViewModel}">
+                <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="15,10">
+                    <TextBlock Grid.Column="0" Text="Chat" FontSize="18" FontWeight="Bold" VerticalAlignment="Center" />
+                    <Button Grid.Column="1" Content="X" Background="Transparent" FontWeight="Bold"
+                            Command="{Binding $parent[UserControl].((vm:CockpitViewModel)DataContext).ToggleChatCommand}" />
+                </Grid>
+
+                <!-- Messages -->
+                <ScrollViewer Grid.Row="1" Margin="10,0">
+                    <ItemsControl ItemsSource="{Binding Messages}" x:DataType="chatVm:ChatViewModel">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="dto:MessageDto">
+                                <Border Margin="2,2" Padding="8,6" CornerRadius="10"
+                                        Background="{DynamicResource Gray100Brush}">
+                                    <StackPanel Spacing="2">
+                                        <StackPanel Orientation="Horizontal" Spacing="6">
+                                            <TextBlock Text="{Binding SenderUsername}" FontSize="11" FontWeight="Bold"
+                                                       Foreground="{DynamicResource PrimaryBrush}" />
+                                            <TextBlock Text="{Binding SentAt, StringFormat='{}{0:HH:mm}'}"
+                                                       FontSize="10" Foreground="{DynamicResource Gray500Brush}" />
+                                        </StackPanel>
+                                        <TextBlock Text="{Binding Content}" FontSize="13" TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+
+                <!-- Input -->
+                <Border Grid.Row="2" Padding="10" x:DataType="chatVm:ChatViewModel">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Border Grid.Column="0" Background="{DynamicResource Gray100Brush}" CornerRadius="15" Padding="10,4" Margin="0,0,8,0">
+                            <TextBox Watermark="Message..." Text="{Binding MessageText}" BorderThickness="0" />
+                        </Border>
+                        <Button Grid.Column="1" Content="Envoyer" Command="{Binding SendMessageCommand}"
+                                Background="{DynamicResource PrimaryBrush}" Foreground="White"
+                                CornerRadius="15" FontWeight="Bold" FontSize="12" VerticalAlignment="Center" />
+                    </Grid>
+                </Border>
+            </Grid>
         </Border>
 
         <!-- Error overlay -->
@@ -33,18 +169,23 @@
 
         <!-- Bottom bar -->
         <Border Grid.Row="1" Background="{DynamicResource Gray100Brush}" Padding="15">
-            <StackPanel Spacing="10">
-                <Button Content="Proposer un arret"
-                        Command="{Binding OpenVotingCommand}"
+            <Grid ColumnDefinitions="*,8,*,8,*">
+                <Button Grid.Column="0" Content="Vote"
+                        Command="{Binding ToggleVotingCommand}"
                         Height="50" CornerRadius="25" FontWeight="Bold"
                         Background="{DynamicResource PrimaryBrush}" Foreground="White"
                         HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
-                <Button Content="Quitter le cockpit"
+                <Button Grid.Column="2" Content="Chat"
+                        Command="{Binding ToggleChatCommand}"
+                        Height="50" CornerRadius="25" FontWeight="Bold"
+                        Background="{DynamicResource PrimaryBrush}" Foreground="White"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
+                <Button Grid.Column="4" Content="Quitter"
                         Command="{Binding LeaveCockpitCommand}"
                         Height="50" CornerRadius="25" FontWeight="Bold"
                         Background="{DynamicResource ErrorBrush}" Foreground="White"
                         HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
-            </StackPanel>
+            </Grid>
         </Border>
 
     </Grid>

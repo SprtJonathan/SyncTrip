@@ -79,6 +79,7 @@ public partial class App : Application
         services.AddSingleton<IVotingService, VotingService>();
         services.AddSingleton<IChatService, ChatService>();
         services.AddSingleton<IConvoySignalRService, ConvoySignalRService>();
+        services.AddSingleton<INavigationApiService, NavigationApiService>();
 
         // ViewModels
         services.AddTransient<MagicLinkViewModel>();

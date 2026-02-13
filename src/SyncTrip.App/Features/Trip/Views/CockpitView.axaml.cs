@@ -1,9 +1,12 @@
+using System.Text.Json;
 using Avalonia.Controls;
 using Mapsui;
 using Mapsui.Layers;
+using Mapsui.Nts;
 using Mapsui.Projections;
 using Mapsui.Styles;
 using Mapsui.Tiling;
+using NetTopologySuite.Geometries;
 using SyncTrip.App.Features.Trip.ViewModels;
 
 namespace SyncTrip.App.Features.Trip.Views;
@@ -12,6 +15,7 @@ public partial class CockpitView : UserControl
 {
     private WritableLayer? _positionsLayer;
     private WritableLayer? _waypointsLayer;
+    private WritableLayer? _routeLayer;
 
     public CockpitView()
     {
@@ -28,6 +32,7 @@ public partial class CockpitView : UserControl
         {
             vm.PositionsUpdated += OnPositionsUpdated;
             vm.WaypointsLoaded += OnWaypointsLoaded;
+            vm.RouteLoaded += OnRouteLoaded;
             await vm.LoadTripCommand.ExecuteAsync(null);
         }
     }
@@ -38,6 +43,7 @@ public partial class CockpitView : UserControl
         {
             vm.PositionsUpdated -= OnPositionsUpdated;
             vm.WaypointsLoaded -= OnWaypointsLoaded;
+            vm.RouteLoaded -= OnRouteLoaded;
             _ = vm.StopTracking();
         }
 
@@ -49,6 +55,9 @@ public partial class CockpitView : UserControl
         var map = MapControl.Map;
         map.Layers.Add(OpenStreetMap.CreateTileLayer());
 
+        _routeLayer = new WritableLayer { Style = null };
+        map.Layers.Add(_routeLayer);
+
         _waypointsLayer = new WritableLayer { Style = null };
         map.Layers.Add(_waypointsLayer);
 
@@ -58,6 +67,74 @@ public partial class CockpitView : UserControl
         // Center on France by default
         var (x, y) = SphericalMercator.FromLonLat(2.3522, 48.8566);
         map.Navigator.CenterOnAndZoomTo(new MPoint(x, y), map.Navigator.Resolutions[10]);
+    }
+
+    private void OnRouteLoaded()
+    {
+        if (DataContext is not CockpitViewModel vm || _routeLayer is null) return;
+        if (string.IsNullOrEmpty(vm.RouteGeometry)) return;
+
+        _routeLayer.Clear();
+
+        try
+        {
+            var coords = ParseGeoJsonLineString(vm.RouteGeometry);
+            if (coords.Count < 2) return;
+
+            var coordinates = coords
+                .Select(c =>
+                {
+                    var (px, py) = SphericalMercator.FromLonLat(c.lon, c.lat);
+                    return new Coordinate(px, py);
+                })
+                .ToArray();
+
+            var lineString = new LineString(coordinates);
+            var feature = new GeometryFeature(lineString);
+            feature.Styles.Add(new VectorStyle
+            {
+                Line = new Pen(Color.FromString("#2196F3"), 4)
+            });
+
+            _routeLayer.Add(feature);
+            _routeLayer.DataHasChanged();
+        }
+        catch
+        {
+            // GeoJSON parsing error — silent
+        }
+    }
+
+    private static List<(double lon, double lat)> ParseGeoJsonLineString(string geoJson)
+    {
+        var result = new List<(double lon, double lat)>();
+
+        using var doc = JsonDocument.Parse(geoJson);
+        var root = doc.RootElement;
+
+        JsonElement coordinates;
+        if (root.TryGetProperty("coordinates", out coordinates))
+        {
+            // Direct LineString
+        }
+        else if (root.TryGetProperty("geometry", out var geometry) &&
+                 geometry.TryGetProperty("coordinates", out coordinates))
+        {
+            // Feature wrapper
+        }
+        else
+        {
+            return result;
+        }
+
+        foreach (var coord in coordinates.EnumerateArray())
+        {
+            var arr = coord.EnumerateArray().ToList();
+            if (arr.Count >= 2)
+                result.Add((arr[0].GetDouble(), arr[1].GetDouble()));
+        }
+
+        return result;
     }
 
     private void OnWaypointsLoaded()

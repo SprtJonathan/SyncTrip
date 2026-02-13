@@ -2,8 +2,11 @@ using System.Collections.ObjectModel;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.DependencyInjection;
 using SyncTrip.App.Core.Platform;
 using SyncTrip.App.Core.Services;
+using SyncTrip.App.Features.Chat.ViewModels;
+using SyncTrip.App.Features.Voting.ViewModels;
 using SyncTrip.Shared.DTOs.Trips;
 
 namespace SyncTrip.App.Features.Trip.ViewModels;
@@ -14,6 +17,8 @@ public partial class CockpitViewModel : ObservableObject
     private readonly ISignalRService _signalRService;
     private readonly ILocationService _locationService;
     private readonly INavigationService _navigationService;
+    private readonly INavigationApiService _navigationApiService;
+    private readonly IServiceProvider _serviceProvider;
     private DispatcherTimer? _locationTimer;
     private DispatcherTimer? _durationTimer;
 
@@ -45,18 +50,40 @@ public partial class CockpitViewModel : ObservableObject
     private string? destinationName;
 
     [ObservableProperty]
+    private string? routeGeometry;
+
+    [ObservableProperty]
+    private string distanceText = string.Empty;
+
+    [ObservableProperty]
+    private string durationText = string.Empty;
+
+    [ObservableProperty]
     private ObservableCollection<MemberPosition> memberPositions = new();
+
+    [ObservableProperty]
+    private bool showVotingPanel;
+
+    [ObservableProperty]
+    private bool showChatPanel;
+
+    public VotingViewModel? VotingViewModel { get; private set; }
+    public ChatViewModel? ChatViewModel { get; private set; }
 
     public event Action? PositionsUpdated;
     public event Action? WaypointsLoaded;
+    public event Action? RouteLoaded;
 
     public CockpitViewModel(ITripService tripService, ISignalRService signalRService,
-        ILocationService locationService, INavigationService navigationService)
+        ILocationService locationService, INavigationService navigationService,
+        INavigationApiService navigationApiService, IServiceProvider serviceProvider)
     {
         _tripService = tripService;
         _signalRService = signalRService;
         _locationService = locationService;
         _navigationService = navigationService;
+        _navigationApiService = navigationApiService;
+        _serviceProvider = serviceProvider;
     }
 
     public void Initialize(string convoyId, string tripId)
@@ -89,6 +116,23 @@ public partial class CockpitViewModel : ObservableObject
             DestinationName = destination?.Name;
 
             WaypointsLoaded?.Invoke();
+
+            // Load route
+            var route = await _navigationApiService.CalculateTripRouteAsync(tripGuid);
+            if (route is not null)
+            {
+                RouteGeometry = route.GeometryGeoJson;
+
+                var distKm = route.DistanceMeters / 1000.0;
+                DistanceText = distKm >= 1 ? $"{distKm:F1} km" : $"{route.DistanceMeters:F0} m";
+
+                var duration = TimeSpan.FromSeconds(route.DurationSeconds);
+                DurationText = duration.TotalHours >= 1
+                    ? $"{(int)duration.TotalHours}h{duration.Minutes:D2}"
+                    : $"{duration.Minutes} min";
+
+                RouteLoaded?.Invoke();
+            }
 
             await StartTracking();
         }
@@ -174,13 +218,42 @@ public partial class CockpitViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task OpenVoting()
+    private async Task ToggleVoting()
     {
-        await _navigationService.NavigateToAsync("voting", new Dictionary<string, string>
+        ShowChatPanel = false;
+
+        if (!ShowVotingPanel)
         {
-            ["convoyId"] = ConvoyId,
-            ["tripId"] = TripId
-        });
+            if (VotingViewModel is null)
+            {
+                VotingViewModel = _serviceProvider.GetRequiredService<VotingViewModel>();
+                VotingViewModel.Initialize(ConvoyId, TripId);
+                VotingViewModel.SubscribeToSignalR();
+                OnPropertyChanged(nameof(VotingViewModel));
+            }
+            await VotingViewModel!.LoadActiveProposalCommand.ExecuteAsync(null);
+        }
+
+        ShowVotingPanel = !ShowVotingPanel;
+    }
+
+    [RelayCommand]
+    private async Task ToggleChat()
+    {
+        ShowVotingPanel = false;
+
+        if (!ShowChatPanel)
+        {
+            if (ChatViewModel is null)
+            {
+                ChatViewModel = _serviceProvider.GetRequiredService<ChatViewModel>();
+                ChatViewModel.Initialize(ConvoyId);
+                OnPropertyChanged(nameof(ChatViewModel));
+            }
+            await ChatViewModel!.LoadMessagesCommand.ExecuteAsync(null);
+        }
+
+        ShowChatPanel = !ShowChatPanel;
     }
 
     [RelayCommand]
@@ -196,6 +269,11 @@ public partial class CockpitViewModel : ObservableObject
         _durationTimer?.Stop();
         _signalRService.LocationReceived -= OnLocationReceived;
         await _signalRService.DisconnectAsync();
+
+        VotingViewModel?.UnsubscribeFromSignalR();
+        if (ChatViewModel is not null)
+            await ChatViewModel.Cleanup();
+
         IsTracking = false;
     }
 
