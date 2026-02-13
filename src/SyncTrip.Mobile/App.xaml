@@ -17,6 +17,8 @@
             <converters:SuccessErrorColorConverter x:Key="SuccessErrorColorConverter" />
             <converters:VehicleTypeConverter x:Key="VehicleTypeConverter" />
             <converters:IsNotNullConverter x:Key="IsNotNullConverter" />
+            <converters:TripStatusConverter x:Key="TripStatusConverter" />
+            <converters:ConvoyRoleConverter x:Key="ConvoyRoleConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>
