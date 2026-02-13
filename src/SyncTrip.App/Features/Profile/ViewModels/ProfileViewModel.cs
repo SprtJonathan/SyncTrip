@@ -11,6 +11,7 @@ public partial class ProfileViewModel : ObservableObject
     private readonly IUserService _userService;
     private readonly IAuthenticationService _authService;
     private readonly INavigationService _navigationService;
+    private readonly IDialogService _dialogService;
 
     [ObservableProperty]
     private Guid userId;
@@ -68,11 +69,12 @@ public partial class ProfileViewModel : ObservableObject
 
     public DateTime MaximumDate => DateTime.Now.AddYears(-14);
 
-    public ProfileViewModel(IUserService userService, IAuthenticationService authService, INavigationService navigationService)
+    public ProfileViewModel(IUserService userService, IAuthenticationService authService, INavigationService navigationService, IDialogService dialogService)
     {
         _userService = userService;
         _authService = authService;
         _navigationService = navigationService;
+        _dialogService = dialogService;
     }
 
     [RelayCommand]
@@ -214,6 +216,42 @@ public partial class ProfileViewModel : ObservableObject
         catch (Exception ex)
         {
             ErrorMessage = $"Erreur lors de la deconnexion: {ex.Message}";
+        }
+    }
+
+    [RelayCommand]
+    private async Task DeleteAccount()
+    {
+        try
+        {
+            var confirm = await _dialogService.ConfirmAsync(
+                "Supprimer mon compte",
+                "Cette action est irreversible. Toutes vos donnees seront supprimees. Voulez-vous continuer ?");
+
+            if (!confirm) return;
+
+            IsLoading = true;
+            ErrorMessage = null;
+
+            var success = await _userService.DeleteAccountAsync();
+
+            if (success)
+            {
+                await _authService.ClearTokenAsync();
+                await _navigationService.NavigateToAsync("login");
+            }
+            else
+            {
+                ErrorMessage = "Impossible de supprimer le compte.";
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"Erreur: {ex.Message}";
+        }
+        finally
+        {
+            IsLoading = false;
         }
     }
 }

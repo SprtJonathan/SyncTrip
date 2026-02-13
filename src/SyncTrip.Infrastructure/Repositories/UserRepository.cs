@@ -49,6 +49,19 @@ public class UserRepository : IUserRepository
             .FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
     }
 
+    public async Task DeleteAsync(Guid userId, CancellationToken cancellationToken = default)
+    {
+        var user = await _context.Users
+            .Include(u => u.Licenses)
+            .FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
+
+        if (user is null)
+            throw new KeyNotFoundException($"Utilisateur {userId} introuvable.");
+
+        _context.Users.Remove(user);
+        await _context.SaveChangesAsync(cancellationToken);
+    }
+
     public async Task UpdateUserLicensesAsync(Guid userId, IList<Core.Enums.LicenseType> licenseTypes, CancellationToken cancellationToken = default)
     {
         // Supprimer les permis existants

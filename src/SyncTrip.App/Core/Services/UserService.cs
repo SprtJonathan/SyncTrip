@@ -34,4 +34,16 @@ public class UserService : IUserService
             return false;
         }
     }
+
+    public async Task<bool> DeleteAccountAsync(CancellationToken ct = default)
+    {
+        try
+        {
+            return await _apiService.DeleteAsync("api/users/me", ct);
+        }
+        catch
+        {
+            return false;
+        }
+    }
 }

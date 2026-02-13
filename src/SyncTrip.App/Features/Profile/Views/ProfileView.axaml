@@ -88,6 +88,15 @@
                             Background="{DynamicResource ErrorBrush}" Foreground="White"
                             HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
                             Margin="0,20,0,0" />
+
+                    <Button Content="Supprimer mon compte"
+                            Command="{Binding DeleteAccountCommand}"
+                            IsVisible="{Binding IsEditing, Converter={StaticResource InvertedBoolConverter}}"
+                            Height="50" CornerRadius="25" FontWeight="Bold"
+                            Background="Transparent" Foreground="{DynamicResource ErrorBrush}"
+                            BorderBrush="{DynamicResource ErrorBrush}" BorderThickness="2"
+                            HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                            Margin="0,10,0,0" />
                 </StackPanel>
 
                 <!-- Saving -->

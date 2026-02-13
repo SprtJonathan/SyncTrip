@@ -46,6 +46,13 @@ public interface IUserRepository
     Task<User?> GetByIdWithLicensesAsync(Guid id, CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Supprime un utilisateur et ses données associées.
+    /// </summary>
+    /// <param name="userId">Identifiant de l'utilisateur à supprimer.</param>
+    /// <param name="cancellationToken">Token d'annulation.</param>
+    Task DeleteAsync(Guid userId, CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Met à jour les permis de conduire d'un utilisateur.
     /// Remplace la liste existante par la nouvelle liste fournie.
     /// </summary>

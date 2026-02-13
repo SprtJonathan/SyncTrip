@@ -6,4 +6,5 @@ public interface IUserService
 {
     Task<UserProfileDto?> GetProfileAsync(CancellationToken ct = default);
     Task<bool> UpdateProfileAsync(UpdateUserProfileRequest request, CancellationToken ct = default);
+    Task<bool> DeleteAccountAsync(CancellationToken ct = default);
 }

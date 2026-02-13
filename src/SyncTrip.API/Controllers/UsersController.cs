@@ -97,6 +97,30 @@ public class UsersController : ControllerBase
     }
 
     /// <summary>
+    /// Supprime le compte de l'utilisateur connecté.
+    /// </summary>
+    [HttpDelete("me")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteMyAccount()
+    {
+        var userId = GetCurrentUserId();
+
+        try
+        {
+            var command = new DeleteUserAccountCommand(userId);
+            await _mediator.Send(command);
+            return NoContent();
+        }
+        catch (KeyNotFoundException)
+        {
+            _logger.LogWarning("Utilisateur introuvable lors de la suppression : {UserId}", userId);
+            return NotFound(new { Message = "Utilisateur introuvable" });
+        }
+    }
+
+    /// <summary>
     /// Récupère l'ID de l'utilisateur connecté depuis le JWT.
     /// </summary>
     private Guid GetCurrentUserId()
