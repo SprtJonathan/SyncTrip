@@ -1,7 +1,7 @@
 # SyncTrip - Suivi de Progression
 
-**Dernière mise à jour** : 12 Février 2026
-**Statut Global** : Features 1, 2 & 3 COMPLÈTES + Features 4, 5 & 6 Backend COMPLET
+**Dernière mise à jour** : 13 Février 2026
+**Statut Global** : Features 1, 2, 3 & 4 COMPLÈTES + Features 5 & 6 Backend COMPLET
 
 ---
 
@@ -202,8 +202,8 @@ Audit de sécurité complet réalisé avec l'agent dotnet-maui-expert. Identific
 ---
 
 #### Feature 4 : Navigation GPS
-**Statut** : Backend TERMINÉ — Mobile à faire
-**Progression** : 50% (Backend complet, Mobile restant)
+**Statut** : TERMINÉ (Backend + Mobile)
+**Progression** : 100%
 
 **Composants Backend terminés** :
 - [x] Core : Enums (TripStatus, RouteProfile, WaypointType)
@@ -223,10 +223,15 @@ Audit de sécurité complet réalisé avec l'agent dotnet-maui-expert. Identific
 - [x] Tests Core : 27 tests (Trip 14, TripWaypoint 13)
 - [x] Tests Application : 15 tests (StartTrip 5, EndTrip 4, AddWaypoint 4, GetTripById 2)
 
-**Composants Mobile restants** :
-- [ ] Mobile : CockpitPage + MapControl (Mapsui)
-- [ ] Mobile : LocationService (foreground only)
-- [ ] Mobile : SignalR client integration
+**Composants Mobile ajoutés** :
+- [x] Mobile : Services (IApiService.DeleteAsync, ITripService, TripService)
+- [x] Mobile : Services (ISignalRService, SignalRService — HubConnection, JWT, ReceiveLocationUpdate)
+- [x] Mobile : Converters (TripStatusConverter, ConvoyRoleConverter)
+- [x] Mobile : ConvoyDetailPage (VM + XAML — détails convoi, membres, voyage actif, démarrer/terminer)
+- [x] Mobile : CockpitPage (VM + XAML — carte Mapsui, MyLocationLayer, WritableLayer membres)
+- [x] Mobile : Navigation ConvoyLobby → ConvoyDetail → CockpitPage (TapGestureRecognizer, routes Shell)
+- [x] Mobile : Configuration MauiProgram.cs (UseSkiaSharp, TripService, SignalRService, VMs, Pages)
+- [x] Mobile : Configuration AppShell.xaml.cs (routes convoydetail, cockpit)
 
 ---
 
@@ -298,11 +303,11 @@ Audit de sécurité complet réalisé avec l'agent dotnet-maui-expert. Identific
 
 ## Métriques
 
-**Features Terminées** : 3 / 6 (Auth + Profil/Garage + Convois - Backend + Mobile + Tests)
-**Features Backend Terminé** : 6 / 6 (+ Navigation GPS + Vote + Chat Backend)
+**Features Terminées** : 4 / 6 (Auth + Profil/Garage + Convois + Navigation GPS - Backend + Mobile + Tests)
+**Features Backend Terminé** : 6 / 6 (+ Vote + Chat Backend)
 **Sécurité Production** : ✅ P0 Critical Issues Résolus (5/5)
-**Progression Globale** : ~75%
-**Dernière compilation** : 12 Fév 2026 - Succès (Backend + Tests)
+**Progression Globale** : ~83%
+**Dernière compilation** : 13 Fév 2026 - Succès (Backend + Mobile + Tests)
 **Tests Passing** : 306 / 306 (100%)
   - Core.Tests : 199 tests (User, Vehicle, Brand, UserLicense, Convoy, ConvoyMember, Trip, TripWaypoint, StopProposal, Vote, Message)
   - Application.Tests : 107 tests (Auth, Users, Vehicles, Convoys, Trips, Voting, Chat)
@@ -444,10 +449,6 @@ Audit de sécurité complet réalisé avec l'agent dotnet-maui-expert. Identific
     - Ports alignés 5000/5001
     - User Secrets configurés (DB, JWT, SMTP)
     - .dockerignore
-
-**Note** : Docker non testé (virtualisation désactivée sur le poste). À valider quand la virtualisation sera réactivée :
-- `docker compose up --build` → API sur `http://localhost:5000`, Scalar sur `http://localhost:5000/scalar/v1`
-- Vérifier migrations auto, endpoints Auth, magic link en console
 
 **Total commits session du 9 Fév (suite)** : 3 commits (2 fixes + 1 Docker/Scalar)
 
@@ -592,25 +593,64 @@ Audit de sécurité complet réalisé avec l'agent dotnet-maui-expert. Identific
 
 **Total commits Feature 6 Backend** : 6 commits (core + shared + application + infrastructure + api + tests)
 
+#### Correctifs Infrastructure & Validation Docker
+56. **494a93f** - `fix(infra): corrige port PostgreSQL Docker (5433) pour eviter conflit avec instance locale`
+57. **7184721** - `feat(infrastructure): ajoute migration EF Core AddChatFeature et supprime anciennes migrations`
+58. **94b3301** - `fix(infrastructure): corrige DesignTimeDbContextFactory pour PostgreSQL Docker`
+    - Connection string : port 5433, DB synctrip, password synctrip_dev_2026
+    - `dotnet ef migrations list` fonctionne sans `--connection`
+
+**Validation Docker effectuée** :
+- ✅ `docker compose up --build -d` → 2 conteneurs UP (synctrip-db + synctrip-api)
+- ✅ Migrations appliquées automatiquement ("Database migrations applied successfully!")
+- ✅ Scalar UI accessible (`http://localhost:5000/scalar/v1` → 200 OK)
+- ✅ Flux auth complet testé : magic-link → verify → register → JWT obtenu
+- ✅ Endpoints authentifiés : GET /api/Brands, GET /api/Users/me → OK
+- ✅ ProposalResolutionService démarré dans les logs
+
+**Total commits correctifs infra** : 3 commits
+
+### Session du 13 Février 2026
+
+#### Feature 4 : Navigation GPS — Mobile
+59. **4888742** - `feat(mobile): ajoute DeleteAsync a IApiService`
+    - IApiService + ApiService : nouvelle méthode DeleteAsync(endpoint)
+60. **88291c0** - `feat(mobile): ajoute ITripService pour les voyages GPS`
+    - ITripService + TripService : 5 méthodes (StartTrip, GetActiveTrip, GetTripById, GetConvoyTrips, EndTrip)
+61. **dc89f1a** - `feat(mobile): ajoute ISignalRService pour le temps reel GPS`
+    - ISignalRService + SignalRService : HubConnection TripHub, JWT via AccessTokenProvider
+    - Events : LocationReceived, méthodes ConnectAsync/SendLocationAsync/DisconnectAsync
+62. **1d31e54** - `feat(mobile): ajoute ConvoyDetailPage avec gestion des voyages`
+    - ConvoyDetailViewModel : LoadDetails, StartTrip, OpenCockpit, EndTrip
+    - ConvoyDetailPage.xaml : affichage membres, voyage actif, boutons leader
+    - TripStatusConverter, ConvoyRoleConverter (int → texte français)
+63. **34b6ddd** - `feat(mobile): ajoute navigation ConvoyLobby vers ConvoyDetail`
+    - SelectConvoyCommand + TapGestureRecognizer sur les cartes convoi
+64. **3f2f78f** - `feat(mobile): ajoute CockpitPage avec carte Mapsui et positions GPS`
+    - CockpitViewModel : géolocalisation 5s, SignalR temps réel, MemberPositions
+    - CockpitPage : MapControl Mapsui, MyLocationLayer, WritableLayer membres, overlay info
+65. **6a0bd45** - `feat(mobile): enregistre services et routes Feature 4 GPS`
+    - MauiProgram.cs : UseSkiaSharp, TripService, SignalRService, ConvoyDetailVM, CockpitVM
+    - AppShell.xaml.cs : routes convoydetail, cockpit
+
+**Validation effectuée** :
+- ✅ Build Mobile Windows : 0 erreurs (net10.0-windows10.0.19041.0)
+- ✅ Navigation : ConvoyLobby → ConvoyDetail → CockpitPage
+- ✅ Carte Mapsui : OpenStreetMap tiles, MyLocationLayer, WritableLayer
+- ✅ SignalR : ConnectAsync/DisconnectAsync avec JWT, ReceiveLocationUpdate
+
+**Total commits Feature 4 Mobile** : 7 commits
+
 ---
 
 ## Prochaines Actions
 
 ### Priorité Haute
-1. **Feature 4 : Navigation GPS Mobile**
-   - CockpitPage + MapControl (Mapsui)
-   - LocationService (foreground)
-   - SignalR client integration
-
-2. **Valider Docker** (quand virtualisation réactivée)
-   - `docker compose up --build`
-   - Tester flux Auth complet via Scalar UI
-   - Tester CRUD Profil, Véhicules, Convois, Trips
+1. **Feature 5 : Système de Vote Mobile** (VotingModal + DeckControl)
+2. **Feature 6 : Chat Mobile** (ChatPage + ChatStreamControl)
 
 ### Priorité Moyenne
-1. Feature 5 : Système de Vote Mobile (VotingModal + DeckControl)
-2. Feature 6 : Chat Mobile (ChatPage + ChatStreamControl)
-3. Ajouter tests d'intégration API
+1. Ajouter tests d'intégration API
 
 ### Priorité Basse
 1. Ajouter Android SDK pour compilation Mobile
