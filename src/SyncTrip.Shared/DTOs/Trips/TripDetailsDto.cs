@@ -44,4 +44,10 @@ public class TripDetailsDto
     /// Liste des waypoints ordonnés.
     /// </summary>
     public List<TripWaypointDto> Waypoints { get; init; } = new();
+
+    public string? RouteGeometry { get; init; }
+
+    public double? RouteDistanceMeters { get; init; }
+
+    public double? RouteDurationSeconds { get; init; }
 }
