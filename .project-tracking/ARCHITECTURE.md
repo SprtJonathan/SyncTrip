@@ -231,7 +231,7 @@ SyncTrip.App/                          # net10.0, UI partagée
 │   ├── NavigationService.cs           # Stack-based, routes registry, Initialize() reflection
 │   ├── DialogService.cs               # Fenêtres de dialogue Avalonia
 │   ├── DesktopSecureStorageService.cs # JSON file dans %APPDATA%/SyncTrip/
-│   └── DesktopLocationService.cs      # Stub (retourne null sur desktop)
+│   └── DesktopLocationService.cs      # Geolocalisation IP (ip-api.com, cache session, fallback Paris)
 └── Themes/
     └── Colors.axaml                   # Palette (Primary #512BD4, Success, Error, Warning, Gray)
 
@@ -261,11 +261,14 @@ SyncTrip.App.Desktop/                  # WinExe, Avalonia.Desktop 11.3.1
 
 **CockpitView (Mapsui.Avalonia)** :
 - `OpenStreetMap.CreateTileLayer()` pour les tuiles
-- `WritableLayer` pour user + membres (PointFeature + SymbolStyle)
+- `WritableLayer _positionsLayer` : user (violet + label "Moi") + membres (vert)
+- `WritableLayer _waypointsLayer` : destination (rouge, large) + stopover (orange) + start (vert) avec LabelStyle
 - `SphericalMercator.FromLonLat()` → tuple `(x, y)` → `new MPoint(x, y)`
-- `map.Navigator.CenterOnAndZoomTo()` pour centrage initial (Paris par défaut)
+- `CenterMapOnContent()` : bounding box user + waypoints (ZoomToBox)
 - Timer géolocalisation via `DispatcherTimer` (5s) → `ILocationService` + `SendLocationAsync()`
-- `PositionsUpdated` event → code-behind met à jour les features sur la WritableLayer
+- `PositionsUpdated` event → code-behind met à jour les positions
+- `WaypointsLoaded` event → code-behind affiche les waypoints + recentre la carte
+- Overlay : durée, destination, nombre de membres connectés
 
 ---
 

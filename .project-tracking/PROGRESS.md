@@ -682,6 +682,35 @@ Audit de sécurité complet réalisé avec l'agent dotnet-maui-expert. Identific
 - ✅ `dotnet build "src\SyncTrip.App.Desktop\SyncTrip.App.Desktop.csproj"` — 0 erreurs
 - ✅ `dotnet test` — 306/306 (199 Core + 107 Application)
 
+#### Correctifs Services HTTP + SMTP + Tests Fonctionnels
+66. `fix(app): corrige services HTTP, verification token et SMTP pour tests fonctionnels`
+    - ApiService : ajout PutAsync, ReadResponseAsync<T> (extraction Guid depuis JSON wrappé)
+    - UserService : URL `api/users/profile` → `api/users/me`, POST → PUT
+    - VehicleService : POST → PUT (update), POST → DELETE (delete)
+    - AuthenticationService : suppression check `response?.Success`
+    - MagicLinkViewModel : ajout étape 2 vérification token (copier-coller)
+    - CompleteRegistrationCommandHandler : retourne JWT pour utilisateur existant (idempotent)
+    - Infrastructure : force EmailService (vrai SMTP Gmail) même en dev
+    - App : BaseAddress corrigé `http://localhost:5000`
+
+#### Ameliorations Desktop : Destination + Geolocalisation
+67. `feat(app): ajoute geolocalisation IP pour DesktopLocationService`
+    - DesktopLocationService : ip-api.com/json (lat/lon), cache session, fallback Paris
+68. `feat(app): ajoute saisie destination lors du demarrage d'un voyage`
+    - ConvoyDetailViewModel : champs DestinationName/Latitude/Longitude, validation, toggle form
+    - ConvoyDetailView : formulaire destination (nom + lat/lon), boutons Annuler/Demarrer
+    - StartTrip : envoie waypoint Type=3 (Destination) dans StartTripRequest.Waypoints
+69. `feat(app): affiche destination et positions sur la carte Mapsui`
+    - CockpitView : WritableLayer waypoints (destination=rouge, stopover=orange, start=vert) avec LabelStyle
+    - CockpitView : label "Moi" sur position utilisateur, bounding box centrage auto
+    - CockpitViewModel : DestinationName, WaypointsLoaded event
+    - CockpitView.axaml : overlay destination dans panneau info
+
+**Validation** :
+- ✅ Build Desktop : 0 erreurs
+- ✅ Tests : 306/306 (199 Core + 107 Application)
+- ✅ Backend : 0 changement nécessaire (waypoints déjà supportés)
+
 ---
 
 ## Prochaines Actions
