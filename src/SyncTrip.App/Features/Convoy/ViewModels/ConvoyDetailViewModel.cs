@@ -145,6 +145,17 @@ public partial class ConvoyDetailViewModel : ObservableObject
     }
 
     [RelayCommand]
+    private async Task OpenChat()
+    {
+        if (Convoy is null) return;
+
+        await _navigationService.NavigateToAsync("chat", new Dictionary<string, string>
+        {
+            ["convoyId"] = Convoy.Id.ToString()
+        });
+    }
+
+    [RelayCommand]
     private async Task EndTrip()
     {
         if (Convoy is null || ActiveTrip is null) return;

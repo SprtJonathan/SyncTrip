@@ -30,11 +30,18 @@
 
         <!-- Bottom bar -->
         <Border Grid.Row="1" Background="{DynamicResource Gray100Brush}" Padding="15">
-            <Button Content="Quitter le cockpit"
-                    Command="{Binding LeaveCockpitCommand}"
-                    Height="50" CornerRadius="25" FontWeight="Bold"
-                    Background="{DynamicResource ErrorBrush}" Foreground="White"
-                    HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
+            <StackPanel Spacing="10">
+                <Button Content="Proposer un arret"
+                        Command="{Binding OpenVotingCommand}"
+                        Height="50" CornerRadius="25" FontWeight="Bold"
+                        Background="{DynamicResource PrimaryBrush}" Foreground="White"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
+                <Button Content="Quitter le cockpit"
+                        Command="{Binding LeaveCockpitCommand}"
+                        Height="50" CornerRadius="25" FontWeight="Bold"
+                        Background="{DynamicResource ErrorBrush}" Foreground="White"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
+            </StackPanel>
         </Border>
 
     </Grid>

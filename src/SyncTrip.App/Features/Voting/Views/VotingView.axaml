@@ -1,0 +1,133 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:SyncTrip.App.Features.Voting.ViewModels"
+             x:Class="SyncTrip.App.Features.Voting.Views.VotingView"
+             x:DataType="vm:VotingViewModel">
+
+    <ScrollViewer>
+        <StackPanel Margin="20" Spacing="15">
+
+            <TextBlock Text="Propositions d'arret" FontSize="24" FontWeight="Bold" Margin="0,20,0,10" />
+
+            <!-- Loading -->
+            <ProgressBar IsVisible="{Binding IsLoading}" IsIndeterminate="True" Height="4" />
+
+            <!-- Active Proposal -->
+            <Border IsVisible="{Binding HasActiveProposal}"
+                    BorderBrush="{DynamicResource PrimaryBrush}" BorderThickness="2"
+                    CornerRadius="15" Padding="20" Margin="0,10">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="Vote en cours" FontSize="18" FontWeight="Bold"
+                               Foreground="{DynamicResource PrimaryBrush}" />
+
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <TextBlock Text="{Binding ActiveProposal.StopType, Converter={StaticResource StopTypeConverter}}"
+                                   FontSize="16" FontWeight="Bold" VerticalAlignment="Center" />
+                        <TextBlock Text="-" VerticalAlignment="Center" />
+                        <TextBlock Text="{Binding ActiveProposal.LocationName}"
+                                   FontSize="16" VerticalAlignment="Center" />
+                    </StackPanel>
+
+                    <TextBlock Text="{Binding ActiveProposal.ProposedByUsername, StringFormat='Propose par: {0}'}"
+                               FontSize="13" Foreground="{DynamicResource Gray500Brush}" />
+
+                    <!-- Countdown -->
+                    <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
+                        <TextBlock Text="Temps restant:" FontSize="14" VerticalAlignment="Center" />
+                        <TextBlock Text="{Binding Countdown}" FontSize="24" FontWeight="Bold"
+                                   Foreground="{DynamicResource WarningBrush}" VerticalAlignment="Center" />
+                    </StackPanel>
+
+                    <!-- Vote counts -->
+                    <Grid ColumnDefinitions="*,*" Margin="0,5">
+                        <StackPanel Grid.Column="0" HorizontalAlignment="Center">
+                            <TextBlock Text="{Binding ActiveProposal.YesCount}" FontSize="28" FontWeight="Bold"
+                                       Foreground="{DynamicResource SuccessBrush}" HorizontalAlignment="Center" />
+                            <TextBlock Text="OUI" FontSize="12" HorizontalAlignment="Center"
+                                       Foreground="{DynamicResource SuccessBrush}" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                            <TextBlock Text="{Binding ActiveProposal.NoCount}" FontSize="28" FontWeight="Bold"
+                                       Foreground="{DynamicResource ErrorBrush}" HorizontalAlignment="Center" />
+                            <TextBlock Text="NON" FontSize="12" HorizontalAlignment="Center"
+                                       Foreground="{DynamicResource ErrorBrush}" />
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Vote buttons -->
+                    <Grid ColumnDefinitions="*,10,*" Margin="0,10,0,0">
+                        <Button Grid.Column="0" Content="OUI"
+                                Command="{Binding VoteYesCommand}"
+                                Height="50" CornerRadius="25" FontWeight="Bold"
+                                Background="{DynamicResource SuccessBrush}" Foreground="White"
+                                HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
+                        <Button Grid.Column="2" Content="NON"
+                                Command="{Binding VoteNoCommand}"
+                                Height="50" CornerRadius="25" FontWeight="Bold"
+                                Background="{DynamicResource ErrorBrush}" Foreground="White"
+                                HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- Propose new stop (only when no active proposal) -->
+            <Border IsVisible="{Binding HasActiveProposal, Converter={StaticResource InvertedBoolConverter}}"
+                    BorderBrush="{DynamicResource Gray300Brush}" BorderThickness="1"
+                    CornerRadius="15" Padding="20" Margin="0,10">
+                <StackPanel Spacing="15">
+                    <TextBlock Text="Proposer un arret" FontSize="18" FontWeight="Bold" />
+
+                    <!-- Stop type -->
+                    <TextBlock Text="Type d'arret" FontSize="14" FontWeight="Bold" />
+                    <ComboBox ItemsSource="{Binding StopTypes}"
+                              SelectedItem="{Binding SelectedStopTypeItem}"
+                              HorizontalAlignment="Stretch">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                    <!-- Location name -->
+                    <TextBlock Text="Nom du lieu *" FontSize="14" FontWeight="Bold" />
+                    <Border BorderBrush="{DynamicResource Gray300Brush}" BorderThickness="1" CornerRadius="10" Padding="15,8">
+                        <TextBox Watermark="Ex: Station Total, Aire de repos..." Text="{Binding LocationName}"
+                                 MaxLength="200" BorderThickness="0" />
+                    </Border>
+
+                    <Button Content="Proposer"
+                            Command="{Binding ProposeStopCommand}"
+                            IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}"
+                            Height="50" CornerRadius="25" FontWeight="Bold"
+                            Background="{DynamicResource PrimaryBrush}" Foreground="White"
+                            HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
+                </StackPanel>
+            </Border>
+
+            <!-- Success -->
+            <Border IsVisible="{Binding SuccessMessage, Converter={StaticResource IsNotNullOrEmptyConverter}}"
+                    BorderBrush="{DynamicResource SuccessBrush}" BorderThickness="1" CornerRadius="10" Padding="15">
+                <TextBlock Text="{Binding SuccessMessage}" Foreground="{DynamicResource SuccessBrush}"
+                           HorizontalAlignment="Center" TextWrapping="Wrap" />
+            </Border>
+
+            <!-- Error -->
+            <Border IsVisible="{Binding ErrorMessage, Converter={StaticResource IsNotNullOrEmptyConverter}}"
+                    BorderBrush="{DynamicResource ErrorBrush}" BorderThickness="1" CornerRadius="10" Padding="15">
+                <TextBlock Text="{Binding ErrorMessage}" Foreground="{DynamicResource ErrorBrush}"
+                           HorizontalAlignment="Center" TextWrapping="Wrap" />
+            </Border>
+
+            <!-- Back button -->
+            <Button Content="Retour au cockpit"
+                    Command="{Binding GoBackCommand}"
+                    Height="50" CornerRadius="25" FontWeight="Bold"
+                    Background="{DynamicResource Gray300Brush}"
+                    HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                    Margin="0,10,0,0" />
+
+        </StackPanel>
+    </ScrollViewer>
+
+</UserControl>

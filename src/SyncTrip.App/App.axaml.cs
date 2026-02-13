@@ -10,6 +10,8 @@ using SyncTrip.App.Features.Convoy.ViewModels;
 using SyncTrip.App.Features.Garage.ViewModels;
 using SyncTrip.App.Features.Profile.ViewModels;
 using SyncTrip.App.Features.Trip.ViewModels;
+using SyncTrip.App.Features.Voting.ViewModels;
+using SyncTrip.App.Features.Chat.ViewModels;
 using SyncTrip.App.Navigation;
 
 namespace SyncTrip.App;
@@ -74,6 +76,9 @@ public partial class App : Application
         services.AddSingleton<IConvoyService, ConvoyService>();
         services.AddSingleton<ITripService, TripService>();
         services.AddSingleton<ISignalRService, SignalRService>();
+        services.AddSingleton<IVotingService, VotingService>();
+        services.AddSingleton<IChatService, ChatService>();
+        services.AddSingleton<IConvoySignalRService, ConvoySignalRService>();
 
         // ViewModels
         services.AddTransient<MagicLinkViewModel>();
@@ -86,6 +91,8 @@ public partial class App : Application
         services.AddTransient<JoinConvoyViewModel>();
         services.AddTransient<ConvoyDetailViewModel>();
         services.AddTransient<CockpitViewModel>();
+        services.AddTransient<VotingViewModel>();
+        services.AddTransient<ChatViewModel>();
         services.AddTransient<MainViewModel>();
     }
 
@@ -99,6 +106,8 @@ public partial class App : Application
         nav.RegisterRoute("joinconvoy", typeof(JoinConvoyViewModel));
         nav.RegisterRoute("convoydetail", typeof(ConvoyDetailViewModel));
         nav.RegisterRoute("cockpit", typeof(CockpitViewModel));
+        nav.RegisterRoute("voting", typeof(VotingViewModel));
+        nav.RegisterRoute("chat", typeof(ChatViewModel));
     }
 
     private static async Task CheckAuthenticationAsync(NavigationService nav)

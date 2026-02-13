@@ -165,6 +165,16 @@ public partial class CockpitViewModel : ObservableObject
     }
 
     [RelayCommand]
+    private async Task OpenVoting()
+    {
+        await _navigationService.NavigateToAsync("voting", new Dictionary<string, string>
+        {
+            ["convoyId"] = ConvoyId,
+            ["tripId"] = TripId
+        });
+    }
+
+    [RelayCommand]
     private async Task LeaveCockpit()
     {
         await StopTracking();

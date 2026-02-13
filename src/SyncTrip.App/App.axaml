@@ -22,6 +22,8 @@
             <converters:IsNotNullConverter x:Key="IsNotNullConverter" />
             <converters:TripStatusConverter x:Key="TripStatusConverter" />
             <converters:ConvoyRoleConverter x:Key="ConvoyRoleConverter" />
+            <converters:StopTypeConverter x:Key="StopTypeConverter" />
+            <converters:ProposalStatusConverter x:Key="ProposalStatusConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

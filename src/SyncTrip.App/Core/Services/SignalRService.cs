@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.SignalR.Client;
+using SyncTrip.Shared.DTOs.Voting;
 
 namespace SyncTrip.App.Core.Services;
 
@@ -11,6 +12,9 @@ public class SignalRService : ISignalRService
     public bool IsConnected => _hubConnection?.State == HubConnectionState.Connected;
 
     public event Action<string, double, double, DateTime>? LocationReceived;
+    public event Action<StopProposalDto>? StopProposed;
+    public event Action<Guid, int, int>? VoteUpdated;
+    public event Action<StopProposalDto>? ProposalResolved;
 
     public SignalRService(IAuthenticationService authService)
     {
@@ -51,6 +55,33 @@ public class SignalRService : ISignalRService
             {
                 // Ignorer les messages malformes
             }
+        });
+
+        _hubConnection.On<StopProposalDto>("StopProposed", proposal =>
+        {
+            StopProposed?.Invoke(proposal);
+        });
+
+        _hubConnection.On<object>("VoteUpdate", data =>
+        {
+            try
+            {
+                var json = System.Text.Json.JsonSerializer.Serialize(data);
+                var doc = System.Text.Json.JsonDocument.Parse(json);
+                var root = doc.RootElement;
+
+                var proposalId = root.GetProperty("ProposalId").GetGuid();
+                var yesCount = root.GetProperty("YesCount").GetInt32();
+                var noCount = root.GetProperty("NoCount").GetInt32();
+
+                VoteUpdated?.Invoke(proposalId, yesCount, noCount);
+            }
+            catch { }
+        });
+
+        _hubConnection.On<StopProposalDto>("ProposalResolved", proposal =>
+        {
+            ProposalResolved?.Invoke(proposal);
         });
 
         await _hubConnection.StartAsync();
