@@ -15,6 +15,9 @@
                 HorizontalAlignment="Left" VerticalAlignment="Top" Margin="15">
             <StackPanel Spacing="8">
                 <TextBlock Text="{Binding TripDuration}" FontSize="28" FontWeight="Bold" Foreground="White" />
+                <TextBlock Text="{Binding DestinationName, StringFormat='Destination: {0}'}"
+                           IsVisible="{Binding DestinationName, Converter={StaticResource IsNotNullOrEmptyConverter}}"
+                           FontSize="14" Foreground="#FFA500" FontWeight="Bold" />
                 <TextBlock Text="{Binding MemberPositions.Count, StringFormat='{}{0} membre(s) connecte(s)'}"
                            FontSize="14" Foreground="White" />
             </StackPanel>

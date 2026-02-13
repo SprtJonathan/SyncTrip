@@ -42,9 +42,13 @@ public partial class CockpitViewModel : ObservableObject
     private string tripDuration = "00:00:00";
 
     [ObservableProperty]
+    private string? destinationName;
+
+    [ObservableProperty]
     private ObservableCollection<MemberPosition> memberPositions = new();
 
     public event Action? PositionsUpdated;
+    public event Action? WaypointsLoaded;
 
     public CockpitViewModel(ITripService tripService, ISignalRService signalRService,
         ILocationService locationService, INavigationService navigationService)
@@ -80,6 +84,11 @@ public partial class CockpitViewModel : ObservableObject
                 ErrorMessage = "Impossible de charger le voyage.";
                 return;
             }
+
+            var destination = Trip.Waypoints.FirstOrDefault(w => w.Type == 3);
+            DestinationName = destination?.Name;
+
+            WaypointsLoaded?.Invoke();
 
             await StartTracking();
         }
