@@ -199,24 +199,33 @@ SyncTrip.App/                          # net10.0, UI partagée
 │   ├── Convoy/
 │   │   ├── Views/                     (ConvoyLobbyView, CreateConvoyView, JoinConvoyView, ConvoyDetailView)
 │   │   └── ViewModels/                (ConvoyLobbyViewModel, CreateConvoyViewModel, JoinConvoyViewModel, ConvoyDetailViewModel)
-│   └── Trip/
-│       ├── Views/                     (CockpitView — carte Mapsui.Avalonia)
-│       └── ViewModels/                (CockpitViewModel — GPS + SignalR + DispatcherTimer)
+│   ├── Trip/
+│   │   ├── Views/                     (CockpitView — carte Mapsui.Avalonia)
+│   │   └── ViewModels/                (CockpitViewModel — GPS + SignalR + DispatcherTimer)
+│   ├── Voting/
+│   │   ├── Views/                     (VotingView — proposition, vote OUI/NON, countdown)
+│   │   └── ViewModels/                (VotingViewModel — SignalR realtime + DispatcherTimer)
+│   └── Chat/
+│       ├── Views/                     (ChatView — messages temps réel, envoi, historique)
+│       └── ViewModels/                (ChatViewModel — ConvoySignalR + pagination curseur)
 ├── Core/
 │   ├── Platform/                      # Abstractions plateforme
 │   │   ├── INavigationService         (NavigateToAsync, GoBackAsync)
 │   │   ├── IDialogService             (ConfirmAsync, AlertAsync)
 │   │   ├── ISecureStorageService      (GetAsync, SetAsync, Remove)
 │   │   └── ILocationService           (GetCurrentLocationAsync → LocationResult?)
-│   ├── Services/                      # 8 services métier (interfaces + implémentations)
+│   ├── Services/                      # 11 services métier (interfaces + implémentations)
 │   │   ├── IApiService / ApiService
 │   │   ├── IAuthenticationService / AuthenticationService  (injecte ISecureStorageService)
 │   │   ├── IUserService / IVehicleService / IBrandService
 │   │   ├── IConvoyService / ConvoyService
 │   │   ├── ITripService / TripService
-│   │   └── ISignalRService / SignalRService
+│   │   ├── ISignalRService / SignalRService        (TripHub: GPS + votes)
+│   │   ├── IVotingService / VotingService           (REST: propositions, votes)
+│   │   ├── IChatService / ChatService               (REST: messages, historique)
+│   │   └── IConvoySignalRService / ConvoySignalRService  (ConvoyHub: chat realtime)
 │   ├── Http/                          (AuthorizationMessageHandler — injecte ISecureStorageService)
-│   └── Converters/                    (7 convertisseurs Avalonia.Data.Converters.IValueConverter)
+│   └── Converters/                    (9 convertisseurs Avalonia.Data.Converters.IValueConverter)
 ├── Navigation/
 │   ├── ViewLocator.cs                 # Convention : XxxViewModel → XxxView (assembly reflection)
 │   ├── NavigationService.cs           # Stack-based, routes registry, Initialize() reflection
@@ -232,15 +241,15 @@ SyncTrip.App.Desktop/                  # WinExe, Avalonia.Desktop 11.3.1
 
 **Navigation** : INavigationService custom + ViewLocator (pas ReactiveUI)
 - Stack-based : push/pop de ViewModels
-- Routes enregistrées dans `App.axaml.cs` : login, registration, main, addvehicle, createconvoy, joinconvoy, convoydetail, cockpit
+- Routes enregistrées dans `App.axaml.cs` : login, registration, main, addvehicle, createconvoy, joinconvoy, convoydetail, cockpit, voting, chat
 - `Initialize(params)` via reflection remplace `[QueryProperty]` de MAUI
 - MainWindow : `<ContentControl Content="{Binding CurrentViewModel}" />` bindé au NavigationService
 
 **État** : CommunityToolkit.Mvvm (ObservableObject, RelayCommand, [ObservableProperty])
 
 **Services — Lifetimes DI** :
-- **Singleton** : ISecureStorageService, ILocationService, IDialogService, INavigationService, AuthenticationService, UserService, VehicleService, BrandService, ConvoyService, TripService, SignalRService
-- **Transient** : ViewModels (MagicLinkViewModel, RegistrationViewModel, etc.), AuthorizationMessageHandler
+- **Singleton** : ISecureStorageService, ILocationService, IDialogService, INavigationService, AuthenticationService, UserService, VehicleService, BrandService, ConvoyService, TripService, SignalRService, VotingService, ChatService, ConvoySignalRService
+- **Transient** : ViewModels (MagicLinkViewModel, RegistrationViewModel, VotingViewModel, ChatViewModel, etc.), AuthorizationMessageHandler
 
 **Dépendances clés** :
 - Avalonia 11.3.1 + Avalonia.Themes.Fluent (framework UI cross-platform)

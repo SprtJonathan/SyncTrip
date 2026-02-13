@@ -1,7 +1,7 @@
 # SyncTrip - Suivi de Progression
 
 **Dernière mise à jour** : 13 Février 2026
-**Statut Global** : Features 1, 2, 3 & 4 COMPLÈTES + Features 5 & 6 Backend COMPLET
+**Statut Global** : 6/6 Features COMPLÈTES (Backend + Mobile AvaloniaUI)
 **Migration MAUI → AvaloniaUI** : TERMINÉE (11 étapes, build 0 erreurs, tests 306/306)
 
 ---
@@ -183,8 +183,6 @@ Audit de sécurité complet réalisé avec l'agent dotnet-maui-expert. Identific
 
 ---
 
-### 🚧 EN COURS
-
 #### Correctifs Mobile — Fondations
 **Statut** : TERMINÉ
 **Date** : 12 Février 2026
@@ -233,10 +231,6 @@ Audit de sécurité complet réalisé avec l'agent dotnet-maui-expert. Identific
 - [x] Mobile : Navigation ConvoyLobby → ConvoyDetail → CockpitPage (TapGestureRecognizer, routes Shell)
 - [x] Mobile : Configuration MauiProgram.cs (UseSkiaSharp, TripService, SignalRService, VMs, Pages)
 - [x] Mobile : Configuration AppShell.xaml.cs (routes convoydetail, cockpit)
-
----
-
-### 📋 À FAIRE
 
 ---
 
