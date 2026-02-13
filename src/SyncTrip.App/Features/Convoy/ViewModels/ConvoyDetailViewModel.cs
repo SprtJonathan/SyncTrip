@@ -37,10 +37,25 @@ public partial class ConvoyDetailViewModel : ObservableObject
     private bool canStartTrip;
 
     [ObservableProperty]
+    private bool canShowStartTripButton;
+
+    [ObservableProperty]
     private bool isLoading;
 
     [ObservableProperty]
     private string? errorMessage;
+
+    [ObservableProperty]
+    private bool showStartTripForm;
+
+    [ObservableProperty]
+    private string destinationName = string.Empty;
+
+    [ObservableProperty]
+    private string destinationLatitude = string.Empty;
+
+    [ObservableProperty]
+    private string destinationLongitude = string.Empty;
 
     public ConvoyDetailViewModel(IConvoyService convoyService, ITripService tripService, IUserService userService,
         INavigationService navigationService, IDialogService dialogService)
@@ -51,6 +66,9 @@ public partial class ConvoyDetailViewModel : ObservableObject
         _navigationService = navigationService;
         _dialogService = dialogService;
     }
+
+    partial void OnCanStartTripChanged(bool value) => CanShowStartTripButton = value && !ShowStartTripForm;
+    partial void OnShowStartTripFormChanged(bool value) => CanShowStartTripButton = CanStartTrip && !value;
 
     public void Initialize(string convoyId, string joinCode)
     {
@@ -94,11 +112,40 @@ public partial class ConvoyDetailViewModel : ObservableObject
     }
 
     [RelayCommand]
+    private void ToggleStartTripForm()
+    {
+        ShowStartTripForm = !ShowStartTripForm;
+        ErrorMessage = null;
+    }
+
+    [RelayCommand]
     private async Task StartTrip()
     {
         try
         {
             if (Convoy is null) return;
+
+            if (string.IsNullOrWhiteSpace(DestinationName))
+            {
+                ErrorMessage = "Veuillez entrer un nom de destination.";
+                return;
+            }
+
+            if (!double.TryParse(DestinationLatitude, System.Globalization.NumberStyles.Float,
+                    System.Globalization.CultureInfo.InvariantCulture, out var lat) ||
+                lat < -90 || lat > 90)
+            {
+                ErrorMessage = "Latitude invalide (entre -90 et 90).";
+                return;
+            }
+
+            if (!double.TryParse(DestinationLongitude, System.Globalization.NumberStyles.Float,
+                    System.Globalization.CultureInfo.InvariantCulture, out var lon) ||
+                lon < -180 || lon > 180)
+            {
+                ErrorMessage = "Longitude invalide (entre -180 et 180).";
+                return;
+            }
 
             IsLoading = true;
             ErrorMessage = null;
@@ -106,7 +153,18 @@ public partial class ConvoyDetailViewModel : ObservableObject
             var request = new StartTripRequest
             {
                 Status = 1,
-                RouteProfile = 1
+                RouteProfile = 1,
+                Waypoints = new List<CreateWaypointRequest>
+                {
+                    new()
+                    {
+                        OrderIndex = 0,
+                        Latitude = lat,
+                        Longitude = lon,
+                        Name = DestinationName.Trim(),
+                        Type = 3 // Destination
+                    }
+                }
             };
 
             var tripId = await _tripService.StartTripAsync(Convoy.Id, request);
@@ -115,6 +173,8 @@ public partial class ConvoyDetailViewModel : ObservableObject
                 ErrorMessage = "Impossible de demarrer le voyage.";
                 return;
             }
+
+            ShowStartTripForm = false;
 
             await _navigationService.NavigateToAsync("cockpit", new Dictionary<string, string>
             {

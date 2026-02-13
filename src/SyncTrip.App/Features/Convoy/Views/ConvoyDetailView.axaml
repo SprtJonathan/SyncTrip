@@ -41,13 +41,56 @@
 
             <!-- Trip Actions -->
             <StackPanel Spacing="10" Margin="0,10,0,0">
-                <!-- Start Trip (leader only, no active trip) -->
+
+                <!-- Start Trip button (leader only, no active trip, form hidden) -->
                 <Button Content="Demarrer un voyage"
-                        Command="{Binding StartTripCommand}"
-                        IsVisible="{Binding CanStartTrip}"
+                        Command="{Binding ToggleStartTripFormCommand}"
+                        IsVisible="{Binding CanShowStartTripButton}"
                         Height="50" CornerRadius="25" FontWeight="Bold"
                         Background="{DynamicResource SuccessBrush}" Foreground="White"
                         HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
+
+                <!-- Start Trip Form -->
+                <Border IsVisible="{Binding ShowStartTripForm}"
+                        BorderBrush="{DynamicResource Gray300Brush}" BorderThickness="1"
+                        CornerRadius="15" Padding="20">
+                    <StackPanel Spacing="12">
+                        <TextBlock Text="Destination du voyage" FontSize="16" FontWeight="Bold" />
+
+                        <TextBlock Text="Nom de la destination" FontSize="13" Foreground="{DynamicResource Gray500Brush}" />
+                        <Border BorderBrush="{DynamicResource Gray300Brush}" BorderThickness="1" CornerRadius="10" Padding="10,6">
+                            <TextBox Watermark="Ex: Lyon, Marseille..." Text="{Binding DestinationName}" BorderThickness="0" />
+                        </Border>
+
+                        <Grid ColumnDefinitions="*,10,*">
+                            <StackPanel Grid.Column="0" Spacing="4">
+                                <TextBlock Text="Latitude" FontSize="13" Foreground="{DynamicResource Gray500Brush}" />
+                                <Border BorderBrush="{DynamicResource Gray300Brush}" BorderThickness="1" CornerRadius="10" Padding="10,6">
+                                    <TextBox Watermark="48.8566" Text="{Binding DestinationLatitude}" BorderThickness="0" />
+                                </Border>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2" Spacing="4">
+                                <TextBlock Text="Longitude" FontSize="13" Foreground="{DynamicResource Gray500Brush}" />
+                                <Border BorderBrush="{DynamicResource Gray300Brush}" BorderThickness="1" CornerRadius="10" Padding="10,6">
+                                    <TextBox Watermark="2.3522" Text="{Binding DestinationLongitude}" BorderThickness="0" />
+                                </Border>
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid ColumnDefinitions="*,10,*" Margin="0,5,0,0">
+                            <Button Grid.Column="0" Content="Annuler"
+                                    Command="{Binding ToggleStartTripFormCommand}"
+                                    Height="50" CornerRadius="25" FontWeight="Bold"
+                                    Background="{DynamicResource Gray300Brush}"
+                                    HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
+                            <Button Grid.Column="2" Content="Demarrer le voyage"
+                                    Command="{Binding StartTripCommand}"
+                                    Height="50" CornerRadius="25" FontWeight="Bold"
+                                    Background="{DynamicResource SuccessBrush}" Foreground="White"
+                                    HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
+                        </Grid>
+                    </StackPanel>
+                </Border>
 
                 <!-- Open Cockpit (active trip exists) -->
                 <Button Content="Ouvrir le cockpit"
