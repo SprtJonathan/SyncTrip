@@ -1,7 +1,24 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:nav="clr-namespace:SyncTrip.App.Navigation"
         x:Class="SyncTrip.App.MainWindow"
+        x:DataType="nav:NavigationService"
         Title="SyncTrip"
         Width="400" Height="700">
-    <ContentControl Content="{Binding CurrentViewModel}" />
+    <DockPanel>
+        <Border DockPanel.Dock="Top" IsVisible="{Binding CanGoBack}"
+                Background="{DynamicResource Gray100Brush}" Padding="10,8">
+            <Grid ColumnDefinitions="Auto,*">
+                <Button Grid.Column="0" Content="&#x2190; Retour"
+                        Command="{Binding GoBackCommand}"
+                        Background="Transparent" FontWeight="Bold"
+                        Padding="10,6" VerticalAlignment="Center" />
+                <TextBlock Grid.Column="1" Text="{Binding PageTitle}"
+                           FontSize="18" FontWeight="Bold"
+                           VerticalAlignment="Center" HorizontalAlignment="Center"
+                           Margin="0,0,50,0" />
+            </Grid>
+        </Border>
+        <ContentControl Content="{Binding CurrentViewModel}" />
+    </DockPanel>
 </Window>

@@ -1,4 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using SyncTrip.App.Core.Platform;
 
@@ -9,9 +10,28 @@ public partial class NavigationService : ObservableObject, INavigationService
     private readonly IServiceProvider _serviceProvider;
     private readonly Stack<object> _navigationStack = new();
     private readonly Dictionary<string, Type> _routes = new();
+    private readonly Stack<string> _routeStack = new();
+
+    private static readonly Dictionary<string, string> RouteTitles = new()
+    {
+        ["convoydetail"] = "Detail du convoi",
+        ["cockpit"] = "Cockpit",
+        ["voting"] = "Vote",
+        ["chat"] = "Chat",
+        ["addvehicle"] = "Ajouter un vehicule",
+        ["createconvoy"] = "Creer un convoi",
+        ["joinconvoy"] = "Rejoindre un convoi",
+        ["registration"] = "Inscription"
+    };
 
     [ObservableProperty]
     private object? currentViewModel;
+
+    [ObservableProperty]
+    private bool canGoBack;
+
+    [ObservableProperty]
+    private string pageTitle = string.Empty;
 
     public NavigationService(IServiceProvider serviceProvider)
     {
@@ -32,7 +52,6 @@ public partial class NavigationService : ObservableObject, INavigationService
 
         if (parameters != null)
         {
-            // Call Initialize method if it exists
             var initMethod = vmType.GetMethod("Initialize");
             if (initMethod != null)
             {
@@ -53,15 +72,31 @@ public partial class NavigationService : ObservableObject, INavigationService
         if (CurrentViewModel != null)
             _navigationStack.Push(CurrentViewModel);
 
+        _routeStack.Push(route);
         CurrentViewModel = vm;
+        CanGoBack = _navigationStack.Count > 0 && route != "login" && route != "main";
+        PageTitle = RouteTitles.GetValueOrDefault(route, string.Empty);
         return Task.CompletedTask;
     }
 
     public Task GoBackAsync()
     {
         if (_navigationStack.Count > 0)
+        {
             CurrentViewModel = _navigationStack.Pop();
+            if (_routeStack.Count > 0)
+                _routeStack.Pop();
+        }
 
+        var currentRoute = _routeStack.Count > 0 ? _routeStack.Peek() : string.Empty;
+        CanGoBack = _navigationStack.Count > 0 && currentRoute != "login" && currentRoute != "main";
+        PageTitle = RouteTitles.GetValueOrDefault(currentRoute, string.Empty);
         return Task.CompletedTask;
+    }
+
+    [RelayCommand]
+    private async Task GoBack()
+    {
+        await GoBackAsync();
     }
 }
