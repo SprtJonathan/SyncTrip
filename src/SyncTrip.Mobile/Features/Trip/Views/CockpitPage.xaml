@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:mapsui="clr-namespace:Mapsui.UI.Maui;assembly=Mapsui.UI.Maui"
+             xmlns:vm="clr-namespace:SyncTrip.Mobile.Features.Trip.ViewModels"
+             x:Class="SyncTrip.Mobile.Features.Trip.Views.CockpitPage"
+             x:DataType="vm:CockpitViewModel"
+             Title="Cockpit"
+             Shell.NavBarIsVisible="False">
+
+    <Grid>
+        <!-- Carte -->
+        <mapsui:MapControl x:Name="MapControl" />
+
+        <!-- Overlay haut : info voyage -->
+        <Frame VerticalOptions="Start"
+               Margin="15,50,15,0"
+               Padding="12"
+               CornerRadius="12"
+               BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}"
+               Opacity="0.92"
+               HasShadow="True">
+            <HorizontalStackLayout Spacing="20" HorizontalOptions="Center">
+                <Label Text="{Binding TripDuration}"
+                       FontSize="18"
+                       FontAttributes="Bold"
+                       VerticalOptions="Center" />
+                <Label Text="{Binding MemberPositions.Count, StringFormat='{0} connecte(s)'}"
+                       FontSize="14"
+                       VerticalOptions="Center"
+                       TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}" />
+            </HorizontalStackLayout>
+        </Frame>
+
+        <!-- Erreur -->
+        <Frame VerticalOptions="Start"
+               Margin="15,110,15,0"
+               Padding="10"
+               CornerRadius="10"
+               BorderColor="{StaticResource Error}"
+               BackgroundColor="Transparent"
+               HasShadow="False"
+               IsVisible="{Binding ErrorMessage, Converter={StaticResource IsNotNullOrEmptyConverter}}">
+            <Label Text="{Binding ErrorMessage}"
+                   TextColor="{StaticResource Error}"
+                   HorizontalOptions="Center"
+                   FontSize="12" />
+        </Frame>
+
+        <!-- Bouton quitter -->
+        <Button Text="Quitter le cockpit"
+                VerticalOptions="End"
+                Margin="15,0,15,30"
+                HeightRequest="50"
+                CornerRadius="10"
+                BackgroundColor="{StaticResource Error}"
+                TextColor="White"
+                Command="{Binding LeaveCockpitCommand}" />
+    </Grid>
+
+</ContentPage>
