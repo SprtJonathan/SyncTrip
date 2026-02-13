@@ -9,6 +9,9 @@ using SyncTrip.Mobile.Features.Garage.ViewModels;
 using SyncTrip.Mobile.Features.Garage.Views;
 using SyncTrip.Mobile.Features.Convoy.ViewModels;
 using SyncTrip.Mobile.Features.Convoy.Views;
+using SyncTrip.Mobile.Features.Trip.ViewModels;
+using SyncTrip.Mobile.Features.Trip.Views;
+using SkiaSharp.Views.Maui.Controls.Hosting;
 
 namespace SyncTrip.Mobile;
 
@@ -19,6 +22,7 @@ public static class MauiProgram
 		var builder = MauiApp.CreateBuilder();
 		builder
 			.UseMauiApp<App>()
+			.UseSkiaSharp()
 			.ConfigureFonts(fonts =>
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -45,6 +49,8 @@ public static class MauiProgram
 		builder.Services.AddSingleton<IVehicleService, VehicleService>();
 		builder.Services.AddSingleton<IBrandService, BrandService>();
 		builder.Services.AddSingleton<IConvoyService, ConvoyService>();
+		builder.Services.AddSingleton<ITripService, TripService>();
+		builder.Services.AddSingleton<ISignalRService, SignalRService>();
 
 		// ViewModels - Authentication
 		builder.Services.AddTransient<MagicLinkViewModel>();
@@ -59,6 +65,10 @@ public static class MauiProgram
 		builder.Services.AddTransient<ConvoyLobbyViewModel>();
 		builder.Services.AddTransient<CreateConvoyViewModel>();
 		builder.Services.AddTransient<JoinConvoyViewModel>();
+		builder.Services.AddTransient<ConvoyDetailViewModel>();
+
+		// ViewModels - Trip
+		builder.Services.AddTransient<CockpitViewModel>();
 
 		// Pages - Authentication
 		builder.Services.AddTransient<MagicLinkPage>();
@@ -73,6 +83,10 @@ public static class MauiProgram
 		builder.Services.AddTransient<ConvoyLobbyPage>();
 		builder.Services.AddTransient<CreateConvoyPage>();
 		builder.Services.AddTransient<JoinConvoyPage>();
+		builder.Services.AddTransient<ConvoyDetailPage>();
+
+		// Pages - Trip
+		builder.Services.AddTransient<CockpitPage>();
 
 		return builder.Build();
 	}

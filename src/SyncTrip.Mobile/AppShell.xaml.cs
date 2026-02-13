@@ -1,6 +1,7 @@
 using SyncTrip.Mobile.Features.Authentication.Views;
 using SyncTrip.Mobile.Features.Convoy.Views;
 using SyncTrip.Mobile.Features.Garage.Views;
+using SyncTrip.Mobile.Features.Trip.Views;
 
 namespace SyncTrip.Mobile;
 
@@ -26,5 +27,9 @@ public partial class AppShell : Shell
 		// Routes Convois
 		Routing.RegisterRoute("createconvoy", typeof(CreateConvoyPage));
 		Routing.RegisterRoute("joinconvoy", typeof(JoinConvoyPage));
+		Routing.RegisterRoute("convoydetail", typeof(ConvoyDetailPage));
+
+		// Routes Trip
+		Routing.RegisterRoute("cockpit", typeof(CockpitPage));
 	}
 }
