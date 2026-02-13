@@ -1,8 +1,8 @@
 # SyncTrip - Suivi de Progression
 
 **Dernière mise à jour** : 13 Février 2026
-**Statut Global** : 6/6 Features COMPLÈTES (Backend + Mobile AvaloniaUI) + Backend Geocoding/Routing
-**Migration MAUI → AvaloniaUI** : TERMINÉE (11 étapes, build 0 erreurs, tests 320/320)
+**Statut Global** : 6/6 Features COMPLÈTES (Backend + Mobile AvaloniaUI) + Backend Geocoding/Routing + 9 Issues Résolues
+**Migration MAUI → AvaloniaUI** : TERMINÉE (11 étapes, build 0 erreurs, tests 323/323)
 
 ---
 
@@ -312,12 +312,13 @@ Audit de sécurité complet réalisé avec l'agent dotnet-maui-expert. Identific
 **Sécurité Production** : ✅ P0 Critical Issues Résolus (5/5)
 **Progression Globale** : 100% (6/6 features complètes)
 **Dernière compilation** : 13 Fév 2026 - Succès (Backend + App Desktop + Tests)
-**Tests Passing** : 320 / 320 (100%)
+**Tests Passing** : 323 / 323 (100%)
   - Core.Tests : 202 tests (User, Vehicle, Brand, UserLicense, Convoy, ConvoyMember, Trip, TripWaypoint, TripRoute, StopProposal, Vote, Message)
-  - Application.Tests : 118 tests (Auth, Users, Vehicles, Convoys, Trips, Navigation, Voting, Chat)
+  - Application.Tests : 121 tests (Auth, Users, Vehicles, Convoys, Trips, Navigation, Voting, Chat)
 **Qualité Code** : ✅ Conforme aux spécifications (Clean Architecture, DDD, MVVM)
 **Sécurité** : ✅ Production Ready (Rate Limiting, Error Handling, Secrets Management)
-**Stack** : .NET 10 LTS — AvaloniaUI 11.3.1 + Mapsui.Avalonia 5.0.0
+**Issues Fonctionnelles** : ✅ 9/9 traitees (7 RESOLU, 1 partiel, 1 AMELIORE)
+**Stack** : .NET 10 LTS — AvaloniaUI 11.3.1 + Mapsui.Avalonia 5.0.0 + Mapsui.Nts 5.0.0
 **Seed Data** : 40 marques de véhicules (motos, voitures, utilitaires)
 
 ---
@@ -741,6 +742,85 @@ Audit de sécurité complet réalisé avec l'agent dotnet-maui-expert. Identific
 - ✅ Route persistée dans Trip (visible par tous les membres du convoi)
 
 **Total commits Backend Geocoding/Routing** : 6 commits + 1 docs (ISSUES.md)
+
+#### Recherche d'adresse Mobile (style Waze)
+76. `feat(app): ajoute NavigationApiService pour la recherche d'adresse`
+    - INavigationApiService + NavigationApiService (GET api/navigation/search)
+    - Enregistrement DI dans App.axaml.cs
+77. `feat(app): remplace saisie lat/lon par recherche d'adresse avec suggestions`
+    - ConvoyDetailViewModel : SearchQuery, SearchResults, SelectedAddress, debounce 400ms
+    - Suppression DestinationLatitude/DestinationLongitude
+    - Validation SelectedAddress != null au lieu de parse lat/lon
+    - SelectAddressCommand, ClearAddressCommand
+    - ConvoyDetailView : champ recherche, liste suggestions, panneau adresse selectionnee
+
+**Validation effectuee** :
+- Build Desktop : 0 erreurs
+- Tests : 320/320 (202 Core + 118 Application)
+- Issue 5 : recherche d'adresse mobile FAIT (itineraire/route reste a faire)
+
+#### Corrections Issues Fonctionnelles (9 issues)
+
+**Contexte** : Tests fonctionnels utilisateur ayant revelé 9 issues (voir `.project-tracking/ISSUES.md`).
+
+78. `fix(app): corrige verbe HTTP DissolveConvoy et chargement automatique onglets`
+    - ConvoyService.DissolveConvoyAsync : POST → DELETE (Issue 9)
+    - MainView.axaml.cs : SelectionChanged sur TabControl, reload donnees au changement d'onglet (Issue 3)
+    - Flag `_initialized` pour eviter double-chargement au demarrage
+
+79. `feat(app): ajoute barre de navigation avec bouton retour et titre`
+    - NavigationService : CanGoBack, PageTitle, GoBackCommand, Stack<string> _routeStack (Issue 1)
+    - Mapping routes → titres français (convoydetail→"Detail du convoi", cockpit→"Cockpit", etc.)
+    - MainWindow.axaml : DockPanel avec header (bouton retour + titre), visible uniquement sur sous-pages
+
+80. `feat(app): ajoute suppression de compte utilisateur (vertical slice)`
+    - Backend : IUserRepository.DeleteAsync, DeleteUserAccountCommand + Handler (Issue 2)
+    - API : DELETE /api/users/me sur UsersController (204/404)
+    - Mobile : IUserService.DeleteAccountAsync, UserService
+    - ProfileViewModel : DeleteAccountCommand avec dialog confirmation + logout
+    - ProfileView.axaml : bouton "Supprimer mon compte" en rouge
+    - Tests : DeleteUserAccountCommandHandlerTests (3 tests — success, not found, error propagation)
+
+81. `feat(app): enrichit page convoi avec destination et acces cockpit`
+    - ConvoyDetailViewModel : ActiveTripDestination extrait des waypoints (Type==3) (Issue 4)
+    - ConvoyDetailView : encart "Voyage en cours" avec destination et bouton cockpit
+    - Bouton "Terminer le voyage" integre dans l'encart
+
+82. `feat(app): affiche itineraire sur la carte et ajoute choix profil de route`
+    - INavigationApiService.CalculateTripRouteAsync + NavigationApiService (Issue 5)
+    - CockpitViewModel : RouteGeometry, DistanceText, DurationText, event RouteLoaded
+    - CockpitView.axaml.cs : route layer avec Mapsui.Nts GeometryFeature + LineString (bleu #2196F3)
+    - CockpitView.axaml : distance et duree dans overlay info
+    - ConvoyDetailViewModel : SelectedRouteProfile (1=Rapide, 2=Panoramique)
+    - ConvoyDetailView : RadioButton choix profil de route
+    - Package ajoute : Mapsui.Nts 5.0.0
+
+83. `fix(app): ameliore geolocalisation Desktop avec cache 30s`
+    - DesktopLocationService : cache TTL 30s au lieu d'infini (Issue 6)
+    - Permet de suivre les changements d'IP en deplacement
+    - GPS natif Windows necessiterait changement TFM (risque compatibilite Avalonia)
+
+84. `feat(app): integre vote et chat en overlay sur le cockpit`
+    - CockpitViewModel : ShowVotingPanel, ShowChatPanel, VotingViewModel, ChatViewModel (Issues 7+8)
+    - VMs enfants lazy-loaded via IServiceProvider (resolus a la demande)
+    - CockpitView.axaml : panneau overlay voting (proposition, vote OUI/NON, proposer arret)
+    - CockpitView.axaml : panneau overlay chat (messages temps reel, envoi, historique)
+    - Bottom bar : 3 boutons (Vote, Chat, Quitter)
+    - StopTracking nettoie les VMs enfants (UnsubscribeFromSignalR, Cleanup)
+
+85. `docs: met a jour tracking avec corrections issues fonctionnelles`
+    - ISSUES.md : 9/9 issues traitees (7 RESOLU, 1 RESOLU partiel, 1 AMELIORE)
+    - PROGRESS.md : historique commits, metriques mises a jour
+
+**Validation effectuee** :
+- ✅ Build Desktop : 0 erreurs
+- ✅ Build API : 0 erreurs
+- ✅ Tous les tests passent (323/323 - 100%)
+  - Core.Tests : 202 tests
+  - Application.Tests : 121 tests (118 existants + 3 nouveaux DeleteUserAccount)
+- ✅ 9 issues fonctionnelles traitees (voir ISSUES.md)
+
+**Total commits corrections issues** : 8 commits (7 code + 1 docs)
 
 ---
 
