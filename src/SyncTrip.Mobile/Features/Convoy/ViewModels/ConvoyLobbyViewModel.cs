@@ -85,6 +85,19 @@ public partial class ConvoyLobbyViewModel : ObservableObject
     }
 
     [RelayCommand]
+    private async Task SelectConvoy(ConvoyDto convoy)
+    {
+        try
+        {
+            await Shell.Current.GoToAsync($"convoydetail?convoyId={convoy.Id}&joinCode={convoy.JoinCode}");
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"Erreur de navigation: {ex.Message}";
+        }
+    }
+
+    [RelayCommand]
     private async Task LeaveConvoy(string joinCode)
     {
         try
