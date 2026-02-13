@@ -47,4 +47,11 @@ public class ApiService : IApiService
         var response = await _httpClient.PostAsJsonAsync(endpoint, request, ct);
         return response.IsSuccessStatusCode;
     }
+
+    /// <inheritdoc />
+    public async Task<bool> DeleteAsync(string endpoint, CancellationToken ct = default)
+    {
+        var response = await _httpClient.DeleteAsync(endpoint, ct);
+        return response.IsSuccessStatusCode;
+    }
 }

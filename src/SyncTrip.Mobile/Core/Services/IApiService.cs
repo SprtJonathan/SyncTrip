@@ -35,4 +35,12 @@ public interface IApiService
     /// <param name="ct">Token d'annulation.</param>
     /// <returns>True si la requête a réussi (2xx), False sinon.</returns>
     Task<bool> PostAsync<TRequest>(string endpoint, TRequest request, CancellationToken ct = default);
+
+    /// <summary>
+    /// Effectue une requête DELETE sans attendre de réponse typée (succès/échec uniquement).
+    /// </summary>
+    /// <param name="endpoint">Endpoint de l'API.</param>
+    /// <param name="ct">Token d'annulation.</param>
+    /// <returns>True si la requête a réussi (2xx), False sinon.</returns>
+    Task<bool> DeleteAsync(string endpoint, CancellationToken ct = default);
 }
