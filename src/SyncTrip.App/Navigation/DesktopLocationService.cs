@@ -8,7 +8,8 @@ public class DesktopLocationService : ILocationService
 {
     private readonly HttpClient _httpClient;
     private LocationResult? _cachedLocation;
-    private bool _fetchAttempted;
+    private DateTime _cacheTime = DateTime.MinValue;
+    private static readonly TimeSpan CacheDuration = TimeSpan.FromSeconds(30);
 
     public DesktopLocationService()
     {
@@ -17,13 +18,8 @@ public class DesktopLocationService : ILocationService
 
     public async Task<LocationResult?> GetCurrentLocationAsync()
     {
-        if (_cachedLocation is not null)
+        if (_cachedLocation is not null && DateTime.UtcNow - _cacheTime < CacheDuration)
             return _cachedLocation;
-
-        if (_fetchAttempted)
-            return _cachedLocation;
-
-        _fetchAttempted = true;
 
         try
         {
@@ -35,16 +31,20 @@ public class DesktopLocationService : ILocationService
                     Latitude = response.Lat,
                     Longitude = response.Lon
                 };
+                _cacheTime = DateTime.UtcNow;
             }
         }
         catch
         {
-            // Geolocalisation IP indisponible — position par defaut (Paris)
-            _cachedLocation = new LocationResult
+            if (_cachedLocation is null)
             {
-                Latitude = 48.8566,
-                Longitude = 2.3522
-            };
+                _cachedLocation = new LocationResult
+                {
+                    Latitude = 48.8566,
+                    Longitude = 2.3522
+                };
+                _cacheTime = DateTime.UtcNow;
+            }
         }
 
         return _cachedLocation;
