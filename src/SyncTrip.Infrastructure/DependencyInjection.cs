@@ -42,6 +42,16 @@ public static class DependencyInjection
 
         services.AddScoped<IEmailService, EmailService>();
 
+        // External API services
+        services.AddHttpClient<IGeocodingService, NominatimGeocodingService>(client =>
+        {
+            client.DefaultRequestHeaders.UserAgent.ParseAdd("SyncTrip/1.0 (contact@synctrip.com)");
+        });
+        services.AddHttpClient<IRoutingService, OsrmRoutingService>(client =>
+        {
+            client.DefaultRequestHeaders.UserAgent.ParseAdd("SyncTrip/1.0 (contact@synctrip.com)");
+        });
+
         // Background Services
         services.AddHostedService<ProposalResolutionService>();
 

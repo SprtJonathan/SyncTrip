@@ -37,6 +37,17 @@ public class TripConfiguration : IEntityTypeConfiguration<Trip>
             .HasForeignKey(t => t.ConvoyId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        // Route geometry (GeoJSON)
+        builder.Property(t => t.RouteGeometry)
+            .HasColumnType("text")
+            .IsRequired(false);
+
+        builder.Property(t => t.RouteDistanceMeters)
+            .IsRequired(false);
+
+        builder.Property(t => t.RouteDurationSeconds)
+            .IsRequired(false);
+
         // Index composite pour recherche par convoi et statut
         builder.HasIndex(t => new { t.ConvoyId, t.Status });
     }
