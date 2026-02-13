@@ -52,7 +52,7 @@ public class VehicleService : IVehicleService
     {
         try
         {
-            return await _apiService.PostAsync($"api/vehicles/{vehicleId}", request, ct);
+            return await _apiService.PutAsync($"api/vehicles/{vehicleId}", request, ct);
         }
         catch
         {
@@ -64,7 +64,7 @@ public class VehicleService : IVehicleService
     {
         try
         {
-            return await _apiService.PostAsync($"api/vehicles/{vehicleId}/delete", new { }, ct);
+            return await _apiService.DeleteAsync($"api/vehicles/{vehicleId}", ct);
         }
         catch
         {

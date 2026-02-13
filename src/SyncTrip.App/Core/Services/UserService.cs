@@ -15,7 +15,7 @@ public class UserService : IUserService
     {
         try
         {
-            return await _apiService.GetAsync<UserProfileDto>("api/users/profile", ct);
+            return await _apiService.GetAsync<UserProfileDto>("api/users/me", ct);
         }
         catch
         {
@@ -27,7 +27,7 @@ public class UserService : IUserService
     {
         try
         {
-            return await _apiService.PostAsync("api/users/profile", request, ct);
+            return await _apiService.PutAsync("api/users/me", request, ct);
         }
         catch
         {

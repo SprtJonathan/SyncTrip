@@ -63,7 +63,7 @@ public partial class App : Application
         services.AddTransient<AuthorizationMessageHandler>();
         services.AddHttpClient<IApiService, ApiService>(client =>
         {
-            client.BaseAddress = new Uri("https://localhost:5001");
+            client.BaseAddress = new Uri("http://localhost:5000");
             client.Timeout = TimeSpan.FromSeconds(30);
         })
         .AddHttpMessageHandler<AuthorizationMessageHandler>();

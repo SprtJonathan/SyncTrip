@@ -20,32 +20,95 @@
                        HorizontalAlignment="Center"
                        Margin="0,0,0,40" />
 
-            <!-- Email -->
-            <TextBlock Text="Adresse email"
-                       FontSize="14"
-                       FontWeight="Bold" />
+            <!-- Step 1: Email -->
+            <StackPanel Spacing="15"
+                        IsVisible="{Binding ShowTokenStep, Converter={StaticResource InvertedBoolConverter}}">
 
-            <Border BorderBrush="{DynamicResource Gray300Brush}"
-                    BorderThickness="1"
-                    CornerRadius="10"
-                    Padding="15,8">
-                <TextBox Watermark="votre@email.com"
-                         Text="{Binding Email}"
-                         BorderThickness="0" />
-            </Border>
+                <TextBlock Text="Adresse email"
+                           FontSize="14"
+                           FontWeight="Bold" />
 
-            <!-- Send Button -->
-            <Button Content="Envoyer le lien magique"
-                    Command="{Binding SendMagicLinkCommand}"
-                    IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}"
-                    Height="50"
-                    CornerRadius="25"
-                    FontWeight="Bold"
-                    Background="{DynamicResource PrimaryBrush}"
-                    Foreground="White"
-                    HorizontalAlignment="Stretch"
-                    HorizontalContentAlignment="Center"
-                    Margin="0,10,0,0" />
+                <Border BorderBrush="{DynamicResource Gray300Brush}"
+                        BorderThickness="1"
+                        CornerRadius="10"
+                        Padding="15,8">
+                    <TextBox Watermark="votre@email.com"
+                             Text="{Binding Email}"
+                             BorderThickness="0" />
+                </Border>
+
+                <Button Content="Envoyer le lien magique"
+                        Command="{Binding SendMagicLinkCommand}"
+                        IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}"
+                        Height="50"
+                        CornerRadius="25"
+                        FontWeight="Bold"
+                        Background="{DynamicResource PrimaryBrush}"
+                        Foreground="White"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center"
+                        Margin="0,10,0,0" />
+
+                <TextBlock Text="Vous recevrez un email avec un lien de connexion securise."
+                           FontSize="12"
+                           Foreground="{DynamicResource Gray500Brush}"
+                           HorizontalAlignment="Center"
+                           TextAlignment="Center" />
+            </StackPanel>
+
+            <!-- Step 2: Token Verification -->
+            <StackPanel Spacing="15"
+                        IsVisible="{Binding ShowTokenStep}">
+
+                <TextBlock Text="Verifiez votre email"
+                           FontSize="20"
+                           FontWeight="Bold"
+                           HorizontalAlignment="Center" />
+
+                <TextBlock Text="Copiez le token depuis le lien recu par email et collez-le ci-dessous."
+                           FontSize="14"
+                           Foreground="{DynamicResource Gray500Brush}"
+                           HorizontalAlignment="Center"
+                           TextAlignment="Center"
+                           TextWrapping="Wrap" />
+
+                <TextBlock Text="Le token se trouve apres '?token=' dans l'URL du lien."
+                           FontSize="12"
+                           Foreground="{DynamicResource Gray500Brush}"
+                           HorizontalAlignment="Center"
+                           TextAlignment="Center"
+                           TextWrapping="Wrap" />
+
+                <Border BorderBrush="{DynamicResource Gray300Brush}"
+                        BorderThickness="1"
+                        CornerRadius="10"
+                        Padding="15,8">
+                    <TextBox Watermark="Collez votre token ici"
+                             Text="{Binding Token}"
+                             BorderThickness="0" />
+                </Border>
+
+                <Button Content="Verifier"
+                        Command="{Binding VerifyTokenCommand}"
+                        IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}"
+                        Height="50"
+                        CornerRadius="25"
+                        FontWeight="Bold"
+                        Background="{DynamicResource SuccessBrush}"
+                        Foreground="White"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center" />
+
+                <Button Content="Renvoyer le lien"
+                        Command="{Binding SendMagicLinkCommand}"
+                        IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}"
+                        Height="40"
+                        CornerRadius="20"
+                        Background="Transparent"
+                        Foreground="{DynamicResource PrimaryBrush}"
+                        HorizontalAlignment="Center"
+                        HorizontalContentAlignment="Center" />
+            </StackPanel>
 
             <!-- Loading -->
             <ProgressBar IsVisible="{Binding IsBusy}"
@@ -64,14 +127,6 @@
                            TextWrapping="Wrap"
                            TextAlignment="Center" />
             </Border>
-
-            <!-- Info -->
-            <TextBlock Text="Vous recevrez un email avec un lien de connexion securise."
-                       FontSize="12"
-                       Foreground="{DynamicResource Gray500Brush}"
-                       HorizontalAlignment="Center"
-                       TextAlignment="Center"
-                       Margin="0,20,0,0" />
 
         </StackPanel>
     </ScrollViewer>

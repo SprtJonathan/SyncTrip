@@ -33,12 +33,12 @@ public class CompleteRegistrationCommandHandler : IRequestHandler<CompleteRegist
         // Normaliser l'email
         var email = request.Email.ToLowerInvariant().Trim();
 
-        // Vérifier si l'utilisateur existe déjà
+        // Si l'utilisateur existe déjà, on le connecte directement
         var existingUser = await _userRepository.GetByEmailAsync(email, cancellationToken);
         if (existingUser != null)
         {
-            _logger.LogWarning("Tentative de création d'un utilisateur déjà existant : {Email}", email);
-            throw new InvalidOperationException("Un utilisateur avec cet email existe déjà");
+            _logger.LogInformation("Utilisateur existant connecté via registration : {Email}", email);
+            return _authService.GenerateJwtToken(existingUser);
         }
 
         // Créer l'utilisateur (la validation de l'âge se fait dans le factory method)

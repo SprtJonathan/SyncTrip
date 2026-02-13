@@ -104,7 +104,7 @@ public class CompleteRegistrationCommandHandlerTests
     }
 
     [Fact]
-    public async Task Handle_WithExistingEmail_ShouldThrowInvalidOperationException()
+    public async Task Handle_WithExistingEmail_ShouldReturnJwtWithoutCreatingUser()
     {
         // Arrange
         var command = new CompleteRegistrationCommand
@@ -124,10 +124,16 @@ public class CompleteRegistrationCommandHandlerTests
             .Setup(x => x.GetByEmailAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(existingUser);
 
-        // Act & Assert
-        var act = async () => await _handler.Handle(command, CancellationToken.None);
-        await act.Should().ThrowAsync<InvalidOperationException>()
-            .WithMessage("*existe déjà*");
+        var expectedJwt = "fake-jwt-token";
+        _authServiceMock
+            .Setup(x => x.GenerateJwtToken(existingUser, It.IsAny<Dictionary<string, string>?>()))
+            .Returns(expectedJwt);
+
+        // Act
+        var result = await _handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        result.Should().Be(expectedJwt);
 
         _userRepositoryMock.Verify(
             x => x.AddAsync(It.IsAny<User>(), It.IsAny<CancellationToken>()),

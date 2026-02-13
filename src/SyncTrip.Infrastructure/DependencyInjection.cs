@@ -40,10 +40,7 @@ public static class DependencyInjection
         // Services
         services.AddScoped<IAuthService, AuthService>();
 
-        if (environment.IsDevelopment())
-            services.AddScoped<IEmailService, DevelopmentEmailService>();
-        else
-            services.AddScoped<IEmailService, EmailService>();
+        services.AddScoped<IEmailService, EmailService>();
 
         // Background Services
         services.AddHostedService<ProposalResolutionService>();

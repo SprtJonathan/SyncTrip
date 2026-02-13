@@ -46,7 +46,7 @@ public class AuthenticationService : IAuthenticationService
         try
         {
             var response = await _apiService.PostAsync<CompleteRegistrationRequest, VerifyTokenResponse>("api/auth/register", request);
-            if (response?.Success == true && !string.IsNullOrEmpty(response.JwtToken))
+            if (response is not null && !string.IsNullOrEmpty(response.JwtToken))
             {
                 await SaveTokenAsync(response.JwtToken);
                 return response.JwtToken;
