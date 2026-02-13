@@ -14,7 +14,7 @@
 - Création d'un DTO complet
 - Implémentation d'un handler avec son validator
 - Ajout d'un controller avec ses endpoints
-- Création d'une page MAUI avec son ViewModel
+- Création d'une View Avalonia avec son ViewModel
 - Correction d'une erreur de compilation
 - Ajout d'un test qui passe
 
@@ -319,25 +319,23 @@ public class CompleteRegistrationValidator : AbstractValidator<CompleteRegistrat
 
 ---
 
-### XAML (MAUI)
+### AXAML (AvaloniaUI)
 
-**Page XAML** :
+**View AXAML** :
 ```xml
 <!-- ✅ BON -->
-<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="clr-namespace:SyncTrip.Mobile.Features.Auth.ViewModels"
-             x:Class="SyncTrip.Mobile.Features.Auth.Views.MagicLinkPage"
-             x:DataType="vm:MagicLinkViewModel"
-             Title="Connexion">
-    <StackLayout Padding="20">
-        <Entry Placeholder="Votre email"
-               Text="{Binding Email}" />
-        <Button Text="Envoyer le lien"
+             x:Class="SyncTrip.Mobile.Features.Auth.Views.MagicLinkView"
+             x:DataType="vm:MagicLinkViewModel">
+    <StackPanel Margin="20">
+        <TextBox Watermark="Votre email"
+                 Text="{Binding Email}" />
+        <Button Content="Envoyer le lien"
                 Command="{Binding SendMagicLinkCommand}" />
-    </StackLayout>
-</ContentPage>
+    </StackPanel>
+</UserControl>
 ```
 
 **ViewModel** :
@@ -463,7 +461,7 @@ private async Task CreateConvoy()
 - [ ] View (XAML) créée
 - [ ] ViewModel créé avec CommunityToolkit.Mvvm
 - [ ] Navigation configurée
-- [ ] DI configuré dans MauiProgram.cs
+- [ ] DI configuré dans App.axaml.cs / Program.cs (Avalonia)
 - [ ] Testé sur au moins une plateforme
 - [ ] Compile sans erreur
 
@@ -555,7 +553,7 @@ dotnet ef migrations script \
 
 **Ressources externes** :
 - [Clean Architecture](https://learn.microsoft.com/en-us/dotnet/architecture/modern-web-apps-azure/common-web-application-architectures)
-- [MAUI Docs](https://learn.microsoft.com/en-us/dotnet/maui/)
+- [AvaloniaUI Docs](https://docs.avaloniaui.net/)
 - [MediatR](https://github.com/jbogard/MediatR)
 - [FluentValidation](https://docs.fluentvalidation.net/)
 

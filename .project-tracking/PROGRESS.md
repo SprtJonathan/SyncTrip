@@ -2,6 +2,7 @@
 
 **Dernière mise à jour** : 13 Février 2026
 **Statut Global** : Features 1, 2, 3 & 4 COMPLÈTES + Features 5 & 6 Backend COMPLET
+**Migration** : MAUI → AvaloniaUI décidée (couverture plateforme complète : Win/Mac/Linux/iOS/Android/WASM)
 
 ---
 
@@ -313,7 +314,7 @@ Audit de sécurité complet réalisé avec l'agent dotnet-maui-expert. Identific
   - Application.Tests : 107 tests (Auth, Users, Vehicles, Convoys, Trips, Voting, Chat)
 **Qualité Code** : ✅ Conforme aux spécifications (Clean Architecture, DDD, MVVM)
 **Sécurité** : ✅ Production Ready (Rate Limiting, Error Handling, Secrets Management)
-**Stack** : .NET 10 LTS (Long Term Support)
+**Stack** : .NET 10 LTS (Long Term Support) — AvaloniaUI (migration depuis MAUI)
 **Seed Data** : 40 marques de véhicules (motos, voitures, utilitaires)
 
 ---
@@ -641,19 +642,59 @@ Audit de sécurité complet réalisé avec l'agent dotnet-maui-expert. Identific
 
 **Total commits Feature 4 Mobile** : 7 commits
 
+#### Décision Architecture : Migration MAUI → AvaloniaUI
+**Date** : 13 Février 2026
+**Type** : Décision architecturale
+
+**Motivation** :
+- AvaloniaUI couvre **toutes les plateformes** : Windows, macOS, Linux, iOS, Android, WebAssembly
+- MAUI ne supporte pas Linux ni WebAssembly
+- `Mapsui.Avalonia 5.0.2` est stable et même version que Mapsui.Maui utilisé — migration directe
+- `CommunityToolkit.Mvvm` est framework-agnostic — tous les ViewModels réutilisables
+- Les services (ApiService, SignalRService, etc.) sont du pur .NET — aucun changement
+- Timing optimal : Features 5 & 6 Mobile pas encore codées
+
+**Impact** :
+- Backend (Core, Shared, Application, Infrastructure, API) : **aucun changement**
+- Tests (306/306) : **aucun changement**
+- Mobile : réécriture projet (XAML → AXAML, Shell → Router, SecureStorage/Geolocation → abstractions)
+
+**Composants réutilisables sans modification** :
+- CommunityToolkit.Mvvm (ObservableObject, RelayCommand)
+- Services HTTP (ApiService, TripService, ConvoyService, etc.)
+- SignalRService (pur SignalR client)
+- Logique métier dans les ViewModels
+
+**Composants à migrer** :
+- 10 pages XAML → AXAML (ContentPage → UserControl)
+- Shell Navigation → Router Avalonia
+- Mapsui.Maui → Mapsui.Avalonia
+- SecureStorage → abstraction par plateforme (DPAPI/Keychain/libsecret)
+- Geolocation → abstraction par plateforme
+- 7 IValueConverter (changement namespace)
+- MauiProgram.cs → AppBuilder Avalonia
+
 ---
 
 ## Prochaines Actions
 
+### Priorité Critique
+1. **Migration MAUI → AvaloniaUI** : Réécriture du projet Mobile
+   - Scaffold projet AvaloniaUI + configuration DI + navigation (Router)
+   - Migration des 10 pages XAML → AXAML (Views Avalonia)
+   - Remplacement SecureStorage → abstraction par plateforme (DPAPI/Keychain/libsecret)
+   - Remplacement Geolocation → abstraction par plateforme
+   - Migration Mapsui.Maui → Mapsui.Avalonia 5.0 (CockpitView)
+   - Adaptation des 7 IValueConverter (namespace Avalonia)
+
 ### Priorité Haute
-1. **Feature 5 : Système de Vote Mobile** (VotingModal + DeckControl)
-2. **Feature 6 : Chat Mobile** (ChatPage + ChatStreamControl)
+1. **Feature 5 : Système de Vote Mobile** (VotingModal + DeckControl) — en AvaloniaUI
+2. **Feature 6 : Chat Mobile** (ChatView + ChatStreamControl) — en AvaloniaUI
 
 ### Priorité Moyenne
 1. Ajouter tests d'intégration API
 
 ### Priorité Basse
-1. Ajouter Android SDK pour compilation Mobile
-2. Ajouter tests unitaires Mobile (ViewModels)
-3. Améliorer UI/UX Mobile avec animations
-4. Configurer CI/CD
+1. Ajouter tests unitaires Mobile (ViewModels)
+2. Améliorer UI/UX avec animations
+3. Configurer CI/CD

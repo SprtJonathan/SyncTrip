@@ -97,7 +97,7 @@ SyncTrip est une application permettant de synchroniser un **Convoi de véhicule
 ## PARTIE B : SPÉCIFICATIONS TECHNIQUES
 Cette section décrit l'implémentation stricte.
 
-**Stack** : .NET 10 MAUI / ASP.NET Core / PostgreSQL / Redis / SignalR / Mapsui.
+**Stack** : .NET 10 AvaloniaUI / ASP.NET Core / PostgreSQL / Redis / SignalR / Mapsui.
 
 ### 1. Module Authentification (Blind Send & Proof)
 #### 1.1 Flux Magic Link

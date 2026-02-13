@@ -22,7 +22,7 @@ SyncTrip/
 │   ├── SyncTrip.Application/       # Use Cases (MediatR + Validation)
 │   ├── SyncTrip.Infrastructure/    # Implémentations (EF Core, Services)
 │   ├── SyncTrip.API/               # API REST + SignalR Hubs
-│   └── SyncTrip.Mobile/            # Application MAUI (iOS, Android, Windows)
+│   └── SyncTrip.Mobile/            # Application AvaloniaUI (Windows, macOS, Linux, iOS, Android, WASM)
 ├── tests/
 │   ├── SyncTrip.Core.Tests/
 │   ├── SyncTrip.Application.Tests/
@@ -163,15 +163,17 @@ SyncTrip/
 
 ---
 
-### SyncTrip.Mobile (.NET MAUI 10)
+### SyncTrip.Mobile (AvaloniaUI)
 
-**Responsabilité** : Application mobile multiplateforme.
+**Responsabilité** : Application multiplateforme (desktop, mobile, web).
 
 **Plateformes supportées** :
-- ✅ Android (API 21+)
-- ✅ iOS (14+)
 - ✅ Windows 10/11
-- ✅ MacCatalyst
+- ✅ macOS
+- ✅ Linux
+- ✅ iOS
+- ✅ Android
+- ✅ WebAssembly (WASM)
 
 **Architecture** : MVVM (Model-View-ViewModel)
 
@@ -180,24 +182,24 @@ SyncTrip/
 SyncTrip.Mobile/
 ├── Features/              # Organisé par feature (vertical slices)
 │   ├── Authentication/
-│   │   ├── Views/         (MagicLinkPage, RegistrationPage)
+│   │   ├── Views/         (MagicLinkView, RegistrationView)
 │   │   └── ViewModels/    (MagicLinkViewModel, RegistrationViewModel)
 │   ├── Profile/
-│   │   ├── Views/         (ProfilePage)
+│   │   ├── Views/         (ProfileView)
 │   │   └── ViewModels/    (ProfileViewModel)
 │   ├── Garage/
-│   │   ├── Views/         (GaragePage, AddVehiclePage)
+│   │   ├── Views/         (GarageView, AddVehicleView)
 │   │   └── ViewModels/    (GarageViewModel, AddVehicleViewModel)
 │   ├── Convoy/
-│   │   ├── Views/         (ConvoyLobbyPage, CreateConvoyPage, JoinConvoyPage, ConvoyDetailPage)
+│   │   ├── Views/         (ConvoyLobbyView, CreateConvoyView, JoinConvoyView, ConvoyDetailView)
 │   │   └── ViewModels/    (ConvoyLobbyViewModel, CreateConvoyViewModel, JoinConvoyViewModel, ConvoyDetailViewModel)
 │   └── Trip/
-│       ├── Views/         (CockpitPage — carte Mapsui)
+│       ├── Views/         (CockpitView — carte Mapsui)
 │       └── ViewModels/    (CockpitViewModel — GPS + SignalR)
 ├── Core/
 │   ├── Services/          # Services métier
 │   │   ├── IApiService / ApiService             (HTTP client typé — GET, POST, DELETE)
-│   │   ├── IAuthenticationService / ...         (JWT SecureStorage)
+│   │   ├── IAuthenticationService / ...         (JWT stockage sécurisé par plateforme)
 │   │   ├── IUserService / IVehicleService / ... (REST clients)
 │   │   ├── IConvoyService / ConvoyService       (REST convois)
 │   │   ├── ITripService / TripService           (REST voyages GPS)
@@ -207,19 +209,20 @@ SyncTrip.Mobile/
 └── Resources/
 ```
 
-**Navigation** : Shell Navigation (AppShell.xaml)
+**Navigation** : Router Avalonia (ou ReactiveUI)
 - Routes : `registration`, `addvehicle`, `createconvoy`, `joinconvoy`, `convoydetail`, `cockpit`
-- Flux GPS : ConvoyLobbyPage → ConvoyDetailPage → CockpitPage
+- Flux GPS : ConvoyLobbyView → ConvoyDetailView → CockpitView
 
 **État** : CommunityToolkit.Mvvm (ObservableObject, RelayCommand)
 
 **Services Mobile — Lifetimes DI** :
 - **Singleton** : AuthenticationService, UserService, VehicleService, BrandService, ConvoyService, TripService, SignalRService
-- **Transient** : ViewModels, Pages
+- **Transient** : ViewModels, Views
 
 **Dépendances clés** :
+- Avalonia 11.x (framework UI cross-platform)
 - Microsoft.AspNetCore.SignalR.Client (TripHub temps réel)
-- Mapsui.Maui 5.0 + SkiaSharp (carte OpenStreetMap)
+- Mapsui.Avalonia 5.0 + SkiaSharp (carte OpenStreetMap)
 - CommunityToolkit.Mvvm 8.4 (MVVM source generators)
 
 **SignalR Client (SignalRService)** :
@@ -228,11 +231,11 @@ SyncTrip.Mobile/
 - Envoi : `SendLocationUpdate(tripId, lat, lon)`
 - Lifecycle : `ConnectAsync(tripId)` → JoinTrip, `DisconnectAsync()` → LeaveTrip + StopAsync + Dispose
 
-**CockpitPage (Mapsui)** :
+**CockpitView (Mapsui)** :
 - `OpenStreetMap.CreateTileLayer()` pour les tuiles
 - `MyLocationLayer` pour la position de l'utilisateur (centrage auto)
 - `WritableLayer` pour les positions des autres membres (PointFeature + SymbolStyle)
-- Timer géolocalisation : 5 secondes → `Geolocation.GetLocationAsync()` + `SendLocationAsync()`
+- Timer géolocalisation : 5 secondes → abstraction géolocalisation par plateforme + `SendLocationAsync()`
 
 ---
 
@@ -448,7 +451,7 @@ wss://api.synctrip.com/hubs/convoy?access_token=<JWT>
 
 **Documentation .NET** :
 - [Clean Architecture](https://learn.microsoft.com/en-us/dotnet/architecture/modern-web-apps-azure/common-web-application-architectures#clean-architecture)
-- [MAUI](https://learn.microsoft.com/en-us/dotnet/maui/)
+- [AvaloniaUI](https://docs.avaloniaui.net/)
 - [SignalR](https://learn.microsoft.com/en-us/aspnet/core/signalr/)
 
 **Librairies** :
