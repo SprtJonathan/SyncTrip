@@ -1,0 +1,26 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:SyncTrip.App"
+             xmlns:profileViews="clr-namespace:SyncTrip.App.Features.Profile.Views"
+             xmlns:garageViews="clr-namespace:SyncTrip.App.Features.Garage.Views"
+             xmlns:convoyViews="clr-namespace:SyncTrip.App.Features.Convoy.Views"
+             x:Class="SyncTrip.App.MainView"
+             x:DataType="vm:MainViewModel">
+
+    <TabControl SelectedIndex="{Binding SelectedTabIndex}">
+
+        <TabItem Header="Profil">
+            <profileViews:ProfileView DataContext="{Binding ProfileViewModel}" />
+        </TabItem>
+
+        <TabItem Header="Garage">
+            <garageViews:GarageView DataContext="{Binding GarageViewModel}" />
+        </TabItem>
+
+        <TabItem Header="Convois">
+            <convoyViews:ConvoyLobbyView DataContext="{Binding ConvoyLobbyViewModel}" />
+        </TabItem>
+
+    </TabControl>
+
+</UserControl>

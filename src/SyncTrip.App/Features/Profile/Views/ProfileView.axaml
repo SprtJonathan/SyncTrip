@@ -1,0 +1,112 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:SyncTrip.App.Features.Profile.ViewModels"
+             x:Class="SyncTrip.App.Features.Profile.Views.ProfileView"
+             x:DataType="vm:ProfileViewModel">
+
+    <ScrollViewer>
+        <StackPanel Margin="30" Spacing="20">
+
+            <!-- Loading -->
+            <ProgressBar IsVisible="{Binding IsLoading}" IsIndeterminate="True" Height="4" Margin="0,20,0,0" />
+
+            <!-- Content -->
+            <StackPanel IsVisible="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}" Spacing="20">
+
+                <TextBlock Text="Informations personnelles" FontSize="24" FontWeight="Bold" Margin="0,20,0,10" />
+
+                <!-- Email (Read-only) -->
+                <TextBlock Text="Adresse email" FontSize="14" FontWeight="Bold" />
+                <Border Background="{DynamicResource Gray100Brush}" CornerRadius="10" Padding="15">
+                    <TextBlock Text="{Binding Email}" Foreground="{DynamicResource Gray500Brush}" FontSize="16" />
+                </Border>
+
+                <!-- Username -->
+                <TextBlock Text="Pseudo *" FontSize="14" FontWeight="Bold" />
+                <Border BorderBrush="{DynamicResource Gray300Brush}" BorderThickness="1" CornerRadius="10" Padding="15,8">
+                    <TextBox Watermark="Votre pseudo" Text="{Binding Username}" MaxLength="50" IsEnabled="{Binding IsEditing}" BorderThickness="0" />
+                </Border>
+
+                <!-- FirstName -->
+                <TextBlock Text="Prenom" FontSize="14" FontWeight="Bold" />
+                <Border BorderBrush="{DynamicResource Gray300Brush}" BorderThickness="1" CornerRadius="10" Padding="15,8">
+                    <TextBox Watermark="Votre prenom (optionnel)" Text="{Binding FirstName}" IsEnabled="{Binding IsEditing}" BorderThickness="0" />
+                </Border>
+
+                <!-- LastName -->
+                <TextBlock Text="Nom" FontSize="14" FontWeight="Bold" />
+                <Border BorderBrush="{DynamicResource Gray300Brush}" BorderThickness="1" CornerRadius="10" Padding="15,8">
+                    <TextBox Watermark="Votre nom (optionnel)" Text="{Binding LastName}" IsEnabled="{Binding IsEditing}" BorderThickness="0" />
+                </Border>
+
+                <!-- BirthDate -->
+                <TextBlock Text="Date de naissance *" FontSize="14" FontWeight="Bold" />
+                <Border BorderBrush="{DynamicResource Gray300Brush}" BorderThickness="1" CornerRadius="10" Padding="15,8">
+                    <CalendarDatePicker SelectedDate="{Binding BirthDate}" IsEnabled="{Binding IsEditing}" />
+                </Border>
+
+                <TextBlock Text="{Binding Age, StringFormat='Age : {0} ans'}" FontSize="14" Foreground="{DynamicResource Gray500Brush}" />
+
+                <!-- Licenses -->
+                <TextBlock Text="Permis de conduire" FontSize="18" FontWeight="Bold" Margin="0,20,0,10" />
+
+                <StackPanel Spacing="10" IsEnabled="{Binding IsEditing}">
+                    <CheckBox Content="Permis B (Voiture)" IsChecked="{Binding HasLicenseB}" />
+                    <CheckBox Content="Permis A (Moto)" IsChecked="{Binding HasLicenseA}" />
+                    <CheckBox Content="Permis C (Camion)" IsChecked="{Binding HasLicenseC}" />
+                    <CheckBox Content="Permis D (Transport en commun)" IsChecked="{Binding HasLicenseD}" />
+                </StackPanel>
+
+                <!-- Actions -->
+                <StackPanel Spacing="15" Margin="0,30,0,0">
+                    <Button Content="Modifier mon profil"
+                            Command="{Binding StartEditCommand}"
+                            IsVisible="{Binding IsEditing, Converter={StaticResource InvertedBoolConverter}}"
+                            Height="50" CornerRadius="25" FontWeight="Bold"
+                            Background="{DynamicResource PrimaryBrush}" Foreground="White"
+                            HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
+
+                    <Button Content="Sauvegarder"
+                            Command="{Binding SaveProfileCommand}"
+                            IsVisible="{Binding IsEditing}"
+                            IsEnabled="{Binding IsSaving, Converter={StaticResource InvertedBoolConverter}}"
+                            Height="50" CornerRadius="25" FontWeight="Bold"
+                            Background="{DynamicResource SuccessBrush}" Foreground="White"
+                            HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
+
+                    <Button Content="Annuler"
+                            Command="{Binding CancelEditCommand}"
+                            IsVisible="{Binding IsEditing}"
+                            Height="50" CornerRadius="25" FontWeight="Bold"
+                            Background="{DynamicResource Gray300Brush}"
+                            HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
+
+                    <Button Content="Deconnexion"
+                            Command="{Binding LogoutCommand}"
+                            IsVisible="{Binding IsEditing, Converter={StaticResource InvertedBoolConverter}}"
+                            Height="50" CornerRadius="25" FontWeight="Bold"
+                            Background="{DynamicResource ErrorBrush}" Foreground="White"
+                            HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                            Margin="0,20,0,0" />
+                </StackPanel>
+
+                <!-- Saving -->
+                <ProgressBar IsVisible="{Binding IsSaving}" IsIndeterminate="True" Height="4" />
+
+                <!-- Error -->
+                <Border IsVisible="{Binding ErrorMessage, Converter={StaticResource IsNotNullOrEmptyConverter}}"
+                        BorderBrush="{DynamicResource ErrorBrush}" BorderThickness="1" CornerRadius="10" Padding="15">
+                    <TextBlock Text="{Binding ErrorMessage}" Foreground="{DynamicResource ErrorBrush}" HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center" />
+                </Border>
+
+                <!-- Success -->
+                <Border IsVisible="{Binding SuccessMessage, Converter={StaticResource IsNotNullOrEmptyConverter}}"
+                        BorderBrush="{DynamicResource SuccessBrush}" BorderThickness="1" CornerRadius="10" Padding="15">
+                    <TextBlock Text="{Binding SuccessMessage}" Foreground="{DynamicResource SuccessBrush}" HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center" />
+                </Border>
+
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+
+</UserControl>

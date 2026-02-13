@@ -1,0 +1,67 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:SyncTrip.App.Features.Convoy.ViewModels"
+             xmlns:dto="clr-namespace:SyncTrip.Shared.DTOs.Vehicles;assembly=SyncTrip.Shared"
+             x:Class="SyncTrip.App.Features.Convoy.Views.JoinConvoyView"
+             x:DataType="vm:JoinConvoyViewModel">
+
+    <ScrollViewer>
+        <StackPanel Margin="30" Spacing="20">
+
+            <TextBlock Text="Rejoindre un convoi" FontSize="24" FontWeight="Bold" Margin="0,20,0,10" />
+            <TextBlock Text="Entrez le code du convoi et selectionnez un vehicule"
+                       FontSize="14" Foreground="{DynamicResource Gray500Brush}" Margin="0,0,0,20" />
+
+            <!-- Loading -->
+            <ProgressBar IsVisible="{Binding IsLoading}" IsIndeterminate="True" Height="4" />
+
+            <!-- Form -->
+            <StackPanel IsVisible="{Binding HasVehicles}" Spacing="20">
+
+                <!-- Join Code -->
+                <TextBlock Text="Code du convoi *" FontSize="14" FontWeight="Bold" />
+                <Border BorderBrush="{DynamicResource Gray300Brush}" BorderThickness="1" CornerRadius="10" Padding="15,8">
+                    <TextBox Watermark="Ex: ABC123" Text="{Binding JoinCode}" MaxLength="6" BorderThickness="0"
+                             FontSize="20" FontWeight="Bold" HorizontalContentAlignment="Center" />
+                </Border>
+
+                <!-- Vehicle selection -->
+                <TextBlock Text="Vehicule *" FontSize="14" FontWeight="Bold" />
+                <ComboBox ItemsSource="{Binding Vehicles}"
+                          SelectedItem="{Binding SelectedVehicle}"
+                          PlaceholderText="Selectionnez un vehicule"
+                          HorizontalAlignment="Stretch">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate x:DataType="dto:VehicleDto">
+                            <TextBlock Text="{Binding Model, StringFormat='{}{0}'}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <!-- Buttons -->
+                <StackPanel Spacing="15" Margin="0,20,0,0">
+                    <Button Content="Rejoindre"
+                            Command="{Binding JoinConvoyCommand}"
+                            IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}"
+                            Height="50" CornerRadius="25" FontWeight="Bold"
+                            Background="{DynamicResource SuccessBrush}" Foreground="White"
+                            HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
+                </StackPanel>
+            </StackPanel>
+
+            <!-- Error -->
+            <Border IsVisible="{Binding ErrorMessage, Converter={StaticResource IsNotNullOrEmptyConverter}}"
+                    BorderBrush="{DynamicResource ErrorBrush}" BorderThickness="1" CornerRadius="10" Padding="15">
+                <TextBlock Text="{Binding ErrorMessage}" Foreground="{DynamicResource ErrorBrush}" HorizontalAlignment="Center" TextWrapping="Wrap" />
+            </Border>
+
+            <!-- Success -->
+            <Border IsVisible="{Binding SuccessMessage, Converter={StaticResource IsNotNullOrEmptyConverter}}"
+                    BorderBrush="{DynamicResource SuccessBrush}" BorderThickness="1" CornerRadius="10" Padding="15">
+                <TextBlock Text="{Binding SuccessMessage}" Foreground="{DynamicResource SuccessBrush}" HorizontalAlignment="Center" TextWrapping="Wrap" />
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+
+</UserControl>

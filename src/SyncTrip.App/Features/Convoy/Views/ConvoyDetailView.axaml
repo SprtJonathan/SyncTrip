@@ -1,0 +1,95 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:SyncTrip.App.Features.Convoy.ViewModels"
+             xmlns:dto="clr-namespace:SyncTrip.Shared.DTOs.Convoys;assembly=SyncTrip.Shared"
+             x:Class="SyncTrip.App.Features.Convoy.Views.ConvoyDetailView"
+             x:DataType="vm:ConvoyDetailViewModel">
+
+    <ScrollViewer>
+        <StackPanel Margin="20" Spacing="15">
+
+            <TextBlock Text="Detail du convoi" FontSize="24" FontWeight="Bold" Margin="0,20,0,10" />
+
+            <!-- Loading -->
+            <ProgressBar IsVisible="{Binding IsLoading}" IsIndeterminate="True" Height="4" />
+
+            <!-- Convoy Info -->
+            <Border IsVisible="{Binding Convoy, Converter={StaticResource IsNotNullConverter}}"
+                    BorderBrush="{DynamicResource Gray300Brush}" BorderThickness="1"
+                    CornerRadius="15" Padding="20" Margin="0,10">
+                <StackPanel Spacing="10">
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <TextBlock Text="Code:" FontSize="14" Foreground="{DynamicResource Gray500Brush}" VerticalAlignment="Center" />
+                        <TextBlock Text="{Binding Convoy.JoinCode}" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" />
+                        <Border IsVisible="{Binding Convoy.IsPrivate}"
+                                Background="{DynamicResource WarningBrush}" Padding="8,4" CornerRadius="8" VerticalAlignment="Center">
+                            <TextBlock Text="Prive" FontSize="12" FontWeight="Bold" />
+                        </Border>
+                    </StackPanel>
+                    <TextBlock Text="{Binding Convoy.LeaderUsername, StringFormat='Leader: {0}'}"
+                               FontSize="14" Foreground="{DynamicResource Gray500Brush}" />
+                </StackPanel>
+            </Border>
+
+            <!-- Trip Actions -->
+            <StackPanel Spacing="10" Margin="0,10,0,0">
+                <!-- Start Trip (leader only, no active trip) -->
+                <Button Content="Demarrer un voyage"
+                        Command="{Binding StartTripCommand}"
+                        IsVisible="{Binding CanStartTrip}"
+                        Height="50" CornerRadius="25" FontWeight="Bold"
+                        Background="{DynamicResource SuccessBrush}" Foreground="White"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
+
+                <!-- Open Cockpit (active trip exists) -->
+                <Button Content="Ouvrir le cockpit"
+                        Command="{Binding OpenCockpitCommand}"
+                        IsVisible="{Binding HasActiveTrip}"
+                        Height="50" CornerRadius="25" FontWeight="Bold"
+                        Background="{DynamicResource PrimaryBrush}" Foreground="White"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
+
+                <!-- End Trip (leader only, active trip) -->
+                <Button Content="Terminer le voyage"
+                        Command="{Binding EndTripCommand}"
+                        IsVisible="{Binding HasActiveTrip}"
+                        Height="50" CornerRadius="25" FontWeight="Bold"
+                        Background="{DynamicResource ErrorBrush}" Foreground="White"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
+            </StackPanel>
+
+            <!-- Members -->
+            <TextBlock Text="Membres" FontSize="18" FontWeight="Bold" Margin="0,20,0,5" />
+            <ItemsControl ItemsSource="{Binding Convoy.Members}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="dto:ConvoyMemberDto">
+                        <Border BorderBrush="{DynamicResource Gray300Brush}" BorderThickness="1"
+                                CornerRadius="10" Padding="15" Margin="0,5">
+                            <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto" RowSpacing="4">
+                                <TextBlock Grid.Row="0" Grid.Column="0"
+                                           Text="{Binding Username}" FontSize="16" FontWeight="Bold" />
+                                <Border Grid.Row="0" Grid.Column="1"
+                                        Background="{DynamicResource PrimaryBrush}" Padding="8,4" CornerRadius="8"
+                                        VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding Role, Converter={StaticResource ConvoyRoleConverter}}"
+                                               FontSize="12" Foreground="White" FontWeight="Bold" />
+                                </Border>
+                                <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                           Text="{Binding VehicleBrand, StringFormat='{}{0}'}"
+                                           FontSize="13" Foreground="{DynamicResource Gray500Brush}" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <!-- Error -->
+            <Border IsVisible="{Binding ErrorMessage, Converter={StaticResource IsNotNullOrEmptyConverter}}"
+                    BorderBrush="{DynamicResource ErrorBrush}" BorderThickness="1" CornerRadius="10" Padding="15">
+                <TextBlock Text="{Binding ErrorMessage}" Foreground="{DynamicResource ErrorBrush}" HorizontalAlignment="Center" TextWrapping="Wrap" />
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+
+</UserControl>

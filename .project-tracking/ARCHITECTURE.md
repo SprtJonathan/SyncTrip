@@ -1,6 +1,6 @@
 # SyncTrip - Documentation Architecture
 
-**Version** : 1.3
+**Version** : 1.4
 **Date** : 13 Février 2026
 
 ---
@@ -18,16 +18,18 @@ L'application est découpée en 6 projets suivant le principe de séparation des
 SyncTrip/
 ├── src/
 │   ├── SyncTrip.Core/              # Domain Layer (Entités, Interfaces)
-│   ├── SyncTrip.Shared/            # DTOs partagés (API ↔ Mobile)
+│   ├── SyncTrip.Shared/            # DTOs partagés (API ↔ App)
 │   ├── SyncTrip.Application/       # Use Cases (MediatR + Validation)
 │   ├── SyncTrip.Infrastructure/    # Implémentations (EF Core, Services)
 │   ├── SyncTrip.API/               # API REST + SignalR Hubs
-│   └── SyncTrip.Mobile/            # Application AvaloniaUI (Windows, macOS, Linux, iOS, Android, WASM)
+│   ├── SyncTrip.App/               # UI partagée AvaloniaUI (Views, VMs, Services)
+│   ├── SyncTrip.App.Desktop/       # Head Desktop (Win/Mac/Linux)
+│   ├── SyncTrip.App.Android/       # Head Android (stub)
+│   ├── SyncTrip.App.iOS/           # Head iOS (stub)
+│   └── SyncTrip.App.Browser/       # Head WASM (stub)
 ├── tests/
 │   ├── SyncTrip.Core.Tests/
-│   ├── SyncTrip.Application.Tests/
-│   ├── SyncTrip.Infrastructure.Tests/
-│   └── SyncTrip.Mobile.Tests/
+│   └── SyncTrip.Application.Tests/
 ├── .project-tracking/              # Fichiers de suivi du projet
 └── DOCUMENTATION.md                # Spécifications fonctionnelles
 ```
@@ -40,7 +42,7 @@ SyncTrip/
 
 ```
 ┌─────────────────────────────────────┐
-│         SyncTrip.Mobile             │ ← Presentation Layer
+│         SyncTrip.App             │ ← Presentation Layer
 │         SyncTrip.API                │
 ├─────────────────────────────────────┤
 │      SyncTrip.Application           │ ← Application Layer (Use Cases)
@@ -163,79 +165,98 @@ SyncTrip/
 
 ---
 
-### SyncTrip.Mobile (AvaloniaUI)
+### SyncTrip.App (AvaloniaUI)
 
-**Responsabilité** : Application multiplateforme (desktop, mobile, web).
+**Responsabilité** : UI partagée multiplateforme.
 
-**Plateformes supportées** :
-- ✅ Windows 10/11
-- ✅ macOS
-- ✅ Linux
-- ✅ iOS
-- ✅ Android
-- ✅ WebAssembly (WASM)
+**Plateformes supportées** (via platform heads) :
+- ✅ Windows 10/11 (SyncTrip.App.Desktop — actif)
+- ✅ macOS (SyncTrip.App.Desktop — actif)
+- ✅ Linux (SyncTrip.App.Desktop — actif)
+- 📋 iOS (SyncTrip.App.iOS — stub)
+- 📋 Android (SyncTrip.App.Android — stub)
+- 📋 WebAssembly (SyncTrip.App.Browser — stub)
 
-**Architecture** : MVVM (Model-View-ViewModel)
+**Architecture** : MVVM (Model-View-ViewModel) + ViewLocator convention
 
 **Structure** :
 ```
-SyncTrip.Mobile/
-├── Features/              # Organisé par feature (vertical slices)
+SyncTrip.App/                          # net10.0, UI partagée
+├── App.axaml / App.axaml.cs           # DI complet, ViewLocator, FluentTheme, converters
+├── MainWindow.axaml                   # ContentControl bindé au NavigationService.CurrentViewModel
+├── MainView.axaml                     # TabControl (Profil, Garage, Convois)
+├── MainViewModel.cs                   # Contient les 3 VMs d'onglets
+├── Features/                          # Organisé par feature (vertical slices)
 │   ├── Authentication/
-│   │   ├── Views/         (MagicLinkView, RegistrationView)
-│   │   └── ViewModels/    (MagicLinkViewModel, RegistrationViewModel)
+│   │   ├── Views/                     (MagicLinkView, RegistrationView)
+│   │   └── ViewModels/                (MagicLinkViewModel, RegistrationViewModel)
 │   ├── Profile/
-│   │   ├── Views/         (ProfileView)
-│   │   └── ViewModels/    (ProfileViewModel)
+│   │   ├── Views/                     (ProfileView)
+│   │   └── ViewModels/                (ProfileViewModel + HasLicenseB/A/C/D)
 │   ├── Garage/
-│   │   ├── Views/         (GarageView, AddVehicleView)
-│   │   └── ViewModels/    (GarageViewModel, AddVehicleViewModel)
+│   │   ├── Views/                     (GarageView, AddVehicleView)
+│   │   └── ViewModels/                (GarageViewModel, AddVehicleViewModel)
 │   ├── Convoy/
-│   │   ├── Views/         (ConvoyLobbyView, CreateConvoyView, JoinConvoyView, ConvoyDetailView)
-│   │   └── ViewModels/    (ConvoyLobbyViewModel, CreateConvoyViewModel, JoinConvoyViewModel, ConvoyDetailViewModel)
+│   │   ├── Views/                     (ConvoyLobbyView, CreateConvoyView, JoinConvoyView, ConvoyDetailView)
+│   │   └── ViewModels/                (ConvoyLobbyViewModel, CreateConvoyViewModel, JoinConvoyViewModel, ConvoyDetailViewModel)
 │   └── Trip/
-│       ├── Views/         (CockpitView — carte Mapsui)
-│       └── ViewModels/    (CockpitViewModel — GPS + SignalR)
+│       ├── Views/                     (CockpitView — carte Mapsui.Avalonia)
+│       └── ViewModels/                (CockpitViewModel — GPS + SignalR + DispatcherTimer)
 ├── Core/
-│   ├── Services/          # Services métier
-│   │   ├── IApiService / ApiService             (HTTP client typé — GET, POST, DELETE)
-│   │   ├── IAuthenticationService / ...         (JWT stockage sécurisé par plateforme)
-│   │   ├── IUserService / IVehicleService / ... (REST clients)
-│   │   ├── IConvoyService / ConvoyService       (REST convois)
-│   │   ├── ITripService / TripService           (REST voyages GPS)
-│   │   └── ISignalRService / SignalRService     (TripHub temps réel)
-│   ├── Http/              (AuthorizationMessageHandler — JWT Bearer auto)
-│   └── Converters/        (InvertedBool, IsNotNull, VehicleType, TripStatus, ConvoyRole)
-└── Resources/
+│   ├── Platform/                      # Abstractions plateforme
+│   │   ├── INavigationService         (NavigateToAsync, GoBackAsync)
+│   │   ├── IDialogService             (ConfirmAsync, AlertAsync)
+│   │   ├── ISecureStorageService      (GetAsync, SetAsync, Remove)
+│   │   └── ILocationService           (GetCurrentLocationAsync → LocationResult?)
+│   ├── Services/                      # 8 services métier (interfaces + implémentations)
+│   │   ├── IApiService / ApiService
+│   │   ├── IAuthenticationService / AuthenticationService  (injecte ISecureStorageService)
+│   │   ├── IUserService / IVehicleService / IBrandService
+│   │   ├── IConvoyService / ConvoyService
+│   │   ├── ITripService / TripService
+│   │   └── ISignalRService / SignalRService
+│   ├── Http/                          (AuthorizationMessageHandler — injecte ISecureStorageService)
+│   └── Converters/                    (7 convertisseurs Avalonia.Data.Converters.IValueConverter)
+├── Navigation/
+│   ├── ViewLocator.cs                 # Convention : XxxViewModel → XxxView (assembly reflection)
+│   ├── NavigationService.cs           # Stack-based, routes registry, Initialize() reflection
+│   ├── DialogService.cs               # Fenêtres de dialogue Avalonia
+│   ├── DesktopSecureStorageService.cs # JSON file dans %APPDATA%/SyncTrip/
+│   └── DesktopLocationService.cs      # Stub (retourne null sur desktop)
+└── Themes/
+    └── Colors.axaml                   # Palette (Primary #512BD4, Success, Error, Warning, Gray)
+
+SyncTrip.App.Desktop/                  # WinExe, Avalonia.Desktop 11.3.1
+└── Program.cs                         # AppBuilder.Configure<App>.UsePlatformDetect.StartWithClassicDesktopLifetime
 ```
 
-**Navigation** : Router Avalonia (ou ReactiveUI)
-- Routes : `registration`, `addvehicle`, `createconvoy`, `joinconvoy`, `convoydetail`, `cockpit`
-- Flux GPS : ConvoyLobbyView → ConvoyDetailView → CockpitView
+**Navigation** : INavigationService custom + ViewLocator (pas ReactiveUI)
+- Stack-based : push/pop de ViewModels
+- Routes enregistrées dans `App.axaml.cs` : login, registration, main, addvehicle, createconvoy, joinconvoy, convoydetail, cockpit
+- `Initialize(params)` via reflection remplace `[QueryProperty]` de MAUI
+- MainWindow : `<ContentControl Content="{Binding CurrentViewModel}" />` bindé au NavigationService
 
-**État** : CommunityToolkit.Mvvm (ObservableObject, RelayCommand)
+**État** : CommunityToolkit.Mvvm (ObservableObject, RelayCommand, [ObservableProperty])
 
-**Services Mobile — Lifetimes DI** :
-- **Singleton** : AuthenticationService, UserService, VehicleService, BrandService, ConvoyService, TripService, SignalRService
-- **Transient** : ViewModels, Views
+**Services — Lifetimes DI** :
+- **Singleton** : ISecureStorageService, ILocationService, IDialogService, INavigationService, AuthenticationService, UserService, VehicleService, BrandService, ConvoyService, TripService, SignalRService
+- **Transient** : ViewModels (MagicLinkViewModel, RegistrationViewModel, etc.), AuthorizationMessageHandler
 
 **Dépendances clés** :
-- Avalonia 11.x (framework UI cross-platform)
-- Microsoft.AspNetCore.SignalR.Client (TripHub temps réel)
-- Mapsui.Avalonia 5.0 + SkiaSharp (carte OpenStreetMap)
-- CommunityToolkit.Mvvm 8.4 (MVVM source generators)
+- Avalonia 11.3.1 + Avalonia.Themes.Fluent (framework UI cross-platform)
+- Mapsui.Avalonia 5.0.0 (carte OpenStreetMap)
+- CommunityToolkit.Mvvm 8.4.0 (MVVM source generators)
+- Microsoft.AspNetCore.SignalR.Client 10.0.0
+- Microsoft.Extensions.DependencyInjection 10.0.0
+- Microsoft.Extensions.Http 10.0.0
 
-**SignalR Client (SignalRService)** :
-- Connexion : `http://localhost:5000/hubs/trip?access_token={jwt}`
-- Écoute : `ReceiveLocationUpdate` → event `LocationReceived(userId, lat, lon, timestamp)`
-- Envoi : `SendLocationUpdate(tripId, lat, lon)`
-- Lifecycle : `ConnectAsync(tripId)` → JoinTrip, `DisconnectAsync()` → LeaveTrip + StopAsync + Dispose
-
-**CockpitView (Mapsui)** :
+**CockpitView (Mapsui.Avalonia)** :
 - `OpenStreetMap.CreateTileLayer()` pour les tuiles
-- `MyLocationLayer` pour la position de l'utilisateur (centrage auto)
-- `WritableLayer` pour les positions des autres membres (PointFeature + SymbolStyle)
-- Timer géolocalisation : 5 secondes → abstraction géolocalisation par plateforme + `SendLocationAsync()`
+- `WritableLayer` pour user + membres (PointFeature + SymbolStyle)
+- `SphericalMercator.FromLonLat()` → tuple `(x, y)` → `new MPoint(x, y)`
+- `map.Navigator.CenterOnAndZoomTo()` pour centrage initial (Paris par défaut)
+- Timer géolocalisation via `DispatcherTimer` (5s) → `ILocationService` + `SendLocationAsync()`
+- `PositionsUpdated` event → code-behind met à jour les features sur la WritableLayer
 
 ---
 

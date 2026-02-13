@@ -1,0 +1,79 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:SyncTrip.App.Features.Authentication.ViewModels"
+             x:Class="SyncTrip.App.Features.Authentication.Views.MagicLinkView"
+             x:DataType="vm:MagicLinkViewModel">
+
+    <ScrollViewer>
+        <StackPanel Margin="30" Spacing="20" VerticalAlignment="Center">
+
+            <!-- Logo / Title -->
+            <TextBlock Text="SyncTrip"
+                       FontSize="42"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Center"
+                       Margin="0,40,0,20" />
+
+            <TextBlock Text="Synchronisez vos convois"
+                       FontSize="18"
+                       Foreground="{DynamicResource Gray500Brush}"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,0,40" />
+
+            <!-- Email -->
+            <TextBlock Text="Adresse email"
+                       FontSize="14"
+                       FontWeight="Bold" />
+
+            <Border BorderBrush="{DynamicResource Gray300Brush}"
+                    BorderThickness="1"
+                    CornerRadius="10"
+                    Padding="15,8">
+                <TextBox Watermark="votre@email.com"
+                         Text="{Binding Email}"
+                         BorderThickness="0" />
+            </Border>
+
+            <!-- Send Button -->
+            <Button Content="Envoyer le lien magique"
+                    Command="{Binding SendMagicLinkCommand}"
+                    IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}"
+                    Height="50"
+                    CornerRadius="25"
+                    FontWeight="Bold"
+                    Background="{DynamicResource PrimaryBrush}"
+                    Foreground="White"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Center"
+                    Margin="0,10,0,0" />
+
+            <!-- Loading -->
+            <ProgressBar IsVisible="{Binding IsBusy}"
+                         IsIndeterminate="True"
+                         Height="4" />
+
+            <!-- Message -->
+            <Border IsVisible="{Binding Message, Converter={StaticResource IsNotNullOrEmptyConverter}}"
+                    BorderBrush="{Binding IsSuccess, Converter={StaticResource SuccessErrorColorConverter}}"
+                    BorderThickness="1"
+                    CornerRadius="10"
+                    Padding="15">
+                <TextBlock Text="{Binding Message}"
+                           Foreground="{Binding IsSuccess, Converter={StaticResource SuccessErrorColorConverter}}"
+                           HorizontalAlignment="Center"
+                           TextWrapping="Wrap"
+                           TextAlignment="Center" />
+            </Border>
+
+            <!-- Info -->
+            <TextBlock Text="Vous recevrez un email avec un lien de connexion securise."
+                       FontSize="12"
+                       Foreground="{DynamicResource Gray500Brush}"
+                       HorizontalAlignment="Center"
+                       TextAlignment="Center"
+                       Margin="0,20,0,0" />
+
+        </StackPanel>
+    </ScrollViewer>
+
+</UserControl>

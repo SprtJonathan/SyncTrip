@@ -2,7 +2,7 @@
 
 **Dernière mise à jour** : 13 Février 2026
 **Statut Global** : Features 1, 2, 3 & 4 COMPLÈTES + Features 5 & 6 Backend COMPLET
-**Migration** : MAUI → AvaloniaUI décidée (couverture plateforme complète : Win/Mac/Linux/iOS/Android/WASM)
+**Migration MAUI → AvaloniaUI** : TERMINÉE (11 étapes, build 0 erreurs, tests 306/306)
 
 ---
 
@@ -306,15 +306,16 @@ Audit de sécurité complet réalisé avec l'agent dotnet-maui-expert. Identific
 
 **Features Terminées** : 4 / 6 (Auth + Profil/Garage + Convois + Navigation GPS - Backend + Mobile + Tests)
 **Features Backend Terminé** : 6 / 6 (+ Vote + Chat Backend)
+**Migration MAUI → AvaloniaUI** : ✅ TERMINÉE (11 étapes)
 **Sécurité Production** : ✅ P0 Critical Issues Résolus (5/5)
 **Progression Globale** : ~83%
-**Dernière compilation** : 13 Fév 2026 - Succès (Backend + Mobile + Tests)
+**Dernière compilation** : 13 Fév 2026 - Succès (Backend + App Desktop + Tests)
 **Tests Passing** : 306 / 306 (100%)
   - Core.Tests : 199 tests (User, Vehicle, Brand, UserLicense, Convoy, ConvoyMember, Trip, TripWaypoint, StopProposal, Vote, Message)
   - Application.Tests : 107 tests (Auth, Users, Vehicles, Convoys, Trips, Voting, Chat)
 **Qualité Code** : ✅ Conforme aux spécifications (Clean Architecture, DDD, MVVM)
 **Sécurité** : ✅ Production Ready (Rate Limiting, Error Handling, Secrets Management)
-**Stack** : .NET 10 LTS (Long Term Support) — AvaloniaUI (migration depuis MAUI)
+**Stack** : .NET 10 LTS — AvaloniaUI 11.3.1 + Mapsui.Avalonia 5.0.0
 **Seed Data** : 40 marques de véhicules (motos, voitures, utilitaires)
 
 ---
@@ -642,54 +643,50 @@ Audit de sécurité complet réalisé avec l'agent dotnet-maui-expert. Identific
 
 **Total commits Feature 4 Mobile** : 7 commits
 
-#### Décision Architecture : Migration MAUI → AvaloniaUI
+#### Migration MAUI → AvaloniaUI
+**Statut** : TERMINÉ
 **Date** : 13 Février 2026
-**Type** : Décision architecturale
 
 **Motivation** :
 - AvaloniaUI couvre **toutes les plateformes** : Windows, macOS, Linux, iOS, Android, WebAssembly
 - MAUI ne supporte pas Linux ni WebAssembly
-- `Mapsui.Avalonia 5.0.2` est stable et même version que Mapsui.Maui utilisé — migration directe
+- `Mapsui.Avalonia 5.0.0` compatible — migration directe depuis Mapsui.Maui
 - `CommunityToolkit.Mvvm` est framework-agnostic — tous les ViewModels réutilisables
-- Les services (ApiService, SignalRService, etc.) sont du pur .NET — aucun changement
-- Timing optimal : Features 5 & 6 Mobile pas encore codées
-
-**Impact** :
 - Backend (Core, Shared, Application, Infrastructure, API) : **aucun changement**
 - Tests (306/306) : **aucun changement**
-- Mobile : réécriture projet (XAML → AXAML, Shell → Router, SecureStorage/Geolocation → abstractions)
 
-**Composants réutilisables sans modification** :
-- CommunityToolkit.Mvvm (ObservableObject, RelayCommand)
-- Services HTTP (ApiService, TripService, ConvoyService, etc.)
-- SignalRService (pur SignalR client)
-- Logique métier dans les ViewModels
+**11 étapes réalisées** :
+1. ✅ Scaffold projet Avalonia (SyncTrip.App + SyncTrip.App.Desktop + stubs Android/iOS/Browser)
+2. ✅ Interfaces d'abstraction plateforme (INavigationService, IDialogService, ISecureStorageService, ILocationService)
+3. ✅ Port 8 services métier (namespace + ISecureStorageService au lieu de MAUI SecureStorage)
+4. ✅ Port 7 convertisseurs (Avalonia.Data.Converters, Brushes au lieu de Colors)
+5. ✅ Port 10 ViewModels (NavigationService, DialogService, Initialize() au lieu de QueryProperty)
+6. ✅ ViewLocator, NavigationService stack-based, DialogService, DesktopSecureStorageService, thème Colors.axaml
+7. ✅ Vues Authentication (MagicLinkView, RegistrationView)
+8. ✅ Vues Profile et Garage (ProfileView, GarageView, AddVehicleView)
+9. ✅ Vues Convoy (ConvoyLobbyView, CreateConvoyView, JoinConvoyView, ConvoyDetailView)
+10. ✅ CockpitView avec Mapsui.Avalonia 5.0.0 (MapControl, WritableLayer, OpenStreetMap)
+11. ✅ MainView TabControl (Profil, Garage, Convois) + finalisation DI + build 0 erreurs + tests 306/306
 
-**Composants à migrer** :
-- 10 pages XAML → AXAML (ContentPage → UserControl)
-- Shell Navigation → Router Avalonia
-- Mapsui.Maui → Mapsui.Avalonia
-- SecureStorage → abstraction par plateforme (DPAPI/Keychain/libsecret)
-- Geolocation → abstraction par plateforme
-- 7 IValueConverter (changement namespace)
-- MauiProgram.cs → AppBuilder Avalonia
+**Changements techniques notables** :
+- Avalonia 11.3.1 (upgrade depuis 11.3.0 pour compatibilité Mapsui 5.0.0)
+- `SyncTrip.Mobile` supprimé → `SyncTrip.App` (UI partagée) + `SyncTrip.App.Desktop` (head)
+- Navigation : INavigationService custom + ViewLocator convention (XxxViewModel → XxxView)
+- Mapsui 5.0 API : `WritableLayer()` sans argument, `SphericalMercator.FromLonLat` retourne tuple, `Navigator.CenterOnAndZoomTo`
+- ProfileViewModel : HasLicenseB/A/C/D pour binding CheckBox pur MVVM (plus de code-behind)
+- SwipeView MAUI → boutons inline + ItemsControl Avalonia
+
+**Validation** :
+- ✅ `dotnet build "src\SyncTrip.App.Desktop\SyncTrip.App.Desktop.csproj"` — 0 erreurs
+- ✅ `dotnet test` — 306/306 (199 Core + 107 Application)
 
 ---
 
 ## Prochaines Actions
 
-### Priorité Critique
-1. **Migration MAUI → AvaloniaUI** : Réécriture du projet Mobile
-   - Scaffold projet AvaloniaUI + configuration DI + navigation (Router)
-   - Migration des 10 pages XAML → AXAML (Views Avalonia)
-   - Remplacement SecureStorage → abstraction par plateforme (DPAPI/Keychain/libsecret)
-   - Remplacement Geolocation → abstraction par plateforme
-   - Migration Mapsui.Maui → Mapsui.Avalonia 5.0 (CockpitView)
-   - Adaptation des 7 IValueConverter (namespace Avalonia)
-
 ### Priorité Haute
-1. **Feature 5 : Système de Vote Mobile** (VotingModal + DeckControl) — en AvaloniaUI
-2. **Feature 6 : Chat Mobile** (ChatView + ChatStreamControl) — en AvaloniaUI
+1. **Feature 5 : Système de Vote — Mobile AvaloniaUI** (VotingView + interface de vote dans CockpitView)
+2. **Feature 6 : Chat — Mobile AvaloniaUI** (ChatView + SignalR ConvoyHub)
 
 ### Priorité Moyenne
 1. Ajouter tests d'intégration API

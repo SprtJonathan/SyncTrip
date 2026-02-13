@@ -1,0 +1,93 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:SyncTrip.App.Features.Convoy.ViewModels"
+             xmlns:dto="clr-namespace:SyncTrip.Shared.DTOs.Convoys;assembly=SyncTrip.Shared"
+             x:Class="SyncTrip.App.Features.Convoy.Views.ConvoyLobbyView"
+             x:DataType="vm:ConvoyLobbyViewModel">
+
+    <Grid>
+        <StackPanel Margin="20" Spacing="15">
+
+            <TextBlock Text="Mes convois" FontSize="24" FontWeight="Bold" Margin="0,20,0,10" />
+
+            <!-- Loading -->
+            <ProgressBar IsVisible="{Binding IsLoading}" IsIndeterminate="True" Height="4" />
+
+            <!-- Empty State -->
+            <StackPanel IsVisible="{Binding IsEmpty}" Spacing="20" Margin="0,60,0,0" HorizontalAlignment="Center">
+                <TextBlock Text="Aucun convoi" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" />
+                <TextBlock Text="Creez ou rejoignez un convoi pour commencer"
+                           FontSize="14" Foreground="{DynamicResource Gray500Brush}"
+                           HorizontalAlignment="Center" TextAlignment="Center" />
+            </StackPanel>
+
+            <!-- Convoy List -->
+            <ItemsControl ItemsSource="{Binding Convoys}"
+                          IsVisible="{Binding IsEmpty, Converter={StaticResource InvertedBoolConverter}}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="dto:ConvoyDto">
+                        <Button Command="{Binding $parent[ItemsControl].((vm:ConvoyLobbyViewModel)DataContext).SelectConvoyCommand}"
+                                CommandParameter="{Binding}"
+                                Background="Transparent" Padding="0" Margin="0,5"
+                                HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                            <Border BorderBrush="{DynamicResource Gray300Brush}" BorderThickness="1"
+                                    CornerRadius="15" Padding="15">
+                                <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto" RowSpacing="6">
+                                    <TextBlock Grid.Row="0" Grid.Column="0"
+                                               Text="{Binding LeaderUsername, StringFormat='Leader: {0}'}" FontSize="12"
+                                               Foreground="{DynamicResource Gray500Brush}" />
+                                    <TextBlock Grid.Row="1" Grid.Column="0"
+                                               Text="{Binding JoinCode}" FontSize="20" FontWeight="Bold" />
+
+                                    <Button Grid.Row="0" Grid.RowSpan="2" Grid.Column="1"
+                                            Content="Quitter"
+                                            Command="{Binding $parent[ItemsControl].((vm:ConvoyLobbyViewModel)DataContext).LeaveConvoyCommand}"
+                                            CommandParameter="{Binding JoinCode}"
+                                            Background="{DynamicResource ErrorBrush}" Foreground="White"
+                                            CornerRadius="8" VerticalAlignment="Center" />
+
+                                    <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                                                Orientation="Horizontal" Spacing="15">
+                                        <Border Background="{DynamicResource PrimaryBrush}" Padding="8,4" CornerRadius="8">
+                                            <TextBlock Text="{Binding MemberCount, StringFormat='{}{0} membres'}"
+                                                       FontSize="12" Foreground="White" FontWeight="Bold" />
+                                        </Border>
+                                        <Border IsVisible="{Binding IsPrivate}"
+                                                Background="{DynamicResource WarningBrush}" Padding="8,4" CornerRadius="8">
+                                            <TextBlock Text="Prive" FontSize="12" FontWeight="Bold" />
+                                        </Border>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <!-- Error -->
+            <Border IsVisible="{Binding ErrorMessage, Converter={StaticResource IsNotNullOrEmptyConverter}}"
+                    BorderBrush="{DynamicResource ErrorBrush}" BorderThickness="1" CornerRadius="10" Padding="15">
+                <TextBlock Text="{Binding ErrorMessage}" Foreground="{DynamicResource ErrorBrush}" HorizontalAlignment="Center" TextWrapping="Wrap" />
+            </Border>
+
+            <!-- Action buttons -->
+            <StackPanel Spacing="10" Margin="0,10,0,0">
+                <Grid ColumnDefinitions="*,10,*">
+                    <Button Grid.Column="0" Content="Creer un convoi"
+                            Command="{Binding CreateConvoyCommand}"
+                            Background="{DynamicResource PrimaryBrush}" Foreground="White"
+                            Height="50" CornerRadius="25" FontWeight="Bold"
+                            HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
+                    <Button Grid.Column="2" Content="Rejoindre"
+                            Command="{Binding JoinConvoyCommand}"
+                            Background="{DynamicResource SuccessBrush}" Foreground="White"
+                            Height="50" CornerRadius="25" FontWeight="Bold"
+                            HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
+                </Grid>
+                <Button Content="Rafraichir" Command="{Binding RefreshCommand}"
+                        CornerRadius="10" HorizontalAlignment="Right" />
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+
+</UserControl>

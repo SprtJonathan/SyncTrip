@@ -1,0 +1,37 @@
+using SyncTrip.Shared.DTOs.Users;
+
+namespace SyncTrip.App.Core.Services;
+
+public class UserService : IUserService
+{
+    private readonly IApiService _apiService;
+
+    public UserService(IApiService apiService)
+    {
+        _apiService = apiService;
+    }
+
+    public async Task<UserProfileDto?> GetProfileAsync(CancellationToken ct = default)
+    {
+        try
+        {
+            return await _apiService.GetAsync<UserProfileDto>("api/users/profile", ct);
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    public async Task<bool> UpdateProfileAsync(UpdateUserProfileRequest request, CancellationToken ct = default)
+    {
+        try
+        {
+            return await _apiService.PostAsync("api/users/profile", request, ct);
+        }
+        catch
+        {
+            return false;
+        }
+    }
+}

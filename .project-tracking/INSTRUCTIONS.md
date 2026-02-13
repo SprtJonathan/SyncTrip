@@ -1,7 +1,7 @@
 # SyncTrip - Instructions pour le Développement
 
-**Version** : 1.1
-**Date** : 12 Février 2026
+**Version** : 1.2
+**Date** : 13 Février 2026
 
 ---
 
@@ -326,8 +326,8 @@ public class CompleteRegistrationValidator : AbstractValidator<CompleteRegistrat
 <!-- ✅ BON -->
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:vm="clr-namespace:SyncTrip.Mobile.Features.Auth.ViewModels"
-             x:Class="SyncTrip.Mobile.Features.Auth.Views.MagicLinkView"
+             xmlns:vm="clr-namespace:SyncTrip.App.Features.Auth.ViewModels"
+             x:Class="SyncTrip.App.Features.Auth.Views.MagicLinkView"
              x:DataType="vm:MagicLinkViewModel">
     <StackPanel Margin="20">
         <TextBox Watermark="Votre email"
@@ -461,7 +461,7 @@ private async Task CreateConvoy()
 - [ ] View (XAML) créée
 - [ ] ViewModel créé avec CommunityToolkit.Mvvm
 - [ ] Navigation configurée
-- [ ] DI configuré dans App.axaml.cs / Program.cs (Avalonia)
+- [ ] DI configuré dans App.axaml.cs (services, VMs, routes)
 - [ ] Testé sur au moins une plateforme
 - [ ] Compile sans erreur
 
@@ -559,7 +559,7 @@ dotnet ef migrations script \
 
 ---
 
-**Dernière mise à jour** : 12 Février 2026
+**Dernière mise à jour** : 13 Février 2026
 
 ---
 

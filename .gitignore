@@ -417,6 +417,7 @@ Thumbs.db
 # Mac bundle stuff
 *.dmg
 *.app
+!src/SyncTrip.App*/
 
 # content below from: https://github.com/github/gitignore/blob/master/Global/macOS.gitignore
 # General

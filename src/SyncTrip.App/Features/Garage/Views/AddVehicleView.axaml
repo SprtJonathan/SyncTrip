@@ -1,0 +1,92 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:SyncTrip.App.Features.Garage.ViewModels"
+             x:Class="SyncTrip.App.Features.Garage.Views.AddVehicleView"
+             x:DataType="vm:AddVehicleViewModel">
+
+    <ScrollViewer>
+        <StackPanel Margin="30" Spacing="20">
+
+            <TextBlock Text="Nouveau vehicule" FontSize="24" FontWeight="Bold" Margin="0,20,0,10" />
+            <TextBlock Text="Remplissez les informations de votre vehicule"
+                       FontSize="14" Foreground="{DynamicResource Gray500Brush}" Margin="0,0,0,20" />
+
+            <!-- Loading -->
+            <ProgressBar IsVisible="{Binding IsLoading}" IsIndeterminate="True" Height="4" />
+
+            <!-- Form -->
+            <StackPanel IsVisible="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}" Spacing="20">
+
+                <!-- Brand -->
+                <TextBlock Text="Marque *" FontSize="14" FontWeight="Bold" />
+                <ComboBox ItemsSource="{Binding Brands}"
+                          SelectedItem="{Binding SelectedBrand}"
+                          PlaceholderText="Selectionnez une marque"
+                          HorizontalAlignment="Stretch">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <!-- Model -->
+                <TextBlock Text="Modele *" FontSize="14" FontWeight="Bold" />
+                <Border BorderBrush="{DynamicResource Gray300Brush}" BorderThickness="1" CornerRadius="10" Padding="15,8">
+                    <TextBox Watermark="Ex: 308, Clio, Golf..." Text="{Binding Model}" MaxLength="100" BorderThickness="0" />
+                </Border>
+
+                <!-- Vehicle Type -->
+                <TextBlock Text="Type de vehicule *" FontSize="14" FontWeight="Bold" />
+                <ComboBox ItemsSource="{Binding VehicleTypes}"
+                          SelectedIndex="0"
+                          HorizontalAlignment="Stretch">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <!-- Color -->
+                <TextBlock Text="Couleur" FontSize="14" FontWeight="Bold" />
+                <Border BorderBrush="{DynamicResource Gray300Brush}" BorderThickness="1" CornerRadius="10" Padding="15,8">
+                    <TextBox Watermark="Ex: Blanc, Noir, Rouge... (optionnel)" Text="{Binding Color}" BorderThickness="0" />
+                </Border>
+
+                <!-- Year -->
+                <TextBlock Text="Annee de fabrication" FontSize="14" FontWeight="Bold" />
+                <Border BorderBrush="{DynamicResource Gray300Brush}" BorderThickness="1" CornerRadius="10" Padding="15,8">
+                    <TextBox Watermark="Ex: 2024" Text="{Binding Year}" BorderThickness="0" />
+                </Border>
+
+                <!-- Buttons -->
+                <StackPanel Spacing="15" Margin="0,20,0,0">
+                    <Button Content="Sauvegarder"
+                            Command="{Binding SaveVehicleCommand}"
+                            IsEnabled="{Binding IsSaving, Converter={StaticResource InvertedBoolConverter}}"
+                            Height="50" CornerRadius="25" FontWeight="Bold"
+                            Background="{DynamicResource SuccessBrush}" Foreground="White"
+                            HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
+
+                    <Button Content="Annuler"
+                            Command="{Binding CancelCommand}"
+                            Height="50" CornerRadius="25" FontWeight="Bold"
+                            Background="{DynamicResource Gray300Brush}"
+                            HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
+                </StackPanel>
+
+                <!-- Saving -->
+                <ProgressBar IsVisible="{Binding IsSaving}" IsIndeterminate="True" Height="4" />
+
+                <!-- Error -->
+                <Border IsVisible="{Binding ErrorMessage, Converter={StaticResource IsNotNullOrEmptyConverter}}"
+                        BorderBrush="{DynamicResource ErrorBrush}" BorderThickness="1" CornerRadius="10" Padding="15">
+                    <TextBlock Text="{Binding ErrorMessage}" Foreground="{DynamicResource ErrorBrush}" HorizontalAlignment="Center" TextWrapping="Wrap" />
+                </Border>
+
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+
+</UserControl>

@@ -1,0 +1,42 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mapsui="clr-namespace:Mapsui.UI.Avalonia;assembly=Mapsui.UI.Avalonia"
+             xmlns:vm="clr-namespace:SyncTrip.App.Features.Trip.ViewModels"
+             x:Class="SyncTrip.App.Features.Trip.Views.CockpitView"
+             x:DataType="vm:CockpitViewModel">
+
+    <Grid RowDefinitions="*,Auto">
+
+        <!-- Map -->
+        <mapsui:MapControl x:Name="MapControl" Grid.Row="0" />
+
+        <!-- Overlay panel -->
+        <Border Grid.Row="0" Background="#80000000" Padding="15" CornerRadius="15"
+                HorizontalAlignment="Left" VerticalAlignment="Top" Margin="15">
+            <StackPanel Spacing="8">
+                <TextBlock Text="{Binding TripDuration}" FontSize="28" FontWeight="Bold" Foreground="White" />
+                <TextBlock Text="{Binding MemberPositions.Count, StringFormat='{}{0} membre(s) connecte(s)'}"
+                           FontSize="14" Foreground="White" />
+            </StackPanel>
+        </Border>
+
+        <!-- Error overlay -->
+        <Border Grid.Row="0" IsVisible="{Binding ErrorMessage, Converter={StaticResource IsNotNullOrEmptyConverter}}"
+                Background="#CC000000" Padding="20" CornerRadius="15"
+                HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Text="{Binding ErrorMessage}" Foreground="{DynamicResource ErrorBrush}" FontSize="16"
+                       TextWrapping="Wrap" MaxWidth="300" HorizontalAlignment="Center" />
+        </Border>
+
+        <!-- Bottom bar -->
+        <Border Grid.Row="1" Background="{DynamicResource Gray100Brush}" Padding="15">
+            <Button Content="Quitter le cockpit"
+                    Command="{Binding LeaveCockpitCommand}"
+                    Height="50" CornerRadius="25" FontWeight="Bold"
+                    Background="{DynamicResource ErrorBrush}" Foreground="White"
+                    HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
+        </Border>
+
+    </Grid>
+
+</UserControl>
