@@ -76,7 +76,7 @@ public class ConvoyService : IConvoyService
     {
         try
         {
-            return await _apiService.PostAsync($"api/convoys/{joinCode}", new { }, ct);
+            return await _apiService.DeleteAsync($"api/convoys/{joinCode}", ct);
         }
         catch
         {

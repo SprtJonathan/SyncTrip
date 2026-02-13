@@ -7,7 +7,7 @@
              x:Class="SyncTrip.App.MainView"
              x:DataType="vm:MainViewModel">
 
-    <TabControl SelectedIndex="{Binding SelectedTabIndex}">
+    <TabControl x:Name="MainTabControl" SelectedIndex="{Binding SelectedTabIndex}" SelectionChanged="OnTabSelectionChanged">
 
         <TabItem Header="Profil">
             <profileViews:ProfileView DataContext="{Binding ProfileViewModel}" />
