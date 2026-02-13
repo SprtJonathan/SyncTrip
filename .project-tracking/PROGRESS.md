@@ -241,8 +241,8 @@ Audit de sécurité complet réalisé avec l'agent dotnet-maui-expert. Identific
 ---
 
 #### Feature 5 : Système de Vote
-**Statut** : Backend TERMINÉ — Mobile à faire
-**Progression** : 50% (Backend complet, Mobile restant)
+**Statut** : TERMINÉ (Backend + Mobile)
+**Progression** : 100%
 
 **Composants Backend terminés** :
 - [x] Core : Enums (StopType, ProposalStatus)
@@ -268,14 +268,19 @@ Audit de sécurité complet réalisé avec l'agent dotnet-maui-expert. Identific
 - [x] Tests Core : 34 tests (StopProposal 28, Vote 6)
 - [x] Tests Application : 19 tests (ProposeStop 7, CastVote 8, GetActiveProposal 2, GetProposalHistory 2)
 
-**Composants Mobile restants** :
-- [ ] Mobile : VotingModal + DeckControl
+**Composants Mobile ajoutés** :
+- [x] App : IVotingService / VotingService (REST: proposer, voter, historique)
+- [x] App : SignalR events StopProposed, VoteUpdate, ProposalResolved sur TripHub
+- [x] App : VotingViewModel (propose stop, cast vote, countdown, SignalR realtime)
+- [x] App : VotingView.axaml (carte proposition, vote OUI/NON, compteur, résultats)
+- [x] App : StopTypeConverter, ProposalStatusConverter
+- [x] App : Navigation CockpitView → VotingView (bouton "Proposer un arrêt")
 
 ---
 
 #### Feature 6 : Chat
-**Statut** : Backend TERMINÉ — Mobile à faire
-**Progression** : 50% (Backend complet, Mobile restant)
+**Statut** : TERMINÉ (Backend + Mobile)
+**Progression** : 100%
 
 **Composants Backend terminés** :
 - [x] Core : Entité Message (factory Create, validation contenu max 500 chars)
@@ -297,18 +302,21 @@ Audit de sécurité complet réalisé avec l'agent dotnet-maui-expert. Identific
 - [x] Tests Core : 7 tests (Create valid, 500 chars OK, empty convoyId, empty senderId, empty content, whitespace, >500 chars)
 - [x] Tests Application : 9 tests (SendMessage 5, GetConvoyMessages 4)
 
-**Composants Mobile restants** :
-- [ ] Mobile : ChatPage + ChatStreamControl
+**Composants Mobile ajoutés** :
+- [x] App : IChatService / ChatService (REST: envoyer message, historique paginé curseur)
+- [x] App : IConvoySignalRService / ConvoySignalRService (ConvoyHub: ReceiveMessage)
+- [x] App : ChatViewModel (messages temps réel, envoi, chargement historique, cleanup)
+- [x] App : ChatView.axaml (liste messages, input, envoi, header, chargement plus)
+- [x] App : Navigation ConvoyDetailView → ChatView (bouton "Ouvrir le chat")
 
 ---
 
 ## Métriques
 
-**Features Terminées** : 4 / 6 (Auth + Profil/Garage + Convois + Navigation GPS - Backend + Mobile + Tests)
-**Features Backend Terminé** : 6 / 6 (+ Vote + Chat Backend)
+**Features Terminées** : 6 / 6 (Auth + Profil/Garage + Convois + Navigation GPS + Vote + Chat)
 **Migration MAUI → AvaloniaUI** : ✅ TERMINÉE (11 étapes)
 **Sécurité Production** : ✅ P0 Critical Issues Résolus (5/5)
-**Progression Globale** : ~83%
+**Progression Globale** : 100% (6/6 features complètes)
 **Dernière compilation** : 13 Fév 2026 - Succès (Backend + App Desktop + Tests)
 **Tests Passing** : 306 / 306 (100%)
   - Core.Tests : 199 tests (User, Vehicle, Brand, UserLicense, Convoy, ConvoyMember, Trip, TripWaypoint, StopProposal, Vote, Message)
@@ -684,14 +692,11 @@ Audit de sécurité complet réalisé avec l'agent dotnet-maui-expert. Identific
 
 ## Prochaines Actions
 
-### Priorité Haute
-1. **Feature 5 : Système de Vote — Mobile AvaloniaUI** (VotingView + interface de vote dans CockpitView)
-2. **Feature 6 : Chat — Mobile AvaloniaUI** (ChatView + SignalR ConvoyHub)
-
 ### Priorité Moyenne
 1. Ajouter tests d'intégration API
+2. Ajouter tests unitaires ViewModels (App)
 
 ### Priorité Basse
-1. Ajouter tests unitaires Mobile (ViewModels)
-2. Améliorer UI/UX avec animations
-3. Configurer CI/CD
+1. Améliorer UI/UX avec animations
+2. Configurer CI/CD
+3. Activer les platform heads Android/iOS/Browser (nécessite SDKs)
