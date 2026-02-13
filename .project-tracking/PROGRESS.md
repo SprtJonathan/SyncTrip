@@ -1,8 +1,8 @@
 # SyncTrip - Suivi de Progression
 
 **Dernière mise à jour** : 13 Février 2026
-**Statut Global** : 6/6 Features COMPLÈTES (Backend + Mobile AvaloniaUI)
-**Migration MAUI → AvaloniaUI** : TERMINÉE (11 étapes, build 0 erreurs, tests 306/306)
+**Statut Global** : 6/6 Features COMPLÈTES (Backend + Mobile AvaloniaUI) + Backend Geocoding/Routing
+**Migration MAUI → AvaloniaUI** : TERMINÉE (11 étapes, build 0 erreurs, tests 320/320)
 
 ---
 
@@ -312,9 +312,9 @@ Audit de sécurité complet réalisé avec l'agent dotnet-maui-expert. Identific
 **Sécurité Production** : ✅ P0 Critical Issues Résolus (5/5)
 **Progression Globale** : 100% (6/6 features complètes)
 **Dernière compilation** : 13 Fév 2026 - Succès (Backend + App Desktop + Tests)
-**Tests Passing** : 306 / 306 (100%)
-  - Core.Tests : 199 tests (User, Vehicle, Brand, UserLicense, Convoy, ConvoyMember, Trip, TripWaypoint, StopProposal, Vote, Message)
-  - Application.Tests : 107 tests (Auth, Users, Vehicles, Convoys, Trips, Voting, Chat)
+**Tests Passing** : 320 / 320 (100%)
+  - Core.Tests : 202 tests (User, Vehicle, Brand, UserLicense, Convoy, ConvoyMember, Trip, TripWaypoint, TripRoute, StopProposal, Vote, Message)
+  - Application.Tests : 118 tests (Auth, Users, Vehicles, Convoys, Trips, Navigation, Voting, Chat)
 **Qualité Code** : ✅ Conforme aux spécifications (Clean Architecture, DDD, MVVM)
 **Sécurité** : ✅ Production Ready (Rate Limiting, Error Handling, Secrets Management)
 **Stack** : .NET 10 LTS — AvaloniaUI 11.3.1 + Mapsui.Avalonia 5.0.0
@@ -710,6 +710,37 @@ Audit de sécurité complet réalisé avec l'agent dotnet-maui-expert. Identific
 - ✅ Build Desktop : 0 erreurs
 - ✅ Tests : 306/306 (199 Core + 107 Application)
 - ✅ Backend : 0 changement nécessaire (waypoints déjà supportés)
+
+#### Backend Geocoding + Routing (Navigation)
+70. `feat(core): ajoute interfaces IGeocodingService et IRoutingService + route Trip`
+    - IGeocodingService (SearchAsync → GeocodingResult), IRoutingService (CalculateRouteAsync → RouteResult)
+    - Trip : RouteGeometry, RouteDistanceMeters, RouteDurationSeconds + UpdateRoute/ClearRoute
+71. `feat(shared): ajoute DTOs Navigation pour geocodage et itineraire`
+    - AddressResultDto, CalculateRouteRequest, RouteResultDto, RouteStepDto
+    - TripDetailsDto enrichi avec champs route
+72. `feat(application): ajoute handlers Navigation (geocodage, routing, calcul voyage)`
+    - SearchAddressQuery, CalculateRouteQuery, CalculateTripRouteCommand + handlers
+    - 3 validators FluentValidation + mapping route dans query handlers Trip
+73. `feat(infrastructure): ajoute services Nominatim et OSRM + migration route`
+    - NominatimGeocodingService (geocodage OpenStreetMap gratuit)
+    - OsrmRoutingService (calcul itineraire GeoJSON, Scenic=exclude motorway avec fallback)
+    - HttpClient types dans DI + migration AddRouteGeometry
+74. `feat(api): ajoute NavigationController avec geocodage et calcul itineraire`
+    - GET /api/navigation/search (geocodage), POST /api/navigation/route (preview)
+    - POST /api/navigation/trips/{tripId}/route (calcul + persistance)
+75. `test: ajoute tests Navigation et Trip route (14 tests, 320/320)`
+    - TripRouteTests (3), SearchAddressQueryHandler (3), CalculateRouteQueryHandler (3)
+    - CalculateTripRouteCommandHandler (5) : valid, not found, non member, <2 waypoints, finished
+
+**Validation effectuée** :
+- ✅ Build API : 0 erreurs
+- ✅ Tous les tests passent (320/320 - 100%)
+  - Core.Tests : 202 (199 existants + 3 nouveaux)
+  - Application.Tests : 118 (107 existants + 11 nouveaux)
+- ✅ APIs externes gratuites sans clé (Nominatim + OSRM)
+- ✅ Route persistée dans Trip (visible par tous les membres du convoi)
+
+**Total commits Backend Geocoding/Routing** : 6 commits + 1 docs (ISSUES.md)
 
 ---
 

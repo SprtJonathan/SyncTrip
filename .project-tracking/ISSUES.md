@@ -73,7 +73,7 @@
 
 ## Issue 5 : Nouveau voyage — Interface de destination inutilisable
 **Priorite** : CRITIQUE
-**Statut** : A FAIRE
+**Statut** : BACKEND FAIT (geocoding Nominatim + routing OSRM + NavigationController) — Mobile A FAIRE
 
 **Problemes** :
 - Saisie manuelle de latitude/longitude = inutilisable pour un utilisateur normal

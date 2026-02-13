@@ -71,7 +71,7 @@ SyncTrip/
 
 **Contenu** :
 - **Entities** : User, MagicLinkToken, Vehicle, Brand, UserLicense, Convoy, ConvoyMember, Trip, TripWaypoint, StopProposal, Vote, Message
-- **Interfaces** : IUserRepository, IMagicLinkTokenRepository, IVehicleRepository, IBrandRepository, IConvoyRepository, ITripRepository, IStopProposalRepository, IMessageRepository, IAuthService, IEmailService
+- **Interfaces** : IUserRepository, IMagicLinkTokenRepository, IVehicleRepository, IBrandRepository, IConvoyRepository, ITripRepository, IStopProposalRepository, IMessageRepository, IAuthService, IEmailService, IGeocodingService, IRoutingService
 - **Enums** : LicenseType, VehicleType, ConvoyRole, TripStatus, RouteProfile, WaypointType, StopType, ProposalStatus
 
 **Règles** :
@@ -128,7 +128,7 @@ SyncTrip/
 
 **Contenu** :
 - **Persistence** : ApplicationDbContext (EF Core), Repositories, Migrations, Configurations, Seed Data
-- **Services** : AuthService, EmailService/DevelopmentEmailService, ProposalResolutionService (BackgroundService)
+- **Services** : AuthService, EmailService/DevelopmentEmailService, ProposalResolutionService (BackgroundService), NominatimGeocodingService (geocodage OSM), OsrmRoutingService (calcul itineraire GeoJSON)
 - **Repositories** : UserRepository, MagicLinkTokenRepository, VehicleRepository, BrandRepository, ConvoyRepository, TripRepository, StopProposalRepository, MessageRepository
 
 **Dépendances** :
@@ -143,7 +143,7 @@ SyncTrip/
 **Responsabilité** : Exposition des endpoints REST et SignalR.
 
 **Contenu** :
-- **Controllers** : AuthController, UsersController, VehiclesController, BrandsController, ConvoysController, TripsController, VotingController, MessagesController
+- **Controllers** : AuthController, UsersController, VehiclesController, BrandsController, ConvoysController, TripsController, VotingController, MessagesController, NavigationController
 - **Hubs** : TripHub (positions GPS, votes temps réel), ConvoyHub (chat temps réel)
 - **Services** : TripNotificationService (implémente ITripNotificationService via IHubContext<TripHub>), ConvoyNotificationService (implémente IConvoyNotificationService via IHubContext<ConvoyHub>)
 - **Middleware** : Global exception handling, JWT validation, Rate Limiting
@@ -318,7 +318,7 @@ public class UserRepository : IUserRepository
 Tous les services sont enregistrés via DI.
 
 **Lifetimes** :
-- **Scoped** : DbContext, Repositories, AuthService, EmailService, TripNotificationService, ConvoyNotificationService
+- **Scoped** : DbContext, Repositories, AuthService, EmailService, TripNotificationService, ConvoyNotificationService, NominatimGeocodingService, OsrmRoutingService
 - **Singleton** : ProposalResolutionService (BackgroundService, crée son propre scope via IServiceScopeFactory)
 - **Transient** : Validators (enregistrés via AddValidatorsFromAssembly)
 
