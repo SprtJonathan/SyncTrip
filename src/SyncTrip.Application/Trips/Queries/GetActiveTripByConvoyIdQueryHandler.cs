@@ -38,6 +38,9 @@ public class GetActiveTripByConvoyIdQueryHandler : IRequestHandler<GetActiveTrip
             EndTime = trip.EndTime,
             RouteProfile = (int)trip.RouteProfile,
             WaypointCount = trip.Waypoints.Count,
+            RouteGeometry = trip.RouteGeometry,
+            RouteDistanceMeters = trip.RouteDistanceMeters,
+            RouteDurationSeconds = trip.RouteDurationSeconds,
             Waypoints = trip.Waypoints
                 .OrderBy(w => w.OrderIndex)
                 .Select(w => new TripWaypointDto
