@@ -48,6 +48,12 @@ public class Trip
     /// </summary>
     public ICollection<TripWaypoint> Waypoints { get; private set; } = new List<TripWaypoint>();
 
+    public string? RouteGeometry { get; private set; }
+
+    public double? RouteDistanceMeters { get; private set; }
+
+    public double? RouteDurationSeconds { get; private set; }
+
     // Constructeur privé pour EF Core
     private Trip()
     {
@@ -128,5 +134,22 @@ public class Trip
             throw new DomainException("Ce waypoint n'existe pas dans ce voyage.");
 
         Waypoints.Remove(waypoint);
+    }
+
+    public void UpdateRoute(string geometryGeoJson, double distanceMeters, double durationSeconds)
+    {
+        if (Status == TripStatus.Finished)
+            throw new DomainException("Impossible de mettre à jour l'itinéraire d'un voyage terminé.");
+
+        RouteGeometry = geometryGeoJson;
+        RouteDistanceMeters = distanceMeters;
+        RouteDurationSeconds = durationSeconds;
+    }
+
+    public void ClearRoute()
+    {
+        RouteGeometry = null;
+        RouteDistanceMeters = null;
+        RouteDurationSeconds = null;
     }
 }
