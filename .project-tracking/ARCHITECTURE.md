@@ -1,7 +1,7 @@
 # SyncTrip - Documentation Architecture
 
-**Version** : 1.2
-**Date** : 12 Février 2026
+**Version** : 1.3
+**Date** : 13 Février 2026
 
 ---
 
@@ -180,29 +180,59 @@ SyncTrip/
 SyncTrip.Mobile/
 ├── Features/              # Organisé par feature (vertical slices)
 │   ├── Authentication/
-│   │   ├── Views/
-│   │   └── ViewModels/
+│   │   ├── Views/         (MagicLinkPage, RegistrationPage)
+│   │   └── ViewModels/    (MagicLinkViewModel, RegistrationViewModel)
 │   ├── Profile/
+│   │   ├── Views/         (ProfilePage)
+│   │   └── ViewModels/    (ProfileViewModel)
 │   ├── Garage/
+│   │   ├── Views/         (GaragePage, AddVehiclePage)
+│   │   └── ViewModels/    (GarageViewModel, AddVehicleViewModel)
 │   ├── Convoy/
-│   ├── Trip/
-│   └── Chat/
+│   │   ├── Views/         (ConvoyLobbyPage, CreateConvoyPage, JoinConvoyPage, ConvoyDetailPage)
+│   │   └── ViewModels/    (ConvoyLobbyViewModel, CreateConvoyViewModel, JoinConvoyViewModel, ConvoyDetailViewModel)
+│   └── Trip/
+│       ├── Views/         (CockpitPage — carte Mapsui)
+│       └── ViewModels/    (CockpitViewModel — GPS + SignalR)
 ├── Core/
-│   ├── Services/          # Services métier (API, SignalR, Location)
-│   ├── Helpers/
-│   └── Converters/
-├── Models/                # ViewModels locaux
+│   ├── Services/          # Services métier
+│   │   ├── IApiService / ApiService             (HTTP client typé — GET, POST, DELETE)
+│   │   ├── IAuthenticationService / ...         (JWT SecureStorage)
+│   │   ├── IUserService / IVehicleService / ... (REST clients)
+│   │   ├── IConvoyService / ConvoyService       (REST convois)
+│   │   ├── ITripService / TripService           (REST voyages GPS)
+│   │   └── ISignalRService / SignalRService     (TripHub temps réel)
+│   ├── Http/              (AuthorizationMessageHandler — JWT Bearer auto)
+│   └── Converters/        (InvertedBool, IsNotNull, VehicleType, TripStatus, ConvoyRole)
 └── Resources/
 ```
 
 **Navigation** : Shell Navigation (AppShell.xaml)
+- Routes : `registration`, `addvehicle`, `createconvoy`, `joinconvoy`, `convoydetail`, `cockpit`
+- Flux GPS : ConvoyLobbyPage → ConvoyDetailPage → CockpitPage
 
 **État** : CommunityToolkit.Mvvm (ObservableObject, RelayCommand)
 
+**Services Mobile — Lifetimes DI** :
+- **Singleton** : AuthenticationService, UserService, VehicleService, BrandService, ConvoyService, TripService, SignalRService
+- **Transient** : ViewModels, Pages
+
 **Dépendances clés** :
-- Microsoft.AspNetCore.SignalR.Client
-- Mapsui (cartographie)
-- CommunityToolkit.Mvvm
+- Microsoft.AspNetCore.SignalR.Client (TripHub temps réel)
+- Mapsui.Maui 5.0 + SkiaSharp (carte OpenStreetMap)
+- CommunityToolkit.Mvvm 8.4 (MVVM source generators)
+
+**SignalR Client (SignalRService)** :
+- Connexion : `http://localhost:5000/hubs/trip?access_token={jwt}`
+- Écoute : `ReceiveLocationUpdate` → event `LocationReceived(userId, lat, lon, timestamp)`
+- Envoi : `SendLocationUpdate(tripId, lat, lon)`
+- Lifecycle : `ConnectAsync(tripId)` → JoinTrip, `DisconnectAsync()` → LeaveTrip + StopAsync + Dispose
+
+**CockpitPage (Mapsui)** :
+- `OpenStreetMap.CreateTileLayer()` pour les tuiles
+- `MyLocationLayer` pour la position de l'utilisateur (centrage auto)
+- `WritableLayer` pour les positions des autres membres (PointFeature + SymbolStyle)
+- Timer géolocalisation : 5 secondes → `Geolocation.GetLocationAsync()` + `SendLocationAsync()`
 
 ---
 
@@ -263,8 +293,9 @@ Tous les services sont enregistrés via DI.
 ### Base de Données : PostgreSQL
 
 **Connexion** :
-- Développement : localhost:5432
-- Production : Configuration via appsettings.json
+- Développement (Docker) : `localhost:5433` (DB: synctrip, User: postgres)
+- Conteneur API → DB : `Host=postgres;Database=synctrip` (réseau Docker interne)
+- Production : Configuration via variables d'environnement
 
 **Migrations** :
 ```bash
@@ -451,4 +482,4 @@ wss://api.synctrip.com/hubs/convoy?access_token=<JWT>
 
 ---
 
-**Dernière mise à jour** : 12 Février 2026
+**Dernière mise à jour** : 13 Février 2026
